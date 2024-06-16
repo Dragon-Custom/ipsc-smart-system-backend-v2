@@ -6,6 +6,7 @@ import {
 	ManyToOne,
 } from "typeorm";
 import { Division } from "./division.entity";
+import { Team } from "./team.entity";
 
 @Entity()
 export class Shooter {
@@ -17,6 +18,9 @@ export class Shooter {
 
 	@ManyToOne(() => Division, (division) => division.shooters)
 	division: Division;
+
+	@ManyToOne(() => Team, (team) => team.shooters)
+	team: Team;
 
 	@Column({ nullable: true })
 	email: string;

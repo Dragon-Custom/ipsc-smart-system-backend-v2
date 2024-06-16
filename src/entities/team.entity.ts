@@ -3,7 +3,9 @@ import {
 	Column,
 	PrimaryGeneratedColumn,
 	CreateDateColumn,
+	OneToMany,
 } from "typeorm";
+import { Shooter } from "./shooter.entity";
 
 @Entity()
 export class Team {
@@ -15,4 +17,7 @@ export class Team {
 
 	@CreateDateColumn({ nullable: false })
 	createAt: Date;
+
+	@OneToMany(() => Shooter, (shooter) => shooter.team)
+	shooters: Shooter[];
 }
