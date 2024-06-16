@@ -4,8 +4,7 @@ import { AppService } from "./app.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import config from "./config";
 import { DataSource } from "typeorm";
-import { Class, Shooter, Team } from "./entities";
-import { Division } from "./entities/division.entity";
+import { Class, Shooter, Team, Division } from "./entities";
 @Module({
 	imports: [
 		TypeOrmModule.forRoot({
