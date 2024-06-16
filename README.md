@@ -13,13 +13,23 @@
 	template: 
 	```typescript
 	import { Config } from "src/config";
-	const config: Config = {
+	//Define your divisions here and the types and values will be automatically generated.
+	export const Divisions = [
+		"Open",
+		"Standard",
+		"Production",
+		"Production Optics",
+	] as const;
+	const config: Config<(typeof Divisions)[number]> = {
 		database: {
 			database: "",
 			username: "",
 			password: "",
 			host: "",
 			port: 0,
+		},
+		ipsc: {
+			division: Object.values(Divisions),
 		},
 	};
 	export default config;

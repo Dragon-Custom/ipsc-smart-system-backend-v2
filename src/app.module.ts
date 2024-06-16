@@ -3,6 +3,8 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import config from "./config";
+import { DataSource } from "typeorm";
+import { Shooter } from "./entities";
 @Module({
 	imports: [
 		TypeOrmModule.forRoot({
@@ -12,11 +14,13 @@ import config from "./config";
 			username: config.database.username,
 			password: config.database.password,
 			database: config.database.database,
-			entities: [],
+			entities: [Shooter],
 			synchronize: true,
 		}),
 	],
 	controllers: [AppController],
 	providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+	constructor(private dataSource: DataSource) {}
+}

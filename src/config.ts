@@ -1,4 +1,4 @@
-export interface Config {
+export interface Config<T> {
 	database: {
 		host: string;
 		port: number;
@@ -6,7 +6,10 @@ export interface Config {
 		password: string;
 		database: string;
 	};
+	ipsc: {
+		division: T[];
+	};
 }
 
 import config from "../server.config";
-export default config as Config;
+export default config as typeof config;
