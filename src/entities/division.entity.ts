@@ -3,24 +3,21 @@ import {
 	Column,
 	PrimaryGeneratedColumn,
 	CreateDateColumn,
-	ManyToOne,
+	OneToMany,
 } from "typeorm";
-import { Division } from "./division.entity";
+import { Shooter } from "./shooter.entity";
 
 @Entity()
-export class Shooter {
+export class Division {
 	@PrimaryGeneratedColumn()
 	id: number;
 
 	@Column({ nullable: false })
 	name: string;
 
-	@ManyToOne(() => Division, (division) => division.shooters)
-	division: Division;
-
-	@Column({ nullable: true })
-	email: string;
-
 	@CreateDateColumn({ nullable: false })
 	createAt: Date;
+
+	@OneToMany(() => Shooter, (shooter) => shooter.division)
+	shooters: Shooter[];
 }
