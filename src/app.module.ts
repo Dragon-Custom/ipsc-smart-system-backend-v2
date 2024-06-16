@@ -5,7 +5,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import config from "./config";
 import { DataSource } from "typeorm";
 import { Class, Shooter, Team, Division } from "./entities";
-import { ShooterCategory } from "./entities/shooter/category.entity";
+import { ShooterCategory } from "./entities/shooter/shooter.category.entity";
 @Module({
 	imports: [
 		TypeOrmModule.forRoot({

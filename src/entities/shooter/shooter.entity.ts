@@ -11,7 +11,7 @@ import {
 import { Division } from "./division.entity";
 import { Team } from "./team.entity";
 import { Class } from "./class.entity";
-import { ShooterCategory } from "./category.entity";
+import { ShooterCategory } from "./shooter.category.entity";
 
 @Entity()
 export class Shooter {
