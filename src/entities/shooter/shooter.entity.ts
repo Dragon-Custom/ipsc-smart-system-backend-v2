@@ -6,6 +6,7 @@ import {
 	ManyToOne,
 	ManyToMany,
 	JoinTable,
+	VirtualColumn,
 } from "typeorm";
 import { Division } from "./division.entity";
 import { Team } from "./team.entity";
@@ -22,12 +23,25 @@ export class Shooter {
 
 	@ManyToOne(() => Division, (division) => division.shooters)
 	division: Division;
+	@VirtualColumn({
+		query: () => `SELECT division.name AS divisionName`,
+	})
+	divisionName: string;
 
 	@ManyToOne(() => Team, (team) => team.shooters)
 	team: Team;
+	@VirtualColumn({
+		query: () => `SELECT team.name AS teamName`,
+	})
+	teamName: string;
 
 	@ManyToOne(() => Class, (_class) => _class.shooters)
 	class: Class;
+
+	@VirtualColumn({
+		query: () => `SELECT class.name AS className`,
+	})
+	className: string;
 
 	@ManyToMany(() => ShooterCategory, (category) => category.shooters)
 	@JoinTable()

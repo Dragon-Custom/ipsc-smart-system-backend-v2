@@ -3,7 +3,7 @@ import {
 	Column,
 	PrimaryGeneratedColumn,
 	CreateDateColumn,
-	ManyToOne,
+	OneToMany,
 } from "typeorm";
 import { Shooter } from "./shooter.entity";
 
@@ -12,10 +12,10 @@ export class Class {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column({ nullable: false })
+	@Column({ nullable: false, unique: true })
 	name: string;
 
-	@ManyToOne(() => Shooter, (shooter) => shooter.class)
+	@OneToMany(() => Shooter, (shooter) => shooter.class)
 	shooters: Shooter[];
 
 	@CreateDateColumn({ nullable: false })
