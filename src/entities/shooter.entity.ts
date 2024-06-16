@@ -11,15 +11,15 @@ export class Shooter {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column()
+	@Column({ nullable: false })
 	name: string;
 
-	@Column()
+	@Column({ nullable: false })
 	division: Division;
 
 	@Column({ nullable: true })
-	email?: string;
+	email: string;
 
-	@CreateDateColumn({})
+	@CreateDateColumn({ nullable: false })
 	createAt: Date;
 }

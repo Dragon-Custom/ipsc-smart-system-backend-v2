@@ -15,7 +15,7 @@ import { Shooter } from "./entities";
 			password: config.database.password,
 			database: config.database.database,
 			entities: [Shooter],
-			synchronize: true,
+			synchronize: process.env.NODE_ENV === "development",
 		}),
 	],
 	controllers: [AppController],
