@@ -25,7 +25,4 @@ export class Shooter {
 
 	@CreateDateColumn()
 	createdAt: Date;
-
-	@Column({ default: false })
-	isActive: boolean;
 }
