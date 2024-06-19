@@ -5,13 +5,20 @@ import {
 	CreateDateColumn,
 	AfterUpdate,
 	ManyToOne,
+	OneToOne,
+	JoinColumn,
 } from "typeorm";
 import { Team } from "./team.entity";
+import { User } from "./user.entity";
 
 @Entity()
 export class Shooter {
 	@PrimaryGeneratedColumn()
 	id: number;
+
+	@OneToOne(() => User, (user) => user.shooterProfile)
+	@JoinColumn()
+	belongsUser: User;
 
 	@Column()
 	firstName: string;

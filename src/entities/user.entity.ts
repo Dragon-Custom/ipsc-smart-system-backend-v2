@@ -8,11 +8,16 @@ import {
 	ManyToOne,
 } from "typeorm";
 import { Team } from "./team.entity";
+import { Shooter } from "./shooter.entity";
 
 @Entity()
 export class User {
 	@PrimaryGeneratedColumn()
 	id: number;
+
+	@OneToOne(() => Shooter, (shooter) => shooter.belongsUser)
+	@JoinColumn()
+	shooterProfile: Shooter;
 
 	@Column()
 	nickname: string;
@@ -35,4 +40,7 @@ export class User {
 
 	@Column({ default: false })
 	isActive: boolean;
+
+	@Column({ default: false })
+	isBanned: boolean;
 }
