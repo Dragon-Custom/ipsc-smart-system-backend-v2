@@ -3,7 +3,11 @@ import {
 	Column,
 	PrimaryGeneratedColumn,
 	CreateDateColumn,
+	OneToOne,
+	JoinColumn,
+	ManyToOne,
 } from "typeorm";
+import { Team } from "./team.entity";
 
 @Entity()
 export class User {
@@ -21,6 +25,13 @@ export class User {
 
 	@CreateDateColumn()
 	createdAt: Date;
+
+	@OneToOne(() => Team, (team) => team.owner)
+	@JoinColumn()
+	ownsTeam: Team;
+
+	@ManyToOne(() => Team, (team) => team.admins)
+	adminOfTeam: Team;
 
 	@Column({ default: false })
 	isActive: boolean;

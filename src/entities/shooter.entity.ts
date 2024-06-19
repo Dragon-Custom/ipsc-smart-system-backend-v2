@@ -4,7 +4,9 @@ import {
 	PrimaryGeneratedColumn,
 	CreateDateColumn,
 	AfterUpdate,
+	ManyToOne,
 } from "typeorm";
+import { Team } from "./team.entity";
 
 @Entity()
 export class Shooter {
@@ -22,6 +24,9 @@ export class Shooter {
 	setFullName() {
 		this.fullName = this.firstName + " " + this.lastName;
 	}
+
+	@ManyToOne(() => Team, (team) => team.members)
+	team: Team;
 
 	@CreateDateColumn()
 	createdAt: Date;
