@@ -31,6 +31,14 @@ export class Match {
 	@Column()
 	matchDate: Date;
 
+	/**
+	 * Whether the stage DQ is enabled for this match.
+	 * When is stage dq, shooter will only DQ at that stage.
+	 * If false, shooter are DQ over entire match.
+	 */
+	@Column()
+	isStageDQEnabled: boolean;
+
 	@CreateDateColumn()
 	createdAt: Date;
 }
