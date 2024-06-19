@@ -21,7 +21,7 @@ import {
 @Module({
 	imports: [
 		TypeOrmModule.forRoot({
-			type: "mysql",
+			type: "postgres",
 			host: config.database.host,
 			port: config.database.port,
 			username: config.database.username,
