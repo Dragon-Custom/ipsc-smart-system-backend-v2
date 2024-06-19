@@ -6,9 +6,11 @@ import {
 	OneToOne,
 	JoinColumn,
 	ManyToOne,
+	OneToMany,
 } from "typeorm";
 import { Team } from "./team.entity";
 import { Shooter } from "./shooter.entity";
+import { Stage } from "./stage.entity";
 
 @Entity()
 export class User {
@@ -37,6 +39,9 @@ export class User {
 
 	@ManyToOne(() => Team, (team) => team.admins)
 	adminOfTeam: Team;
+
+	@OneToMany(() => Stage, (stage) => stage.designer)
+	designedStages: Stage[];
 
 	@Column({ default: false })
 	isActive: boolean;
