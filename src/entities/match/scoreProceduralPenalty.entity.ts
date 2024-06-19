@@ -17,9 +17,13 @@ export class ScoreProceduralPenalty {
 	@Column()
 	count: number;
 
-	@ManyToOne(() => Score, (score) => score.proceduralPenalties)
+	@ManyToOne(() => Score, (score) => score.proceduralPenalties, {
+		nullable: false,
+	})
 	score: Score;
 
-	@ManyToOne(() => Score, (score) => score.proceduralPenalties)
+	@ManyToOne(() => Score, (score) => score.proceduralPenalties, {
+		nullable: false,
+	})
 	proceduralPenalty: ProceduralPenalty;
 }
