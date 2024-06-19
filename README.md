@@ -2,25 +2,18 @@
 
 ## Installation
 ### Requirement:
-- [x] MySQL
+- [x] PostgreSQL
 - [x] Node.js
 
 ### Steps:
 1. Clone the repository
 2. Install dependencies using `npm install`
-3. Create a MySQL database.
+3. Create a PostgreSQL database.
 4. Update the `server.config.ts` file with your database credentials.
 	template: 
 	```typescript
 	import { Config } from "src/config";
-	//Define your divisions here and the types and values will be automatically generated.
-	export const Divisions = [
-		"Open",
-		"Standard",
-		"Production",
-		"Production Optics",
-	] as const;
-	const config: Config<(typeof Divisions)[number]> = {
+	const config: Config = {
 		database: {
 			database: "",
 			username: "",
@@ -28,9 +21,7 @@
 			host: "",
 			port: 0,
 		},
-		ipsc: {
-			division: Object.values(Divisions),
-		},
+		ipsc: {},
 	};
 	export default config;
 	```
