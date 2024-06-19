@@ -16,6 +16,9 @@ import {
 	Classification,
 	MatchShooterCategory,
 	MatchStage,
+	Score,
+	ProceduralPenalty,
+	ScoreProceduralPenalty,
 } from "./entities";
 
 @Module({
@@ -27,6 +30,7 @@ import {
 			username: config.database.username,
 			password: config.database.password,
 			database: config.database.database,
+			logging: ["error", "warn", "info", "query", "schema", "migration"],
 			entities: [
 				User,
 				Shooter,
@@ -39,6 +43,9 @@ import {
 				Division,
 				Classification,
 				MatchShooterCategory,
+				ProceduralPenalty,
+				ScoreProceduralPenalty,
+				Score,
 			],
 			synchronize: process.env.NODE_ENV !== "production",
 		}),

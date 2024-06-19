@@ -3,7 +3,6 @@ import {
 	Column,
 	PrimaryGeneratedColumn,
 	CreateDateColumn,
-	AfterUpdate,
 	ManyToOne,
 	OneToOne,
 	JoinColumn,
@@ -11,7 +10,7 @@ import {
 } from "typeorm";
 import { Team } from "./team.entity";
 import { User } from "./user.entity";
-import { MatchShooter } from "./match";
+import { MatchShooter, Score } from "./match";
 
 @Entity()
 export class Shooter {
@@ -28,17 +27,20 @@ export class Shooter {
 	@Column()
 	lastName: string;
 
+	@Column({
+		generatedType: "STORED",
+		asExpression: `"firstName" || ' ' || "lastName"`,
+	})
 	fullName: string;
-	@AfterUpdate()
-	setFullName() {
-		this.fullName = this.firstName + " " + this.lastName;
-	}
 
 	@ManyToOne(() => Team, (team) => team.members)
 	team: Team;
 
 	@OneToMany(() => MatchShooter, (matchShooter) => matchShooter.shooter)
 	shooterOfMatches: MatchShooter[];
+
+	@OneToMany(() => Score, (score) => score.shooter)
+	scores: Score[];
 
 	@CreateDateColumn()
 	createdAt: Date;
