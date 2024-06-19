@@ -12,8 +12,16 @@ export interface Config {
 		port: number;
 	};
 	api: {
-		passwordOption?: IsStrongPasswordOptions;
-		passwordEncryptSecret: string;
+		passwordOption?: IsStrongPasswordOptions & {
+			encryptSecret: string;
+		};
+		jwt: {
+			expiresIn: string;
+			/**
+			 * expressed in seconds or a string describing a time span zeit/ms. Eg: 60, "2 days", "10h", "7d"
+			 */
+			jwtSecret: string;
+		};
 	};
 }
 
