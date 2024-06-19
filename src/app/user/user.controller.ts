@@ -47,7 +47,9 @@ export class UserController {
 	@Get(":id")
 	@ApiNotFoundResponse({ description: "User not found" })
 	async findOne(@Param() param: NumericIdParams): Promise<UserResponseDTO> {
-		const reuslt = await this.userService.findOne(param.id);
+		const reuslt = await this.userService.findOne({
+			id: param.id,
+		});
 		if (reuslt) {
 			delete reuslt.encryptedPassword;
 			return reuslt;

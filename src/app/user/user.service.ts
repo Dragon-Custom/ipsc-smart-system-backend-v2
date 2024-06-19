@@ -19,6 +19,17 @@ function encryptePassword(password: string) {
 	return secondResult;
 }
 
+export interface SearchByID {
+	id: number;
+}
+export interface SearchByEmail {
+	email: string;
+}
+export interface SearchByNickname {
+	nickname: string;
+}
+export type UserSearchParams = SearchByID | SearchByEmail | SearchByNickname;
+
 @Injectable()
 export class UserService {
 	constructor(private dataSource: DataSource) {}
@@ -44,10 +55,10 @@ export class UserService {
 		return await this.dataSource.manager.find(User);
 	}
 
-	async findOne(id: number) {
+	async findOne(searchParam: UserSearchParams) {
 		return await this.dataSource.manager.findOne(User, {
 			where: {
-				id,
+				...searchParam,
 			},
 		});
 	}
