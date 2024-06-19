@@ -81,7 +81,9 @@ export class UserService {
 		return await this.dataSource.manager.update(User, id, {
 			email: updateUserDto.email,
 			nickname: updateUserDto.nickname,
-			encryptedPassword: this.encryptePassword(updateUserDto.password),
+			encryptedPassword: updateUserDto.password
+				? this.encryptePassword(updateUserDto.password)
+				: undefined,
 		});
 	}
 
