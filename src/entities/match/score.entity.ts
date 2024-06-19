@@ -10,6 +10,7 @@ import {
 import { MatchStage } from "./matchStage.entity";
 import { Shooter } from "../shooter.entity";
 import { ScoreProceduralPenalty } from "./scoreProceduralPenalty.entity";
+import { DQReason } from "./dqReason.entity";
 
 export enum ScoreStateType {
 	DidNotAttempted = "Did Not Attempted",
@@ -94,6 +95,9 @@ export class Score {
 
 	@ManyToOne(() => Shooter, (shooter) => shooter.scores)
 	shooter: Shooter;
+
+	@ManyToOne(() => DQReason, (reason) => reason.dqedScores)
+	dqReason: DQReason;
 
 	@CreateDateColumn()
 	createdAt: Date;

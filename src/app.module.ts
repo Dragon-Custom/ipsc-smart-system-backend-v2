@@ -19,6 +19,8 @@ import {
 	Score,
 	ProceduralPenalty,
 	ScoreProceduralPenalty,
+	DQReason,
+	StageDQShooter,
 } from "./entities";
 
 @Module({
@@ -46,6 +48,8 @@ import {
 				ProceduralPenalty,
 				ScoreProceduralPenalty,
 				Score,
+				DQReason,
+				StageDQShooter,
 			],
 			synchronize: process.env.NODE_ENV !== "production",
 		}),

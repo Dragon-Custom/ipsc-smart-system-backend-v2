@@ -8,3 +8,5 @@ export * from "./matchStage.entity";
 export * from "./score.entity";
 export * from "./proceduralPenalty.entity";
 export * from "./scoreProceduralPenalty.entity";
+export * from "./dqReason.entity";
+export * from "./stageDqShooter.entity";

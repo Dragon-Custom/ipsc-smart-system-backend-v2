@@ -5,12 +5,14 @@ import {
 	ManyToOne,
 	ManyToMany,
 	JoinTable,
+	OneToMany,
 } from "typeorm";
 import { Match } from "./match.entity";
 import { Shooter } from "../shooter.entity";
 import { Division } from "./division.entity";
 import { Classification } from "./classification.entity";
 import { MatchShooterCategory } from "./matchShooterCategory.entity";
+import { StageDQShooter } from "./stageDqShooter.entity";
 
 @Entity()
 export class MatchShooter {
@@ -43,6 +45,9 @@ export class MatchShooter {
 	)
 	@JoinTable()
 	categories: MatchShooterCategory[];
+
+	@OneToMany(() => StageDQShooter, (dqedShooter) => dqedShooter.shoooter)
+	stageDQ: StageDQShooter;
 
 	@ManyToOne(() => Match, (match) => match.staffs)
 	match: Match;
