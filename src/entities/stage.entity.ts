@@ -5,8 +5,10 @@ import {
 	CreateDateColumn,
 	ManyToOne,
 	AfterUpdate,
+	OneToMany,
 } from "typeorm";
 import { User } from "./user.entity";
+import { MatchStage } from "./match/matchStage.entity";
 
 export type StageType = "Short" | "Medium" | "Long" | "Unclassified";
 
@@ -61,6 +63,9 @@ export class Stage {
 		else if (this.minRounds <= 32) this.stageType = "Long";
 		else this.stageType = "Unclassified";
 	}
+
+	@OneToMany(() => MatchStage, (matchStage) => matchStage.stage)
+	stageOfMatches: MatchStage[];
 
 	@CreateDateColumn()
 	createdAt: Date;

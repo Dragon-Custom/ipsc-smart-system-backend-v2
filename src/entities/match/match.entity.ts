@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import { MatchStaff } from "./matchStaff.entity";
 import { MatchShooter } from "./matchShooter.entity";
+import { MatchStage } from "./matchStage.entity";
 
 @Entity()
 export class Match {
@@ -21,6 +22,9 @@ export class Match {
 
 	@OneToMany(() => MatchStaff, (matchStuff) => matchStuff.match)
 	shooters: MatchShooter[];
+
+	@OneToMany(() => MatchStage, (matchStage) => matchStage.match)
+	stages: MatchStage[];
 
 	@Column()
 	level: number;

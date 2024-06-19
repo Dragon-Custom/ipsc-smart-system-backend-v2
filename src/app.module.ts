@@ -15,7 +15,9 @@ import {
 	Division,
 	Classification,
 	MatchShooterCategory,
+	MatchStage,
 } from "./entities";
+
 @Module({
 	imports: [
 		TypeOrmModule.forRoot({
@@ -33,6 +35,7 @@ import {
 				Match,
 				MatchStaff,
 				MatchShooter,
+				MatchStage,
 				Division,
 				Classification,
 				MatchShooterCategory,
