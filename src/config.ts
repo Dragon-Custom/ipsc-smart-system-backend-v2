@@ -1,4 +1,4 @@
-export interface Config<T> {
+export interface Config {
 	database: {
 		host: string;
 		port: number;
@@ -6,9 +6,7 @@ export interface Config<T> {
 		password: string;
 		database: string;
 	};
-	ipsc: {
-		division: T[];
-	};
+	ipsc: {};
 }
 
 import config from "../server.config";
