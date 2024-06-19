@@ -6,7 +6,6 @@ import {
 	CreateDateColumn,
 	UpdateDateColumn,
 	OneToMany,
-	VirtualColumn,
 } from "typeorm";
 import { MatchStage } from "./matchStage.entity";
 import { Shooter } from "../shooter.entity";
@@ -33,41 +32,62 @@ export class Score {
 	})
 	time: number;
 
-	@Column()
+	@Column({ default: 0 })
 	alpha: number;
 
-	@Column()
+	@Column({ default: 0 })
 	bravo: number;
 
-	@Column()
+	@Column({ default: 0 })
 	charlie: number;
 
-	@Column()
+	@Column({ default: 0 })
 	delta: number;
 
-	@Column()
+	@Column({ default: 0 })
 	miss: number;
 
-	@Column()
+	@Column({ default: 0 })
 	noShoot: number;
 
-	@Column()
+	@Column({ default: 0 })
 	popper: number;
 
 	@Column({
 		type: "enum",
 		enum: ScoreStateType,
+		default: ScoreStateType.DidNotAttempted,
 	})
 	state: ScoreStateType;
 
 	@OneToMany(() => ScoreProceduralPenalty, (penalty) => penalty.score)
 	proceduralPenalties: ScoreProceduralPenalty[];
 
-	@VirtualColumn({
-		query: (alias) =>
-			`SELECT SUM("count") FROM "score_procedural_penalty" WHERE "scoreId" = ${alias}.id`,
-	})
+	@Column({ default: 0 })
 	totalProceduralPenalties: number;
+
+	@Column({
+		type: "int",
+		generatedType: "STORED",
+		asExpression: `
+			(alpha * 5 + bravo * 3 + charlie * 3 + delta * 1 + popper * 5) -
+			(miss * 10 + "noShoot" * 10 + "totalProceduralPenalties" * 10)
+		`,
+	})
+	score: number;
+
+	@Column({
+		type: "float",
+		generatedType: "STORED",
+		asExpression: `
+			CASE WHEN time = 0 THEN
+				0
+			ELSE
+				(alpha * 5 + bravo * 3 + charlie * 3 + delta * 1 + popper * 5) - (miss * 10 + "noShoot" * 10 + "totalProceduralPenalties" * 10) / time
+			END
+		`,
+	})
+	hitFactor: number;
 
 	@ManyToOne(() => MatchStage, (stage) => stage.scores)
 	stage: MatchStage;
