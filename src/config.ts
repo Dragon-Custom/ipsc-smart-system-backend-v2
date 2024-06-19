@@ -1,3 +1,4 @@
+import { IsStrongPasswordOptions } from "class-validator";
 export interface Config {
 	database: {
 		host: string;
@@ -7,6 +8,13 @@ export interface Config {
 		database: string;
 	};
 	ipsc: {};
+	server: {
+		port: number;
+	};
+	api: {
+		passwordOption?: IsStrongPasswordOptions;
+		passwordEncryptSecret: string;
+	};
 }
 
 import config from "../server.config";
