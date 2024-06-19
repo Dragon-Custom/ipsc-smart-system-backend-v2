@@ -1,8 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from "typeorm";
+import {
+	Entity,
+	PrimaryGeneratedColumn,
+	ManyToOne,
+	Column,
+	Check,
+} from "typeorm";
 import { Score } from "./score.entity";
 import { ProceduralPenalty } from "./proceduralPenalty.entity";
 
 @Entity()
+@Check("count >= 1")
 export class ScoreProceduralPenalty {
 	@PrimaryGeneratedColumn()
 	id: number;
