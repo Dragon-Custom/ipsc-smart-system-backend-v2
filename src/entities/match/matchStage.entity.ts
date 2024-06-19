@@ -5,6 +5,7 @@ import {
 	OneToMany,
 	CreateDateColumn,
 	UpdateDateColumn,
+	Column,
 } from "typeorm";
 import { Match } from "./match.entity";
 import { Stage } from "../stage.entity";
@@ -27,6 +28,9 @@ export class MatchStage {
 
 	@OneToMany(() => StageDQShooter, (matchShooter) => matchShooter.shoooter)
 	stageDQ: StageDQShooter[];
+
+	@Column({ default: false })
+	isFinished: boolean;
 
 	@CreateDateColumn()
 	createdAt: Date;

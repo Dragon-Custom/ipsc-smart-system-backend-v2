@@ -45,4 +45,7 @@ export class Match {
 
 	@CreateDateColumn()
 	createdAt: Date;
+
+	@Column({ default: false })
+	isFinished: boolean;
 }
