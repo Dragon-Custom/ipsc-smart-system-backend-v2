@@ -11,6 +11,7 @@ import {
 import { Team } from "./team.entity";
 import { Shooter } from "./shooter.entity";
 import { Stage } from "./stage.entity";
+import { MatchStaff } from "./match";
 
 @Entity()
 export class User {
@@ -42,6 +43,9 @@ export class User {
 
 	@OneToMany(() => Stage, (stage) => stage.designer)
 	designedStages: Stage[];
+
+	@OneToMany(() => MatchStaff, (match) => match.user)
+	stuffOfMatches: MatchStaff[];
 
 	@Column({ default: false })
 	isActive: boolean;

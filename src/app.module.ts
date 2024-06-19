@@ -4,7 +4,18 @@ import { AppService } from "./app.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import config from "./config";
 import { DataSource } from "typeorm";
-import { Shooter, Stage, Team, User } from "./entities";
+import {
+	Match,
+	Shooter,
+	Stage,
+	Team,
+	User,
+	MatchShooter,
+	MatchStaff,
+	Division,
+	Classification,
+	MatchShooterCategory,
+} from "./entities";
 @Module({
 	imports: [
 		TypeOrmModule.forRoot({
@@ -14,7 +25,18 @@ import { Shooter, Stage, Team, User } from "./entities";
 			username: config.database.username,
 			password: config.database.password,
 			database: config.database.database,
-			entities: [User, Shooter, Team, Stage],
+			entities: [
+				User,
+				Shooter,
+				Team,
+				Stage,
+				Match,
+				MatchStaff,
+				MatchShooter,
+				Division,
+				Classification,
+				MatchShooterCategory,
+			],
 			synchronize: process.env.NODE_ENV !== "production",
 		}),
 	],

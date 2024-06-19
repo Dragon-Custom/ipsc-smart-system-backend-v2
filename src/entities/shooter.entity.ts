@@ -7,9 +7,11 @@ import {
 	ManyToOne,
 	OneToOne,
 	JoinColumn,
+	OneToMany,
 } from "typeorm";
 import { Team } from "./team.entity";
 import { User } from "./user.entity";
+import { MatchShooter } from "./match";
 
 @Entity()
 export class Shooter {
@@ -34,6 +36,9 @@ export class Shooter {
 
 	@ManyToOne(() => Team, (team) => team.members)
 	team: Team;
+
+	@OneToMany(() => MatchShooter, (matchShooter) => matchShooter.shooter)
+	shooterOfMatches: MatchShooter[];
 
 	@CreateDateColumn()
 	createdAt: Date;
