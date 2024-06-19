@@ -4,13 +4,17 @@ import {
 	PrimaryGeneratedColumn,
 	CreateDateColumn,
 	ManyToOne,
-	AfterUpdate,
 	OneToMany,
 } from "typeorm";
 import { User } from "./user.entity";
 import { MatchStage } from "./match/matchStage.entity";
 
-export type StageType = "Short" | "Medium" | "Long" | "Unclassified";
+export enum StageType {
+	Short = "Short",
+	Medium = "Medium",
+	Long = "Long",
+	Unclassified = "Unclassified",
+}
 
 @Entity()
 export class Stage {
@@ -50,19 +54,35 @@ export class Stage {
 	@Column()
 	isBZoneEnabled: boolean;
 
+	@Column({
+		generatedType: "STORED",
+		asExpression: `(papers * 2 + poppers)`,
+	})
 	minRounds: number;
-	maxScores: number;
-	stageType: StageType;
 
-	@AfterUpdate()
-	setCalculatedFields() {
-		this.minRounds = this.papers * 2 + this.poppers;
-		this.maxScores = this.papers * 2 * 5 + this.poppers * 5;
-		if (this.minRounds <= 12) this.stageType = "Short";
-		else if (this.minRounds <= 24) this.stageType = "Medium";
-		else if (this.minRounds <= 32) this.stageType = "Long";
-		else this.stageType = "Unclassified";
-	}
+	@Column({
+		generatedType: "STORED",
+		asExpression: `(papers * 2 * 5 + poppers * 5)`,
+	})
+	maxScores: number;
+
+	@Column({
+		type: "enum",
+		enum: StageType,
+		generatedType: "STORED",
+		asExpression: `
+			CASE WHEN (papers * 2 + poppers) <= 12 THEN
+				stage_stagetype_enum('${StageType.Short}')
+			WHEN (papers * 2 + poppers) <= 24 THEN
+				stage_stagetype_enum('${StageType.Medium}')
+			WHEN (papers * 2 + poppers) <= 32 THEN
+				stage_stagetype_enum('${StageType.Long}')
+			ELSE
+				stage_stagetype_enum('${StageType.Unclassified}')
+			END
+		`,
+	})
+	stageType: StageType;
 
 	@OneToMany(() => MatchStage, (matchStage) => matchStage.stage)
 	stageOfMatches: MatchStage[];
