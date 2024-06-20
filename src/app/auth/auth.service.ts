@@ -1,11 +1,11 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { UserService } from "src/app";
+import { UsersService } from "src/app";
 
 @Injectable()
 export class AuthService {
 	constructor(
-		private usersService: UserService,
+		private usersService: UsersService,
 		private jwtService: JwtService,
 	) {}
 

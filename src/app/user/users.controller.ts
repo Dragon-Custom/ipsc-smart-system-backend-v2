@@ -12,7 +12,7 @@ import {
 	UnauthorizedException,
 	UseFilters,
 } from "@nestjs/common";
-import { UserService } from "./user.service";
+import { UsersService } from "./users.service";
 import { CreateUserDto, UpdateUserDto, UserResponseDTO } from "./dto";
 import { IsInt } from "class-validator";
 import {
@@ -32,10 +32,10 @@ export class NumericIdParams {
 	id: number;
 }
 
-@ApiTags("user")
-@Controller("user")
-export class UserController {
-	constructor(private readonly userService: UserService) {}
+@ApiTags("users")
+@Controller("users")
+export class UsersController {
+	constructor(private readonly userService: UsersService) {}
 
 	@UseFilters(TypeOrmFilter)
 	@Post()

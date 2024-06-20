@@ -28,7 +28,7 @@ export type UserSearchParams = Either<
 >;
 
 @Injectable()
-export class UserService {
+export class UsersService {
 	constructor(private dataSource: DataSource) {}
 
 	encryptePassword(password: string) {
