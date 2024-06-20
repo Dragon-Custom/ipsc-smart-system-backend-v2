@@ -12,6 +12,7 @@ import { Team } from "./team.entity";
 import { Shooter } from "./shooter.entity";
 import { Stage } from "./stage.entity";
 import { MatchStaff } from "./match";
+import { Exclude } from "class-transformer";
 
 @Entity()
 export class User {
@@ -25,9 +26,10 @@ export class User {
 	@Column()
 	nickname: string;
 
-	@Column()
+	@Column({ unique: true })
 	email: string;
 
+	@Exclude()
 	@Column()
 	encryptedPassword: string;
 

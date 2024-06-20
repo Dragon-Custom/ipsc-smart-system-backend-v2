@@ -20,7 +20,8 @@ import {
 	DQReason,
 	StageDQShooter,
 } from "./entities";
-
+import { UsersModule, AuthModule, ShootersModule } from "./app";
+import { DevtoolsModule } from "@nestjs/devtools-integration";
 @Module({
 	imports: [
 		TypeOrmModule.forRoot({
@@ -50,6 +51,12 @@ import {
 				StageDQShooter,
 			],
 			synchronize: process.env.NODE_ENV !== "production",
+		}),
+		AuthModule,
+		UsersModule,
+		ShootersModule,
+		DevtoolsModule.register({
+			http: process.env.NODE_ENV !== "production",
 		}),
 	],
 })
