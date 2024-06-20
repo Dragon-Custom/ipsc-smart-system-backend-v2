@@ -1,11 +1,12 @@
 import { Module } from "@nestjs/common";
 import { ShootersService } from "./shooters.service";
 import { ShootersController } from "./shooters.controller";
-import { UsersModule, UsersService } from "../user";
+import { UsersService } from "../user";
 
 @Module({
-	imports: [UsersModule],
+	imports: [],
 	controllers: [ShootersController],
-	providers: [ShootersService],
+	providers: [ShootersService, UsersService],
+	exports: [ShootersService],
 })
 export class ShootersModule {}

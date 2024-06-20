@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable, forwardRef } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { DataSource, FindOneOptions } from "typeorm";
@@ -6,6 +6,7 @@ import { User } from "src/entities";
 import config from "src/config";
 import { createHash } from "crypto";
 import { Either } from "src/utils";
+import { ShootersService } from "../shooters/shooters.service";
 
 export interface SearchByID {
 	id: number;
@@ -26,7 +27,11 @@ export type UserSearchParams = Either<
 
 @Injectable()
 export class UsersService {
-	constructor(private dataSource: DataSource) {}
+	constructor(
+		private dataSource: DataSource,
+		@Inject(forwardRef(() => ShootersService))
+		private shooterService: ShootersService,
+	) {}
 
 	encryptePassword(password: string) {
 		// add secret key
@@ -94,5 +99,11 @@ export class UsersService {
 
 	async remove(id: number) {
 		return await this.dataSource.manager.delete(User, id);
+	}
+
+	async findShooter(id: number) {
+		return await this.shooterService.findOne({
+			userId: id,
+		});
 	}
 }

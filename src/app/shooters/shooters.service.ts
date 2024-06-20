@@ -1,9 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable, forwardRef } from "@nestjs/common";
 import { CreateShooterDto } from "./dto/create-shooter.dto";
 import { UpdateShooterDto } from "./dto/update-shooter.dto";
-import { DataSource } from "typeorm";
+import { DataSource, FindOneOptions } from "typeorm";
 import { Shooter } from "src/entities";
 import { Either } from "src/utils";
+import { UsersService } from "../user";
 
 export interface ShooterSearchByID {
 	id: number;
@@ -11,23 +12,21 @@ export interface ShooterSearchByID {
 export interface ShooterSearchByFullName {
 	fullName: string;
 }
-export interface ShooterSearchByNickname {
-	nickname: string;
-}
 export interface ShooterSearchByUserID {
-	userId: string;
+	userId: number;
 }
 export type ShooterSearchParams = Either<
 	ShooterSearchByID,
-	Either<
-		ShooterSearchByFullName,
-		Either<ShooterSearchByFullName, ShooterSearchByUserID>
-	>
+	Either<ShooterSearchByFullName, ShooterSearchByUserID>
 >;
 
 @Injectable()
 export class ShootersService {
-	constructor(private dataSource: DataSource) {}
+	constructor(
+		private dataSource: DataSource,
+		@Inject(forwardRef(() => UsersService))
+		private userService: UsersService,
+	) {}
 
 	async create(createShooterDto: CreateShooterDto) {
 		const result = await this.dataSource.manager.insert(Shooter, {
@@ -50,8 +49,24 @@ export class ShootersService {
 	}
 
 	async findOne(searchParam: ShooterSearchParams, relations: string[] = []) {
+		let where: FindOneOptions<Shooter> = {};
+		if ("id" in searchParam) where = { where: { id: searchParam.id } };
+		else if ("fullName" in searchParam)
+			where = {
+				where: {
+					fullName: searchParam.fullName,
+				},
+			};
+		else if ("userId" in searchParam)
+			where = {
+				where: {
+					belongsUser: {
+						id: searchParam.userId,
+					},
+				},
+			};
 		return await this.dataSource.manager.findOne(Shooter, {
-			where: { ...searchParam },
+			where: { ...where.where },
 			relations: [...relations],
 		});
 	}
@@ -71,5 +86,9 @@ export class ShootersService {
 
 	remove(id: number) {
 		return this.dataSource.manager.delete(Shooter, id);
+	}
+
+	async findUser(id: number) {
+		return await this.userService.findOne({ shooterId: id });
 	}
 }

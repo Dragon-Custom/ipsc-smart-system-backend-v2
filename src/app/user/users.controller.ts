@@ -23,6 +23,7 @@ import {
 import { AuthGuard, RequestWithUserAuthInfo } from "../auth/auth.guard";
 import { TypeOrmFilter } from "src/exceptionFilters";
 import { NumericIdParams } from "src/utils";
+import { ShooterResponseDTO } from "../shooters/dto/shooter-response.dto";
 
 @ApiTags("users")
 @Controller("users")
@@ -102,5 +103,15 @@ export class UsersController {
 		} else {
 			throw new NotFoundException("User not found");
 		}
+	}
+
+	@Get(":id/shooters")
+	@ApiNotFoundResponse({ description: "User not found" })
+	async findShooter(
+		@Param() param: NumericIdParams,
+	): Promise<ShooterResponseDTO> {
+		const result = await this.userService.findShooter(param.id);
+		if (result) return result;
+		throw new NotFoundException("User not found");
 	}
 }

@@ -26,14 +26,10 @@ import { AuthGuard, RequestWithUserAuthInfo } from "../auth";
 import { ShooterResponseDTO } from "./dto/shooter-response.dto";
 import { InsertResult } from "typeorm";
 import { UserResponseDTO } from "../user/dto";
-import { UsersService } from "../user";
 
 @Controller("shooters")
 export class ShootersController {
-	constructor(
-		private readonly shootersService: ShootersService,
-		private readonly userService: UsersService,
-	) {}
+	constructor(private readonly shootersService: ShootersService) {}
 
 	@Post()
 	@SerializeOptions({})
@@ -140,7 +136,7 @@ export class ShootersController {
 	@ApiResponse({ type: UserResponseDTO, isArray: true })
 	@SerializeOptions({})
 	async findUsers(@Param() param: NumericIdParams) {
-		const result = await this.userService.findOne({ shooterId: param.id });
-		return result;
+		const result = await this.shootersService.findUser(param.id);
+		if (result) return result;
 	}
 }
