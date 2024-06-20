@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { DataSource } from "typeorm";
+import { DataSource, FindOneOptions } from "typeorm";
 import { User } from "src/entities";
 import config from "src/config";
 import { createHash } from "crypto";
@@ -16,9 +16,12 @@ export interface SearchByEmail {
 export interface SearchByNickname {
 	nickname: string;
 }
+export interface SearchByShooterId {
+	shooterId: number;
+}
 export type UserSearchParams = Either<
 	SearchByID,
-	Either<SearchByEmail, SearchByNickname>
+	Either<SearchByEmail, Either<SearchByNickname, SearchByShooterId>>
 >;
 
 @Injectable()
@@ -64,10 +67,18 @@ export class UsersService {
 	}
 
 	async findOne(searchParam: UserSearchParams) {
+		let where: FindOneOptions<User> = {};
+		if ("id" in searchParam) where = { where: { id: searchParam.id } };
+		else if ("email" in searchParam)
+			where = { where: { email: searchParam.email } };
+		else if ("nickname" in searchParam)
+			where = { where: { nickname: searchParam.nickname } };
+		else if ("shooterId" in searchParam)
+			where = {
+				where: { shooterProfile: { id: searchParam.shooterId } },
+			};
 		return await this.dataSource.manager.findOne(User, {
-			where: {
-				...searchParam,
-			},
+			...where,
 		});
 	}
 

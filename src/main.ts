@@ -5,7 +5,9 @@ import { ClassSerializerInterceptor, ValidationPipe } from "@nestjs/common";
 import config from "./config";
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule);
+	const app = await NestFactory.create(AppModule, {
+		snapshot: true,
+	});
 
 	const swaggerConfig = new DocumentBuilder()
 		.setTitle("IPSC Smart system example")

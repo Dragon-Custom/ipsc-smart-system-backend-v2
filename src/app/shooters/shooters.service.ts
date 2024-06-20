@@ -3,6 +3,27 @@ import { CreateShooterDto } from "./dto/create-shooter.dto";
 import { UpdateShooterDto } from "./dto/update-shooter.dto";
 import { DataSource } from "typeorm";
 import { Shooter } from "src/entities";
+import { Either } from "src/utils";
+
+export interface ShooterSearchByID {
+	id: number;
+}
+export interface ShooterSearchByFullName {
+	fullName: string;
+}
+export interface ShooterSearchByNickname {
+	nickname: string;
+}
+export interface ShooterSearchByUserID {
+	userId: string;
+}
+export type ShooterSearchParams = Either<
+	ShooterSearchByID,
+	Either<
+		ShooterSearchByFullName,
+		Either<ShooterSearchByFullName, ShooterSearchByUserID>
+	>
+>;
 
 @Injectable()
 export class ShootersService {
@@ -28,9 +49,9 @@ export class ShootersService {
 		return await this.dataSource.manager.find(Shooter);
 	}
 
-	async findOne(id: number, relations: string[] = []) {
+	async findOne(searchParam: ShooterSearchParams, relations: string[] = []) {
 		return await this.dataSource.manager.findOne(Shooter, {
-			where: { id },
+			where: { ...searchParam },
 			relations: [...relations],
 		});
 	}

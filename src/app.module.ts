@@ -21,6 +21,7 @@ import {
 	StageDQShooter,
 } from "./entities";
 import { UsersModule, AuthModule, ShootersModule } from "./app";
+import { DevtoolsModule } from "@nestjs/devtools-integration";
 @Module({
 	imports: [
 		TypeOrmModule.forRoot({
@@ -54,6 +55,9 @@ import { UsersModule, AuthModule, ShootersModule } from "./app";
 		AuthModule,
 		UsersModule,
 		ShootersModule,
+		DevtoolsModule.register({
+			http: process.env.NODE_ENV !== "production",
+		}),
 	],
 })
 export class AppModule {
