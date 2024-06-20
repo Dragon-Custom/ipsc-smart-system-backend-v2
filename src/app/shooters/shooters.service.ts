@@ -8,26 +8,47 @@ import { Shooter } from "src/entities";
 export class ShootersService {
 	constructor(private dataSource: DataSource) {}
 
-	create(createShooterDto: CreateShooterDto) {
-		return "This action adds a new shooter";
+	async create(createShooterDto: CreateShooterDto) {
+		const result = await this.dataSource.manager.insert(Shooter, {
+			belongsUser: {
+				id: createShooterDto.belongsUserId,
+			},
+			firstName: createShooterDto.firstName,
+			lastName: createShooterDto.lastName,
+			team: createShooterDto.teamId
+				? {
+						id: createShooterDto.teamId,
+					}
+				: undefined,
+		});
+		return result;
 	}
 
 	async findAll() {
 		return await this.dataSource.manager.find(Shooter);
 	}
 
-	async findOne(id: number) {
+	async findOne(id: number, relations: string[] = []) {
 		return await this.dataSource.manager.findOne(Shooter, {
 			where: { id },
-			relations: ["belongsUser"],
+			relations: [...relations],
 		});
 	}
 
 	update(id: number, updateShooterDto: UpdateShooterDto) {
-		return `This action updates a #${id} shooter`;
+		const result = this.dataSource.manager.update(Shooter, id, {
+			firstName: updateShooterDto.firstName,
+			lastName: updateShooterDto.lastName,
+			team: updateShooterDto.teamId
+				? {
+						id: updateShooterDto.teamId,
+					}
+				: undefined,
+		});
+		return result;
 	}
 
 	remove(id: number) {
-		return `This action removes a #${id} shooter`;
+		return this.dataSource.manager.delete(Shooter, id);
 	}
 }
