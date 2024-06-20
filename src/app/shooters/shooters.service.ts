@@ -1,26 +1,32 @@
-import { Injectable } from '@nestjs/common';
-import { CreateShooterDto } from './dto/create-shooter.dto';
-import { UpdateShooterDto } from './dto/update-shooter.dto';
+import { Injectable } from "@nestjs/common";
+import { CreateShooterDto } from "./dto/create-shooter.dto";
+import { UpdateShooterDto } from "./dto/update-shooter.dto";
+import { DataSource } from "typeorm";
+import { Shooter } from "src/entities";
 
 @Injectable()
 export class ShootersService {
-  create(createShooterDto: CreateShooterDto) {
-    return 'This action adds a new shooter';
-  }
+	constructor(private dataSource: DataSource) {}
 
-  findAll() {
-    return `This action returns all shooters`;
-  }
+	create(createShooterDto: CreateShooterDto) {
+		return "This action adds a new shooter";
+	}
 
-  findOne(id: number) {
-    return `This action returns a #${id} shooter`;
-  }
+	findAll() {
+		return `This action returns all shooters`;
+	}
 
-  update(id: number, updateShooterDto: UpdateShooterDto) {
-    return `This action updates a #${id} shooter`;
-  }
+	async findOne(id: number) {
+		return await this.dataSource.manager.findOne(Shooter, {
+			where: { id },
+		});
+	}
 
-  remove(id: number) {
-    return `This action removes a #${id} shooter`;
-  }
+	update(id: number, updateShooterDto: UpdateShooterDto) {
+		return `This action updates a #${id} shooter`;
+	}
+
+	remove(id: number) {
+		return `This action removes a #${id} shooter`;
+	}
 }

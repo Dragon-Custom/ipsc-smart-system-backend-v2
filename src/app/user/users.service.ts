@@ -5,6 +5,7 @@ import { DataSource } from "typeorm";
 import { User } from "src/entities";
 import config from "src/config";
 import { createHash } from "crypto";
+import { Either } from "src/utils";
 
 export interface SearchByID {
 	id: number;
@@ -15,13 +16,6 @@ export interface SearchByEmail {
 export interface SearchByNickname {
 	nickname: string;
 }
-type Only<T, U> = {
-	[P in keyof T]: T[P];
-} & {
-	[P in keyof U]?: never;
-};
-
-type Either<T, U> = Only<T, U> | Only<U, T>;
 export type UserSearchParams = Either<
 	SearchByID,
 	Either<SearchByEmail, SearchByNickname>

@@ -14,23 +14,14 @@ import {
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto, UpdateUserDto, UserResponseDTO } from "./dto";
-import { IsInt } from "class-validator";
 import {
 	ApiNotFoundResponse,
-	ApiProperty,
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { Type } from "class-transformer";
 import { AuthGuard, RequestWithUserAuthInfo } from "../auth/auth.guard";
 import { TypeOrmFilter } from "src/exceptionFilters";
-
-export class NumericIdParams {
-	@Type(() => Number)
-	@IsInt()
-	@ApiProperty()
-	id: number;
-}
+import { NumericIdParams } from "src/utils";
 
 @ApiTags("users")
 @Controller("users")

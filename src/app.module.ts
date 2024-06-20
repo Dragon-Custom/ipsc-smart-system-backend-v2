@@ -20,10 +20,7 @@ import {
 	DQReason,
 	StageDQShooter,
 } from "./entities";
-import { UsersModule, AuthModule } from "./app";
-import { ShootersModule } from './shooters/shooters.module';
-import { ShootersModule } from './app/shooters/shooters.module';
-
+import { UsersModule, AuthModule, ShootersModule } from "./app";
 @Module({
 	imports: [
 		TypeOrmModule.forRoot({
