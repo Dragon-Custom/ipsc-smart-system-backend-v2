@@ -11,6 +11,7 @@ import {
 	Request,
 	UnauthorizedException,
 	UseFilters,
+	SerializeOptions,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto, UpdateUserDto, UserResponseDTO } from "./dto";
@@ -39,26 +40,21 @@ export class UsersController {
 	}
 
 	@Get()
+	@SerializeOptions({})
 	async findAll(): Promise<UserResponseDTO[]> {
 		const result = await this.userService.findAll();
-		return result.map((user) => {
-			delete user.encryptedPassword;
-			return user;
-		});
+		return result;
 	}
 
 	@Get(":id")
+	@SerializeOptions({})
 	@ApiNotFoundResponse({ description: "User not found" })
 	async findOne(@Param() param: NumericIdParams): Promise<UserResponseDTO> {
-		const reuslt = await this.userService.findOne({
+		const result = await this.userService.findOne({
 			id: param.id,
 		});
-		if (reuslt) {
-			delete reuslt.encryptedPassword;
-			return reuslt;
-		} else {
-			throw new NotFoundException("User not found");
-		}
+		if (result) return result;
+		throw new NotFoundException("User not found");
 	}
 
 	@Patch(":id")

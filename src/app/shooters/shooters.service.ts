@@ -19,6 +19,7 @@ export class ShootersService {
 	async findOne(id: number) {
 		return await this.dataSource.manager.findOne(Shooter, {
 			where: { id },
+			relations: ["belongsUser"],
 		});
 	}
 

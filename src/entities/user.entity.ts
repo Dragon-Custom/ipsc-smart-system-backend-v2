@@ -30,6 +30,7 @@ export class User {
 	email: string;
 
 	@Exclude()
+	@Column()
 	encryptedPassword: string;
 
 	@CreateDateColumn()
