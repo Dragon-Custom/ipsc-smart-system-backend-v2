@@ -12,8 +12,8 @@ export class ShootersService {
 		return "This action adds a new shooter";
 	}
 
-	findAll() {
-		return `This action returns all shooters`;
+	async findAll() {
+		return await this.dataSource.manager.find(Shooter);
 	}
 
 	async findOne(id: number) {

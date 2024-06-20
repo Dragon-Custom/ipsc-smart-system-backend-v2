@@ -24,8 +24,8 @@ export class ShootersController {
 	}
 
 	@Get()
-	findAll() {
-		return this.shootersService.findAll();
+	async findAll() {
+		return await this.shootersService.findAll();
 	}
 
 	@Get(":id")
