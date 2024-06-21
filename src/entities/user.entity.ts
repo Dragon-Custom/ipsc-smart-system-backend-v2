@@ -12,10 +12,13 @@ import { Team } from "./team.entity";
 import { Shooter } from "./shooter.entity";
 import { Stage } from "./stage.entity";
 import { MatchStaff } from "./match";
+import { Field, Int, ObjectType } from "@nestjs/graphql";
 
 @Entity()
+@ObjectType()
 export class User {
 	@PrimaryGeneratedColumn()
+	@Field(() => Int)
 	id: number;
 
 	@OneToOne(() => Shooter, (shooter) => shooter.belongsUser)
@@ -23,15 +26,18 @@ export class User {
 	shooterProfile: Shooter;
 
 	@Column()
+	@Field(() => String)
 	nickname: string;
 
-	@Column()
+	@Column({ unique: true })
+	@Field(() => String)
 	email: string;
 
 	@Column()
 	encryptedPassword: string;
 
 	@CreateDateColumn()
+	@Field(() => Date)
 	createdAt: Date;
 
 	@OneToOne(() => Team, (team) => team.owner)

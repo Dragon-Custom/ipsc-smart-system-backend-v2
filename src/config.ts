@@ -10,6 +10,9 @@ export interface Config {
 	server: {
 		port: number;
 	};
+	security: {
+		passwordSalt: string;
+	};
 }
 
 import config from "../server.config";
