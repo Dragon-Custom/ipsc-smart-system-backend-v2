@@ -7,6 +7,9 @@ export interface Config {
 		database: string;
 	};
 	ipsc: {};
+	server: {
+		port: number;
+	};
 }
 
 import config from "../server.config";
