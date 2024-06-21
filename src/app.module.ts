@@ -20,7 +20,7 @@ import {
 	DQReason,
 	StageDQShooter,
 } from "./entities";
-import { UserModule } from "./graphql";
+import { UserModule, AuthModule } from "./graphql";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 
@@ -61,6 +61,7 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 			autoSchemaFile: true,
 		}),
 		UserModule,
+		AuthModule,
 	],
 })
 export class AppModule {

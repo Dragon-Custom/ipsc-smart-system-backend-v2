@@ -27,7 +27,7 @@ export class User {
 
 	@Column()
 	@Field(() => String)
-	nickname: string;
+	name: string;
 
 	@Column({ unique: true })
 	@Field(() => String)

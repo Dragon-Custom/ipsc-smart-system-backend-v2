@@ -16,7 +16,14 @@ export interface FindOneUserByEmail {
 	email: string;
 }
 
-export type FindUniqueUserArgs = Either<FindOneUserById, FindOneUserByEmail>;
+export interface FindOneUserByName {
+	name: string;
+}
+
+export type FindUniqueUserArgs = Either<
+	FindOneUserById,
+	Either<FindOneUserByEmail, FindOneUserByName>
+>;
 
 @Injectable()
 export class UserService {
