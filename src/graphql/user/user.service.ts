@@ -52,7 +52,7 @@ export class UserService {
 	async create(createUserInput: CreateUserInput) {
 		const result = await this.userRepo.save({
 			email: createUserInput.email,
-			nickname: createUserInput.nickname,
+			name: createUserInput.name,
 			encryptedPassword: this.encryptePassword(createUserInput.password),
 		});
 		return result;
