@@ -5,7 +5,6 @@ import {
 	CreateDateColumn,
 	ManyToOne,
 	OneToOne,
-	JoinColumn,
 	OneToMany,
 } from "typeorm";
 import { Team } from "./team.entity";
@@ -18,7 +17,6 @@ export class Shooter {
 	id: number;
 
 	@OneToOne(() => User, (user) => user.shooterProfile)
-	@JoinColumn()
 	belongsUser: User;
 
 	@Column()

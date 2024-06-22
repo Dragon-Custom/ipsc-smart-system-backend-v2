@@ -35,7 +35,6 @@ export class User {
 	createdAt: Date;
 
 	@OneToOne(() => Team, (team) => team.owner)
-	@JoinColumn()
 	ownsTeam: Team;
 
 	@ManyToOne(() => Team, (team) => team.admins)
