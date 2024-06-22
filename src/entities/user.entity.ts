@@ -21,8 +21,11 @@ export class User {
 	@Field(() => Int)
 	id: number;
 
-	@OneToOne(() => Shooter, (shooter) => shooter.belongsUser)
+	@OneToOne(() => Shooter, (shooter) => shooter.belongsUser, {
+		cascade: true,
+	})
 	@JoinColumn()
+	@Field(() => Shooter, { nullable: true })
 	shooterProfile: Shooter;
 
 	@Column()

@@ -6,6 +6,8 @@ import {
 	Int,
 	InputType,
 	Field,
+	ResolveField,
+	Parent,
 } from "@nestjs/graphql";
 import { FindUniqueUserArgs, UserService } from "./user.service";
 import { CreateUserInput } from "./dto/create-user.input";
@@ -37,6 +39,13 @@ export class UserResolver {
 			throw new BadRequestException("Invalid search parameters");
 		}
 		return searchArgs;
+	}
+
+	@ResolveField(() => User)
+	async shooterProfile(@Parent() user: User) {
+		return (
+			await this.userService.getRelations(user.id, ["shooterProfile"])
+		).shooterProfile;
 	}
 
 	@Mutation(() => User)

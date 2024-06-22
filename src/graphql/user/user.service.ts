@@ -49,11 +49,21 @@ export class UserService {
 		return secondResult;
 	}
 
+	getRelations(id: number, relations: string[]) {
+		return this.userRepo.findOne({
+			where: { id },
+			relations,
+		});
+	}
+
 	async create(createUserInput: CreateUserInput) {
 		const result = await this.userRepo.save({
 			email: createUserInput.email,
 			name: createUserInput.name,
 			encryptedPassword: this.encryptePassword(createUserInput.password),
+			shooterProfile: {
+				id: createUserInput.shooterProfileId,
+			},
 		});
 		return result;
 	}
@@ -74,10 +84,10 @@ export class UserService {
 		searchArgs: FindUniqueUserArgs,
 		updateUserInput: UpdateUserInput,
 	) {
-		let user = await this.findOne(searchArgs);
+		const user = await this.findOne(searchArgs);
 		if (!user) return null;
-		const { password, ...newValues } = updateUserInput;
-		user = {
+		const { password, shooterProfileId, ...newValues } = updateUserInput;
+		return await this.userRepo.save({
 			...user,
 			...newValues,
 			...{
@@ -85,8 +95,10 @@ export class UserService {
 					? this.encryptePassword(password)
 					: user.encryptedPassword,
 			},
-		};
-		return await this.userRepo.save(user);
+			shooterProfile: {
+				id: shooterProfileId,
+			},
+		});
 	}
 
 	async remove(searchArgs: FindUniqueUserArgs) {

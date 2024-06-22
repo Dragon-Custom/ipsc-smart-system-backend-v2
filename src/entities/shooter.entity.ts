@@ -21,8 +21,8 @@ export class Shooter {
 	id: number;
 
 	@OneToOne(() => User, (user) => user.shooterProfile)
-	@JoinColumn()
-	@Field(() => User)
+	@JoinColumn({})
+	@Field(() => User, { nullable: true })
 	belongsUser: User;
 
 	@Column()

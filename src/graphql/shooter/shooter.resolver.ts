@@ -11,7 +11,7 @@ import {
 } from "@nestjs/graphql";
 import { FindUniqueShooterArgs, ShooterService } from "./shooter.service";
 import { CreateShooterInput, UpdateShooterInput } from "./dto";
-import { Shooter, User } from "src/entities";
+import { Shooter } from "src/entities";
 import { BadRequestException } from "@nestjs/common";
 
 @InputType()
@@ -36,10 +36,10 @@ export class ShooterResolver {
 		throw new BadRequestException("Invalid search parameters");
 	}
 
-	@ResolveField(() => User)
-	async belongsUser(@Parent() user: User) {
+	@ResolveField(() => Shooter)
+	async belongsUser(@Parent() shooter: Shooter) {
 		return (
-			await this.shooterService.getRelations(user.id, ["belongsUser"])
+			await this.shooterService.getRelations(shooter.id, ["belongsUser"])
 		).belongsUser;
 	}
 

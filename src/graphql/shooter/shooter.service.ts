@@ -57,13 +57,16 @@ export class ShooterService {
 		searchArgs: FindUniqueShooterArgs,
 		updateShooterInput: UpdateShooterInput,
 	) {
-		let shooter = await this.findOne(searchArgs);
+		const shooter = await this.findOne(searchArgs);
 		if (!shooter) return null;
-		shooter = {
+		const { belongsUserId, ...newValue } = updateShooterInput;
+		return await this.shooterRepo.save({
 			...shooter,
-			...updateShooterInput,
-		};
-		return await this.shooterRepo.save(shooter);
+			...newValue,
+			belongsUser: {
+				id: belongsUserId,
+			},
+		});
 	}
 
 	async remove(searchArgs: FindUniqueShooterArgs) {
