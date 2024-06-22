@@ -31,7 +31,13 @@ export class ShooterService {
 	}
 
 	create(createShooterInput: CreateShooterInput) {
-		return "This action adds a new shooter";
+		return this.shooterRepo.save({
+			firstName: createShooterInput.firstName,
+			lastName: createShooterInput.lastName,
+			belongsUser: {
+				id: createShooterInput.belongsUserId,
+			},
+		});
 	}
 
 	findAll() {
@@ -39,21 +45,31 @@ export class ShooterService {
 	}
 
 	findOne(params: FindUniqueShooterArgs) {
-		return this.shooterRepo.findOne({
-			where: {
-				belongsUser: {
-					id: params.belongsUserId,
-				},
-				id: params.id,
+		return this.shooterRepo.findOneBy({
+			id: params.id,
+			belongsUser: {
+				id: params.belongsUserId,
 			},
 		});
 	}
 
-	update(id: number, updateShooterInput: UpdateShooterInput) {
-		return `This action updates a #${id} shooter`;
+	async update(
+		searchArgs: FindUniqueShooterArgs,
+		updateShooterInput: UpdateShooterInput,
+	) {
+		let shooter = await this.findOne(searchArgs);
+		if (!shooter) return null;
+		shooter = {
+			...shooter,
+			...updateShooterInput,
+		};
+		return await this.shooterRepo.save(shooter);
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} shooter`;
+	async remove(searchArgs: FindUniqueShooterArgs) {
+		const shooter = await this.findOne(searchArgs);
+		if (!shooter) return null;
+		const result = await this.shooterRepo.remove(shooter);
+		return { ...shooter, ...result, ...searchArgs };
 	}
 }

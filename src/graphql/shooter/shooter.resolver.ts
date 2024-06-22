@@ -65,16 +65,23 @@ export class ShooterResolver {
 
 	@Mutation(() => Shooter)
 	updateShooter(
-		@Args("updateShooterInput") updateShooterInput: UpdateShooterInput,
+		@Args("shooter", { type: () => FindUniqueShooterInput })
+		shooter: FindUniqueShooterInput,
+		@Args("data") data: UpdateShooterInput,
 	) {
 		return this.shooterService.update(
-			updateShooterInput.id,
-			updateShooterInput,
+			this.extractFindUniqueShooterArgs(shooter),
+			data,
 		);
 	}
 
 	@Mutation(() => Shooter)
-	removeShooter(@Args("id", { type: () => Int }) id: number) {
-		return this.shooterService.remove(id);
+	removeShooter(
+		@Args("shooter", { type: () => FindUniqueShooterInput })
+		shooter: FindUniqueShooterInput,
+	) {
+		return this.shooterService.remove(
+			this.extractFindUniqueShooterArgs(shooter),
+		);
 	}
 }
