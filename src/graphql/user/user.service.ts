@@ -65,6 +65,7 @@ export class UserService {
 	findOne(searchArgs: FindUniqueUserArgs) {
 		return this.userRepo.findOneBy({
 			id: searchArgs.id,
+			name: searchArgs.name,
 			email: searchArgs.email,
 		});
 	}

@@ -12,6 +12,13 @@ export interface Config {
 	};
 	security: {
 		passwordSalt: string;
+		jwt: {
+			jwtSecret: string;
+			/**
+			 * expressed in seconds or a string describing a time span zeit/ms. Eg: 60, "2 days", "10h", "7d"
+			 */
+			jwtExpirationTime: string;
+		};
 	};
 }
 
