@@ -23,6 +23,7 @@ import {
 import { UserModule, AuthModule } from "./graphql";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
+import { ShooterModule } from './graphql/shooter/shooter.module';
 
 @Module({
 	imports: [
@@ -62,6 +63,7 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 		}),
 		UserModule,
 		AuthModule,
+		ShooterModule,
 	],
 })
 export class AppModule {

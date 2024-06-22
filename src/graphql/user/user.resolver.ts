@@ -40,10 +40,8 @@ export class UserResolver {
 	}
 
 	@Mutation(() => User)
-	async createUser(
-		@Args("createUserInput") createUserInput: CreateUserInput,
-	) {
-		return await this.userService.create(createUserInput);
+	async createUser(@Args("data") data: CreateUserInput) {
+		return await this.userService.create(data);
 	}
 
 	@Query(() => [User], { name: "users" })
