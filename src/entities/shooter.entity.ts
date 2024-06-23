@@ -7,6 +7,7 @@ import {
 	OneToOne,
 	OneToMany,
 	RelationId,
+	VirtualColumn,
 } from "typeorm";
 import { Team } from "./team.entity";
 import { User } from "./user.entity";
@@ -20,10 +21,16 @@ export class Shooter {
 	id: number;
 
 	@RelationId((shooter: Shooter) => shooter.belongsUser)
+	@VirtualColumn({
+		query: (alias) =>
+			`SELECT id FROM public."user" WHERE "shooterProfileId" = ${alias}.id`,
+	})
 	@Expose()
 	belongsUserId?: number | null = null;
 
-	@OneToOne(() => User, (user) => user.shooterProfile)
+	@OneToOne(() => User, (user) => user.shooterProfile, {
+		eager: false,
+	})
 	@Exclude()
 	belongsUser: User;
 
