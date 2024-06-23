@@ -4,7 +4,9 @@ import {
 	Get,
 	NotFoundException,
 	Param,
+	Patch,
 	Post,
+	Put,
 } from "@nestjs/common";
 import { USER_PAGINATION_CONFIG, UserService } from "./user.service";
 import { IsInt } from "class-validator";
@@ -17,6 +19,7 @@ import {
 	Paginated,
 	PaginatedSwaggerDocs,
 } from "nestjs-paginate";
+import { UpdateUserDto } from "./dto/updateUser.dto";
 
 export class FindUniqueUserByIdParams {
 	@ApiProperty()
@@ -54,5 +57,21 @@ export class UserController {
 	@Post()
 	async createUser(@Body() createUserData: CreateUserDTO): Promise<UserDTO> {
 		return await this.userService.createUser(createUserData);
+	}
+
+	@Put(":id")
+	async updateEntireUser(
+		@Param() param: FindUniqueUserByIdParams,
+		@Body() userData: CreateUserDTO,
+	) {
+		return await this.userService.updateUser(param.id, userData);
+	}
+
+	@Patch(":id")
+	async updateUser(
+		@Param() param: FindUniqueUserByIdParams,
+		@Body() userData: UpdateUserDto,
+	) {
+		return await this.userService.updateUser(param.id, userData);
 	}
 }

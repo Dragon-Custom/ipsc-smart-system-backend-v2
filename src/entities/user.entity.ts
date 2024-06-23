@@ -87,7 +87,6 @@ export class User {
 			.digest("base64");
 		// add secret key
 		password = salt + firstResult;
-		console.log(password, salt);
 		// sha256 hash
 		const secondResult = createHash("sha512")
 			.update(password)
@@ -102,6 +101,7 @@ export class User {
 	@BeforeInsert()
 	@BeforeUpdate()
 	async encryptPassword() {
+		console.log(this.password);
 		this.passwordSalt = createHash("sha512")
 			.update(Math.random().toString())
 			.digest("base64");

@@ -11,6 +11,7 @@ import {
 	paginate,
 } from "nestjs-paginate";
 import { CreateUserDTO } from "./dto";
+import { UpdateUserDto } from "./dto/updateUser.dto";
 
 export const USER_PAGINATION_CONFIG: PaginateConfig<User> = {
 	sortableColumns: ["id", "nickname", "email", "shooterProfileId"],
@@ -46,5 +47,26 @@ export class UserService {
 		user.password = data.password;
 		user.nickname = data.nickname;
 		return await this.repository.save(user);
+	}
+
+	async updateUser(id: number, data: UpdateUserDto): Promise<User | null> {
+		const user = await this.getUserById(id);
+		if (!user) return null;
+		if (data.email) user.email = data.email;
+		if (data.password) {
+			//* the @BeforeUpdate() hook won't work here due to a typeorm bug
+			//* https://github.com/typeorm/typeorm/issues/5493
+			//* so we need to manually encrypt the password
+			user.encryptedPassword = user.encryptePassword(
+				data.password,
+				user.passwordSalt,
+			);
+			user.password = data.password;
+		}
+		if (data.nickname) user.nickname = data.nickname;
+		return await this.repository.save(user, {
+			reload: true,
+			listeners: true,
+		});
 	}
 }
