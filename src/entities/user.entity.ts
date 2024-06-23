@@ -10,6 +10,7 @@ import {
 	RelationId,
 	BeforeInsert,
 	BeforeUpdate,
+	DeleteDateColumn,
 } from "typeorm";
 import { Team } from "./team.entity";
 import { Shooter } from "./shooter.entity";
@@ -110,4 +111,8 @@ export class User {
 			this.passwordSalt,
 		);
 	}
+
+	@DeleteDateColumn()
+	@Exclude()
+	deletedAt: Date;
 }

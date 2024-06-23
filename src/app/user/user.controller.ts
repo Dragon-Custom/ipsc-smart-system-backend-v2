@@ -1,6 +1,7 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
 	NotFoundException,
 	Param,
@@ -11,7 +12,12 @@ import {
 import { USER_PAGINATION_CONFIG, UserService } from "./user.service";
 import { IsInt } from "class-validator";
 import { Type, plainToInstance } from "class-transformer";
-import { ApiNotFoundResponse, ApiProperty, ApiTags } from "@nestjs/swagger";
+import {
+	ApiNotFoundResponse,
+	ApiOkResponse,
+	ApiProperty,
+	ApiTags,
+} from "@nestjs/swagger";
 import { CreateUserDTO, UserDTO } from "./dto";
 import {
 	Paginate,
@@ -55,23 +61,41 @@ export class UserController {
 	}
 
 	@Post()
+	@ApiOkResponse({ description: "User created successfully" })
 	async createUser(@Body() createUserData: CreateUserDTO): Promise<UserDTO> {
 		return await this.userService.createUser(createUserData);
 	}
 
 	@Put(":id")
+	@ApiOkResponse({ description: "User updated successfully" })
+	@ApiNotFoundResponse({ description: "User not found" })
 	async updateEntireUser(
 		@Param() param: FindUniqueUserByIdParams,
 		@Body() userData: CreateUserDTO,
 	) {
-		return await this.userService.updateUser(param.id, userData);
+		const result = await this.userService.updateUser(param.id, userData);
+		if (result) return result;
+		else throw new NotFoundException("User not found");
 	}
 
 	@Patch(":id")
+	@ApiOkResponse({ description: "User updated successfully" })
+	@ApiNotFoundResponse({ description: "User not found" })
 	async updateUser(
 		@Param() param: FindUniqueUserByIdParams,
 		@Body() userData: UpdateUserDto,
 	) {
-		return await this.userService.updateUser(param.id, userData);
+		const result = await this.userService.updateUser(param.id, userData);
+		if (result) return result;
+		else throw new NotFoundException("User not found");
+	}
+
+	@Delete(":id")
+	@ApiOkResponse({ description: "User deleted successfully" })
+	@ApiNotFoundResponse({ description: "User not found" })
+	async deleteUser(@Param() param: FindUniqueUserByIdParams) {
+		const result = await this.userService.deleteUser(param.id);
+		if (result) return result;
+		else throw new NotFoundException("User not found");
 	}
 }

@@ -69,4 +69,13 @@ export class UserService {
 			listeners: true,
 		});
 	}
+
+	async deleteUser(id: number): Promise<User | null> {
+		const user = await this.getUserById(id);
+		if (!user) return null;
+		await this.repository.softRemove({
+			id,
+		});
+		return user;
+	}
 }
