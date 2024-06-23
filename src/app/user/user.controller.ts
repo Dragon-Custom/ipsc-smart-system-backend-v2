@@ -1,9 +1,16 @@
-import { Controller, Get, NotFoundException, Param } from "@nestjs/common";
+import {
+	Body,
+	Controller,
+	Get,
+	NotFoundException,
+	Param,
+	Post,
+} from "@nestjs/common";
 import { USER_PAGINATION_CONFIG, UserService } from "./user.service";
 import { IsInt } from "class-validator";
 import { Type, plainToInstance } from "class-transformer";
 import { ApiNotFoundResponse, ApiProperty, ApiTags } from "@nestjs/swagger";
-import { UserDTO } from "./dto";
+import { CreateUserDTO, UserDTO } from "./dto";
 import {
 	Paginate,
 	PaginateQuery,
@@ -38,11 +45,14 @@ export class UserController {
 	async getAllUsers(
 		@Paginate() query: PaginateQuery,
 	): Promise<Paginated<UserDTO>> {
-		const reuslt = await this.userService.getAllUsers(query);
-		console.log(reuslt);
 		return plainToInstance(
 			Paginated<UserDTO>,
 			await this.userService.getAllUsers(query),
 		);
+	}
+
+	@Post()
+	async createUser(@Body() createUserData: CreateUserDTO): Promise<UserDTO> {
+		return await this.userService.createUser(createUserData);
 	}
 }
