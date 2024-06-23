@@ -8,6 +8,7 @@ import {
 	OneToMany,
 	RelationId,
 	VirtualColumn,
+	DeleteDateColumn,
 } from "typeorm";
 import { Team } from "./team.entity";
 import { User } from "./user.entity";
@@ -20,11 +21,11 @@ export class Shooter {
 	@Expose()
 	id: number;
 
-	@RelationId((shooter: Shooter) => shooter.belongsUser)
 	@VirtualColumn({
 		query: (alias) =>
 			`SELECT id FROM public."user" WHERE "shooterProfileId" = ${alias}.id`,
 	})
+	@RelationId((shooter: Shooter) => shooter.belongsUser)
 	@Expose()
 	belongsUserId?: number | null = null;
 
@@ -51,11 +52,11 @@ export class Shooter {
 
 	@RelationId((shooter: Shooter) => shooter.team)
 	@Expose()
-	teamId: number;
+	teamId?: number | null = null;
 
-	@ManyToOne(() => Team, (team) => team.members)
+	@ManyToOne(() => Team, (team) => team.members, { nullable: true })
 	@Exclude()
-	team: Team;
+	team?: Team;
 
 	@OneToMany(() => MatchShooter, (matchShooter) => matchShooter.shooter)
 	@Exclude()
@@ -68,4 +69,8 @@ export class Shooter {
 	@CreateDateColumn()
 	@Expose()
 	createdAt: Date;
+
+	@DeleteDateColumn()
+	@Exclude()
+	deletedAt?: Date;
 }

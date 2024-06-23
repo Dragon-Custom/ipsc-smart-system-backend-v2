@@ -24,6 +24,7 @@ async function bootstrap() {
 		new ClassSerializerInterceptor(app.get(Reflector), {
 			exposeDefaultValues: true,
 			exposeUnsetFields: true,
+			enableImplicitConversion: true,
 		}),
 	);
 	await app.listen(config.server.port);

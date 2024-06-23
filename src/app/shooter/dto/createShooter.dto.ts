@@ -1,16 +1,8 @@
-import { ApiProperty, PickType } from "@nestjs/swagger";
-import { IsString } from "class-validator";
-import { Shooter } from "src/entities";
+import { PickType } from "@nestjs/swagger";
+import { ShooterDto } from "./shooter.dto";
 
-export class CreateShooterDto extends PickType(Shooter, [
+export class CreateShooterDto extends PickType(ShooterDto, [
 	"firstName",
 	"lastName",
-] as const) {
-	@ApiProperty()
-	@IsString()
-	firstName: string;
-
-	@ApiProperty()
-	@IsString()
-	lastName: string;
-}
+	"teamId",
+] as const) {}

@@ -1,4 +1,5 @@
 import { ApiProperty, PickType } from "@nestjs/swagger";
+import { Type } from "class-transformer";
 import { IsDateString, IsEmail, IsInt, IsString } from "class-validator";
 import { User } from "src/entities";
 
@@ -9,6 +10,7 @@ export class UserDto extends PickType(User, [
 	"createdAt",
 ] as const) {
 	@ApiProperty()
+	@Type(() => Number)
 	@IsInt()
 	id: number;
 

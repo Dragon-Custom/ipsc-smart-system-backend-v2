@@ -1,7 +1,7 @@
 import { ApiProperty, PickType } from "@nestjs/swagger";
-import { IsDateString, IsInt, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsDateString, IsInt, IsOptional, IsString } from "class-validator";
 import { Shooter } from "src/entities";
-import { IsNullable } from "src/lib";
 
 export class ShooterDto extends PickType(Shooter, [
 	"id",
@@ -13,6 +13,7 @@ export class ShooterDto extends PickType(Shooter, [
 	"createdAt",
 ] as const) {
 	@ApiProperty()
+	@Type(() => Number)
 	@IsInt()
 	id: number;
 
@@ -29,14 +30,18 @@ export class ShooterDto extends PickType(Shooter, [
 	fullName: string;
 
 	@ApiProperty()
+	@Type(() => Number)
+	@IsOptional()
 	@IsInt()
-	@IsNullable()
-	belongsUserId?: number | null = null;
+	belongsUserId?: number = undefined;
 
-	@ApiProperty()
+	@ApiProperty({
+		description: "set it to 0 to unbound the shooter from a team",
+	})
+	@Type(() => Number)
+	@IsOptional()
 	@IsInt()
-	@IsNullable()
-	teamId: number;
+	teamId?: number = undefined;
 
 	@ApiProperty()
 	@IsDateString()
