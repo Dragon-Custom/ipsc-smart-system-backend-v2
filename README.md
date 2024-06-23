@@ -12,16 +12,29 @@
 4. Update the `server.config.ts` file with your database credentials.
 	template: 
 	```typescript
-	import { Config } from "src/config";
+	import { Config } from "./src/config";
+
 	const config: Config = {
 		database: {
 			database: "",
 			username: "",
 			password: "",
-			host: "",
-			port: 0,
+			host: "localhost",
+			port: 5432,
 		},
 		ipsc: {},
+		server: {
+			port: 3000,
+		},
+		security: {
+			password: {
+				strongPasswordCriteria: {
+					minLength: 8,
+					minSymbols: 0,
+				},
+				passwordEncryptionSecret: "<KEY>",
+			},
+		},
 	};
 	export default config;
 	```
