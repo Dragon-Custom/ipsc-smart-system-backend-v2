@@ -3,7 +3,7 @@ import { IsEmail, IsString, IsStrongPassword } from "class-validator";
 import config from "src/config";
 import { User } from "src/entities";
 
-export class CreateUserDTO extends PickType(User, [
+export class CreateUserDto extends PickType(User, [
 	"nickname",
 	"email",
 ] as const) {

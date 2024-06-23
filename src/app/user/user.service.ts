@@ -10,8 +10,7 @@ import {
 	Paginated,
 	paginate,
 } from "nestjs-paginate";
-import { CreateUserDTO } from "./dto";
-import { UpdateUserDto } from "./dto/updateUser.dto";
+import { CreateUserDto, UpdateUserDto } from "./dto";
 
 export const USER_PAGINATION_CONFIG: PaginateConfig<User> = {
 	sortableColumns: ["id", "nickname", "email", "shooterProfileId"],
@@ -41,7 +40,7 @@ export class UserService {
 		return paginate(query, this.repository, USER_PAGINATION_CONFIG);
 	}
 
-	async createUser(data: CreateUserDTO): Promise<User> {
+	async createUser(data: CreateUserDto): Promise<User> {
 		const user = new User();
 		user.email = data.email;
 		user.password = data.password;
