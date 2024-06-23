@@ -18,5 +18,5 @@
 		"forceConsistentCasingInFileNames": false,
 		"noFallthroughCasesInSwitch": false,
 	},
-	"include": ["./server.config.ts", "./src/**/*"]
+	"include": ["src/config/configuration.ts", "./src/**/*"]
 }
