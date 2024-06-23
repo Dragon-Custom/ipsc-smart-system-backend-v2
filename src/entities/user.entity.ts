@@ -28,7 +28,7 @@ export class User {
 
 	@RelationId((user: User) => user.shooterProfile)
 	@Expose()
-	shooterProfileId: number;
+	shooterProfileId?: number | null = null;
 
 	@OneToOne(() => Shooter, (shooter) => shooter.belongsUser)
 	@JoinColumn()

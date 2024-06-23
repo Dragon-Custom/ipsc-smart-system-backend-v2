@@ -22,7 +22,9 @@ async function bootstrap() {
 	);
 	app.useGlobalInterceptors(
 		new ClassSerializerInterceptor(app.get(Reflector), {
-			// excludeExtraneousValues: true,
+			exposeDefaultValues: true,
+			exposeUnsetFields: true,
+			enableImplicitConversion: true,
 		}),
 	);
 	await app.listen(config.server.port);
