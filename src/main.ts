@@ -22,7 +22,8 @@ async function bootstrap() {
 	);
 	app.useGlobalInterceptors(
 		new ClassSerializerInterceptor(app.get(Reflector), {
-			// excludeExtraneousValues: true,
+			exposeDefaultValues: true,
+			exposeUnsetFields: true,
 		}),
 	);
 	await app.listen(config.server.port);
