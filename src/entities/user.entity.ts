@@ -43,10 +43,6 @@ export class User {
 	@Expose()
 	email: string;
 
-	@Column()
-	@Exclude()
-	encryptedPassword: string;
-
 	@CreateDateColumn()
 	@Expose()
 	createdAt: Date;
@@ -54,6 +50,10 @@ export class User {
 	@OneToOne(() => Team, (team) => team.owner)
 	@Exclude()
 	ownsTeam: Team;
+
+	@RelationId((user: User) => user.adminOfTeam)
+	@Expose()
+	adminOfTeamId: number;
 
 	@ManyToOne(() => Team, (team) => team.admins)
 	@Exclude()
@@ -75,10 +75,14 @@ export class User {
 	@Exclude()
 	isBanned: boolean;
 
+	// #region password encrpyion
+	@Column()
+	@Exclude()
+	encryptedPassword: string;
+
 	@Column({ default: "" })
 	@Exclude()
 	passwordSalt: string;
-
 	encryptePassword(password: string, salt: string) {
 		// add secret key
 		password = password + config.security.password.passwordEncryptionSecret;
@@ -95,10 +99,8 @@ export class User {
 
 		return secondResult;
 	}
-
 	@Exclude()
 	password: string;
-
 	@BeforeInsert()
 	@BeforeUpdate()
 	async encryptPassword() {
@@ -111,6 +113,7 @@ export class User {
 			this.passwordSalt,
 		);
 	}
+	// #endregion
 
 	@DeleteDateColumn()
 	@Exclude()
