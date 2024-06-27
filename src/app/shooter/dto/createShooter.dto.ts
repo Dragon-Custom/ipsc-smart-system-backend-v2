@@ -1,7 +1,7 @@
 import { PickType } from "@nestjs/swagger";
-import { ShooterDto } from "./shooter.dto";
+import { Shooter } from "src/entities";
 
-export class CreateShooterDto extends PickType(ShooterDto, [
+export class CreateShooterDto extends PickType(Shooter, [
 	"firstName",
 	"lastName",
 	"teamId",
