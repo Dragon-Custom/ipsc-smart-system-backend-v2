@@ -16,18 +16,27 @@ import { Team } from "./team.entity";
 import { Shooter } from "./shooter.entity";
 import { Stage } from "./stage.entity";
 import { MatchStaff } from "./match";
-import { Exclude, Expose } from "class-transformer";
+import { Exclude, Expose, Type } from "class-transformer";
 import config from "src/config";
 import { createHash } from "crypto";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsDate, IsEmail, IsInt, IsOptional, IsString } from "class-validator";
 
 @Entity()
 export class User {
 	@PrimaryGeneratedColumn()
 	@Expose()
+	@ApiProperty()
+	@Type(() => Number)
+	@IsInt()
 	id: number;
 
 	@RelationId((user: User) => user.shooterProfile)
 	@Expose()
+	@ApiProperty()
+	@Type(() => Number)
+	@IsOptional()
+	@IsInt()
 	shooterProfileId?: number | null = null;
 
 	@OneToOne(() => Shooter, (shooter) => shooter.belongsUser)
@@ -37,14 +46,20 @@ export class User {
 
 	@Column()
 	@Expose()
+	@ApiProperty()
+	@IsString()
 	nickname: string;
 
 	@Column()
 	@Expose()
+	@ApiProperty()
+	@IsEmail()
 	email: string;
 
 	@CreateDateColumn()
 	@Expose()
+	@ApiProperty()
+	@IsDate()
 	createdAt: Date;
 
 	@OneToOne(() => Team, (team) => team.owner)
@@ -53,6 +68,9 @@ export class User {
 
 	@RelationId((user: User) => user.adminOfTeam)
 	@Expose()
+	@ApiProperty()
+	@Type(() => Number)
+	@IsInt()
 	adminOfTeamId: number;
 
 	@ManyToOne(() => Team, (team) => team.admins)

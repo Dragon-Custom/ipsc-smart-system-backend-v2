@@ -18,7 +18,7 @@ import {
 	ApiProperty,
 	ApiTags,
 } from "@nestjs/swagger";
-import { CreateUserDto, UserDto } from "./dto";
+import { CreateUserDto } from "./dto";
 import {
 	Paginate,
 	PaginateQuery,
@@ -26,6 +26,7 @@ import {
 	PaginatedSwaggerDocs,
 } from "nestjs-paginate";
 import { UpdateUserDto } from "./dto";
+import { User } from "src/entities";
 
 export class FindUniqueUserByIdParams {
 	@ApiProperty()
@@ -41,28 +42,26 @@ export class UserController {
 
 	@Get(":id")
 	@ApiNotFoundResponse({ description: "User not found" })
-	async getUserById(
-		@Param() param: FindUniqueUserByIdParams,
-	): Promise<UserDto> {
+	async getUserById(@Param() param: FindUniqueUserByIdParams): Promise<User> {
 		const user = await this.userService.getUserById(param.id);
 		if (user) return user;
 		else throw new NotFoundException("User not found");
 	}
 
 	@Get()
-	@PaginatedSwaggerDocs(UserDto, USER_PAGINATION_CONFIG)
+	@PaginatedSwaggerDocs(User, USER_PAGINATION_CONFIG)
 	async getAllUsers(
 		@Paginate() query: PaginateQuery,
-	): Promise<Paginated<UserDto>> {
+	): Promise<Paginated<User>> {
 		return plainToInstance(
-			Paginated<UserDto>,
+			Paginated<User>,
 			await this.userService.getAllUsers(query),
 		);
 	}
 
 	@Post()
 	@ApiOkResponse({ description: "User created successfully" })
-	async createUser(@Body() createUserData: CreateUserDto): Promise<UserDto> {
+	async createUser(@Body() createUserData: CreateUserDto): Promise<User> {
 		return await this.userService.createUser(createUserData);
 	}
 
