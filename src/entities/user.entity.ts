@@ -20,7 +20,14 @@ import { Exclude, Expose, Type } from "class-transformer";
 import config from "src/config";
 import { createHash } from "crypto";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsEmail, IsInt, IsOptional, IsString } from "class-validator";
+import {
+	IsDate,
+	IsEmail,
+	IsInt,
+	IsOptional,
+	IsString,
+	IsStrongPassword,
+} from "class-validator";
 
 @Entity()
 export class User {
