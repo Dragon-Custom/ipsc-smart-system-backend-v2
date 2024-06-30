@@ -17,12 +17,13 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { isMimeType } from "class-validator";
 import config from "src/config";
 import { ImageDto } from "./image.dto";
-import { ApiOkResponse } from "@nestjs/swagger";
+import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
 import { Response } from "express";
 import { createReadStream } from "fs";
 
 @Controller("images")
+@ApiTags("images")
 export class ImagesController {
 	constructor(private readonly imagesService: ImagesService) {}
 
