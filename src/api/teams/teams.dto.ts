@@ -5,7 +5,13 @@ import {
 	PickType,
 } from "@nestjs/swagger";
 import { Exclude, Type } from "class-transformer";
-import { IsDate, IsInt, IsOptional, IsString } from "class-validator";
+import {
+	IsDate,
+	IsISO31661Alpha3,
+	IsInt,
+	IsOptional,
+	IsString,
+} from "class-validator";
 import { Shooter, Team, User } from "src/entities";
 
 export class TeamDto extends Team {
@@ -55,6 +61,14 @@ export class TeamDto extends Team {
 	})
 	@IsDate()
 	createdAt: Date;
+
+	@ApiProperty({
+		description: "Team's region",
+		example: "HKG",
+		default: "XXX",
+	})
+	@IsISO31661Alpha3()
+	region: string;
 
 	@ApiProperty({
 		description: "Team's last update date",

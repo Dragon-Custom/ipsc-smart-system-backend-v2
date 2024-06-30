@@ -39,6 +39,17 @@ export abstract class Team {
 	@OneToMany(() => Shooter, (shooter) => shooter.team)
 	abstract members: Shooter[];
 
+	/**
+	 * ISO 3166-1 alpha-3 code for the team's region
+	 */
+	@Column({
+		comment: "ISO 3166-1 alpha-3 code for the team's region",
+		type: "varchar",
+		length: 3,
+		default: "XXX",
+	})
+	abstract region: string;
+
 	@CreateDateColumn()
 	abstract createdAt: Date;
 
