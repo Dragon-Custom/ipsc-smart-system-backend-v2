@@ -21,7 +21,13 @@ import {
 	StageDQShooter,
 	Image,
 } from "./entities";
-import { ShootersModule, UsersModule, TeamsModule, ImagesModule } from "./api";
+import {
+	ShootersModule,
+	UsersModule,
+	TeamsModule,
+	ImagesModule,
+	StagesModule,
+} from "./api";
 
 @Module({
 	imports: [
@@ -58,6 +64,7 @@ import { ShootersModule, UsersModule, TeamsModule, ImagesModule } from "./api";
 		ShootersModule,
 		TeamsModule,
 		ImagesModule,
+		StagesModule,
 	],
 })
 export class AppModule {

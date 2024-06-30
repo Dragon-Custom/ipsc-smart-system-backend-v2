@@ -7,9 +7,13 @@ import {
 	OneToMany,
 	DeleteDateColumn,
 	UpdateDateColumn,
+	OneToOne,
+	RelationId,
+	JoinColumn,
 } from "typeorm";
 import { User } from "./user.entity";
 import { MatchStage } from "./match/matchStage.entity";
+import { Image } from "./image.entity";
 
 export enum StageType {
 	Short = "Short",
@@ -26,14 +30,33 @@ export abstract class Stage {
 	@Column()
 	abstract name: string;
 
-	@Column({ nullable: true })
-	abstract description: string;
+	@OneToOne(() => Image)
+	@JoinColumn()
+	thumbnail: Image;
+
+	@RelationId((stage: Stage) => stage.thumbnail)
+	@Column()
+	abstract thumbnailId: string;
+
+	@OneToMany(() => Image, (image) => image.stage)
+	attachments: Image[];
+
+	@RelationId((stage: Stage) => stage.attachments)
+	abstract attachmentIds?: string[];
 
 	@Column({ nullable: true })
-	abstract briefing: string;
+	abstract description?: string;
 
-	@ManyToOne(() => User, (user) => user.designedStages)
-	abstract designer: User;
+	@Column({ nullable: true })
+	abstract briefing?: string;
+
+	@ManyToOne(() => User, (user) => user.designedStages, { nullable: false })
+	@JoinColumn()
+	designer: User;
+
+	@RelationId((stage: Stage) => stage.designer)
+	@Column()
+	abstract designerId: number;
 
 	@Column()
 	abstract papers: number;
@@ -50,7 +73,7 @@ export abstract class Stage {
 	/**
 	 * in seconds
 	 */
-	@Column({ comment: "in seconds", type: "time" })
+	@Column({ comment: "in seconds" })
 	abstract walkthroughTime: number;
 
 	@Column()
@@ -87,14 +110,14 @@ export abstract class Stage {
 	abstract readonly stageType: StageType;
 
 	@OneToMany(() => MatchStage, (matchStage) => matchStage.stage)
-	abstract stageOfMatches: MatchStage[];
+	stageOfMatches: MatchStage[];
 
 	@CreateDateColumn()
-	abstract createdAt: Date;
+	abstract readonly createdAt: Date;
 
 	@UpdateDateColumn()
-	abstract updatedAt: Date;
+	abstract readonly updatedAt: Date;
 
 	@DeleteDateColumn()
-	abstract deletedAt: Date;
+	abstract readonly deletedAt: Date;
 }

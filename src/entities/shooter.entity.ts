@@ -21,7 +21,7 @@ export abstract class Shooter {
 	abstract id: number;
 
 	@OneToOne(() => User, (user) => user.shooterProfile)
-	abstract belongsUser: User;
+	belongsUser: User;
 
 	@RelationId((shooter: Shooter) => shooter.belongsUser)
 	abstract belongsUserId?: number;
@@ -36,11 +36,11 @@ export abstract class Shooter {
 		generatedType: "STORED",
 		asExpression: `"firstName" || ' ' || "lastName"`,
 	})
-	abstract fullName: string;
+	abstract readonly fullName: string;
 
 	@ManyToOne(() => Team, (team) => team.members)
 	@JoinColumn()
-	abstract team: Team;
+	team: Team;
 
 	@RelationId((shooter: Shooter) => shooter.team)
 	@Column({
@@ -49,17 +49,17 @@ export abstract class Shooter {
 	abstract teamId?: number;
 
 	@OneToMany(() => MatchShooter, (matchShooter) => matchShooter.shooter)
-	abstract shooterOfMatches: MatchShooter[];
+	shooterOfMatches: MatchShooter[];
 
 	@OneToMany(() => Score, (score) => score.shooter)
-	abstract scores: Score[];
+	scores: Score[];
 
 	@CreateDateColumn()
-	abstract createdAt: Date;
+	abstract readonly createdAt: Date;
 
 	@UpdateDateColumn()
-	abstract updatedAt: Date;
+	abstract readonly updatedAt: Date;
 
 	@DeleteDateColumn()
-	abstract deletedAt: Date;
+	abstract readonly deletedAt: Date;
 }

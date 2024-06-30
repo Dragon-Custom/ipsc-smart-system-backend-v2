@@ -25,7 +25,7 @@ export abstract class Team {
 
 	@OneToOne(() => User, (user) => user.ownsTeam)
 	@JoinColumn()
-	abstract owner: User;
+	owner: User;
 
 	@RelationId((team: Team) => team.owner)
 	@Column({
@@ -34,10 +34,10 @@ export abstract class Team {
 	abstract ownerId: number;
 
 	@OneToMany(() => User, (user) => user.adminOfTeam)
-	abstract admins: User[];
+	admins: User[];
 
 	@OneToMany(() => Shooter, (shooter) => shooter.team)
-	abstract members: Shooter[];
+	members: Shooter[];
 
 	/**
 	 * ISO 3166-1 alpha-3 code for the team's region
@@ -51,8 +51,8 @@ export abstract class Team {
 	abstract region: string;
 
 	@CreateDateColumn()
-	abstract createdAt: Date;
+	abstract readonly createdAt: Date;
 
 	@UpdateDateColumn()
-	abstract updatedAt: Date;
+	abstract readonly updatedAt: Date;
 }

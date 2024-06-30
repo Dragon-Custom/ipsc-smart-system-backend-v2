@@ -52,7 +52,6 @@ export class ImagesController {
 		@Res({ passthrough: true }) res: Response,
 	): Promise<void> {
 		const image = await this.imagesService.getImage(id);
-		console.log(image, id);
 		res.set({
 			"Content-Type": image.fileType,
 			"Content-Disposition": `attachment; filename="${image.name}"`,
