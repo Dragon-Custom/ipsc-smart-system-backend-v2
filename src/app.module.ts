@@ -20,7 +20,7 @@ import {
 	DQReason,
 	StageDQShooter,
 } from "./entities";
-import { UsersModule } from "./api";
+import { ShootersModule, UsersModule } from "./api";
 
 @Module({
 	imports: [
@@ -53,6 +53,7 @@ import { UsersModule } from "./api";
 			synchronize: process.env.NODE_ENV !== "production",
 		}),
 		UsersModule,
+		ShootersModule,
 	],
 })
 export class AppModule {

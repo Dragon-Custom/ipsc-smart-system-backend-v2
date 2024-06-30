@@ -9,13 +9,16 @@ import {
 	OneToMany,
 	UpdateDateColumn,
 	DeleteDateColumn,
+	RelationId,
+	BeforeInsert,
+	BeforeUpdate,
 } from "typeorm";
 import { Team } from "./team.entity";
 import { Shooter } from "./shooter.entity";
 import { Stage } from "./stage.entity";
 import { MatchStaff } from "./match";
-import { Exclude } from "class-transformer";
-
+import { createHash } from "crypto";
+import config from "src/config";
 @Entity()
 export class User {
 	@PrimaryGeneratedColumn()
@@ -25,6 +28,12 @@ export class User {
 	@JoinColumn()
 	shooterProfile: Shooter;
 
+	@RelationId((user: User) => user.shooterProfile)
+	@Column({
+		nullable: true,
+	})
+	shooterProfileId?: number;
+
 	@Column()
 	nickname: string;
 
@@ -32,8 +41,30 @@ export class User {
 	email: string;
 
 	@Column()
-	@Exclude()
-	encryptedPassword: string;
+	password: string;
+
+	@BeforeInsert()
+	@BeforeUpdate()
+	async hashPassword() {
+		console.log("hashing password ", this.password);
+		if (!this.password) return;
+		// add secret key
+		let password =
+			this.password + config.security.encrypt.passwordEncryptionKey;
+		// sha256 hash
+		const firstResult = createHash("sha512")
+			.update(password)
+			.digest("base64");
+		// add secret key
+		password = config.security.encrypt.passwordEncryptionKey + firstResult;
+		// sha256 hash
+		const secondResult = createHash("sha512")
+			.update(password)
+			.digest("base64");
+
+		this.password = secondResult;
+		return this.password;
+	}
 
 	@CreateDateColumn()
 	createdAt: Date;
@@ -41,7 +72,6 @@ export class User {
 	@UpdateDateColumn()
 	updatedAt: Date;
 
-	@Exclude()
 	@DeleteDateColumn()
 	deletedAt: Date;
 

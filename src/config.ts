@@ -10,7 +10,14 @@ export interface Config {
 	server: {
 		port: number;
 	};
+	security: {
+		encrypt: {
+			passwordEncryptionKey: string;
+		};
+		passwordOptions?: IsStrongPasswordOptions;
+	};
 }
 
+import { IsStrongPasswordOptions } from "class-validator";
 import config from "../server.config";
 export default config as typeof config;
