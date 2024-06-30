@@ -6,6 +6,9 @@ import {
 	OneToOne,
 	JoinColumn,
 	OneToMany,
+	RelationId,
+	UpdateDateColumn,
+	DeleteDateColumn,
 } from "typeorm";
 import { User } from "./user.entity";
 import { Shooter } from "./shooter.entity";
@@ -19,11 +22,17 @@ export class Team {
 	name: string;
 
 	@Column({ nullable: true })
-	description: string;
+	description?: string;
 
 	@OneToOne(() => User, (user) => user.ownsTeam)
 	@JoinColumn()
 	owner: User;
+
+	@RelationId((team: Team) => team.owner)
+	@Column({
+		nullable: false,
+	})
+	ownerId: number;
 
 	@OneToMany(() => User, (user) => user.adminOfTeam)
 	admins: User[];
@@ -33,4 +42,7 @@ export class Team {
 
 	@CreateDateColumn()
 	createdAt: Date;
+
+	@UpdateDateColumn()
+	updatedAt: Date;
 }

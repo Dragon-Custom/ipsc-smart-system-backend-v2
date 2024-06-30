@@ -20,7 +20,7 @@ import {
 	DQReason,
 	StageDQShooter,
 } from "./entities";
-import { ShootersModule, UsersModule } from "./api";
+import { ShootersModule, UsersModule, TeamsModule } from "./api";
 
 @Module({
 	imports: [
@@ -54,6 +54,7 @@ import { ShootersModule, UsersModule } from "./api";
 		}),
 		UsersModule,
 		ShootersModule,
+		TeamsModule,
 	],
 })
 export class AppModule {

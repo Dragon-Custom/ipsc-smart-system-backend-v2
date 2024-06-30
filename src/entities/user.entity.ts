@@ -77,6 +77,9 @@ export class User {
 	@OneToOne(() => Team, (team) => team.owner)
 	ownsTeam: Team;
 
+	@RelationId((user: User) => user.ownsTeam)
+	ownerOfTeamId?: number;
+
 	@ManyToOne(() => Team, (team) => team.admins)
 	adminOfTeam: Team;
 

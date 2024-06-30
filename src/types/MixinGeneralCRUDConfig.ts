@@ -2,7 +2,6 @@ import { CrudOptions } from "@nestjsx/crud";
 
 export function mixinCrudConfig(option: CrudOptions): CrudOptions {
 	return {
-		...option,
 		...{
 			validation: {
 				always: true,
@@ -13,5 +12,6 @@ export function mixinCrudConfig(option: CrudOptions): CrudOptions {
 				persist: ["id"],
 			},
 		},
+		...option,
 	};
 }
