@@ -31,7 +31,15 @@ import { UserModule, ShooterModule, TeamModule } from "./app";
 			username: config.database.username,
 			password: config.database.password,
 			database: config.database.database,
-			logging: ["error", "warn", "info", "query", "schema", "migration"],
+			logging: [
+				"error",
+				"warn",
+				"info",
+				"query",
+				"schema",
+				"migration",
+				"log",
+			],
 			entities: [
 				User,
 				Shooter,

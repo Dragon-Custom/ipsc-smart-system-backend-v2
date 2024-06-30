@@ -7,7 +7,6 @@ import {
 	OneToOne,
 	OneToMany,
 	RelationId,
-	VirtualColumn,
 	DeleteDateColumn,
 } from "typeorm";
 import { Team } from "./team.entity";
@@ -26,10 +25,6 @@ export class Shooter {
 	@IsInt()
 	id: number;
 
-	@VirtualColumn({
-		query: (alias) =>
-			`SELECT id FROM public."user" WHERE "shooterProfileId" = ${alias}.id`,
-	})
 	@RelationId((shooter: Shooter) => shooter.belongsUser)
 	@Expose()
 	@ApiProperty()

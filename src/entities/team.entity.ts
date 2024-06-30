@@ -7,18 +7,23 @@ import {
 	JoinColumn,
 	OneToMany,
 	RelationId,
+	VirtualColumn,
+	AfterLoad,
+	AfterInsert,
+	AfterUpdate,
 } from "typeorm";
 import { User } from "./user.entity";
 import { Shooter } from "./shooter.entity";
 import { Exclude, Expose, Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsDate, IsInt, IsString } from "class-validator";
+import { IsArray, IsDate, IsInt, IsOptional, IsString } from "class-validator";
 
 @Entity()
 export class Team {
 	@PrimaryGeneratedColumn()
 	@Expose()
 	@ApiProperty()
+	@Type(() => Number)
 	@IsInt()
 	id: number;
 
@@ -31,8 +36,9 @@ export class Team {
 	@Column({ nullable: true })
 	@Expose()
 	@ApiProperty()
+	@IsOptional()
 	@IsString()
-	description: string;
+	description?: string;
 
 	@OneToOne(() => User, (user) => user.ownsTeam)
 	@JoinColumn()
@@ -54,9 +60,11 @@ export class Team {
 	@Expose()
 	@ApiProperty()
 	@IsArray()
-	adminsId: number[];
+	adminsIds: number[];
 
-	@OneToMany(() => Shooter, (shooter) => shooter.team)
+	@OneToMany(() => Shooter, (shooter) => shooter.team, {
+		eager: false,
+	})
 	@Exclude()
 	members: Shooter[];
 
@@ -64,7 +72,27 @@ export class Team {
 	@Expose()
 	@ApiProperty()
 	@IsArray()
-	membersId: number[];
+	membersIds: number[];
+
+	@Expose()
+	@ApiProperty()
+	@Type(() => Number)
+	@IsInt()
+	@VirtualColumn({
+		query: (alias) =>
+			`SELECT COUNT("id") FROM public."shooter" WHERE "teamId" = ${alias}.id`,
+		type: "int",
+		hstoreType: "object",
+	})
+	membersCount: number;
+
+	@AfterLoad()
+	@AfterInsert()
+	@AfterUpdate()
+	private generateMembersCount(): void {
+		if (this.membersIds) this.membersCount = this.membersIds.length;
+		else this.membersCount = 0;
+	}
 
 	@CreateDateColumn()
 	@Expose()
