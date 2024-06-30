@@ -1,5 +1,5 @@
 import { PickType } from "@nestjs/mapped-types";
-import { ApiProperty, PartialType } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional, PartialType } from "@nestjs/swagger";
 import { Exclude, Type } from "class-transformer";
 import {
 	IsBoolean,
@@ -31,11 +31,9 @@ export class UserDto extends User {
 	@Exclude()
 	shooterProfile: Shooter;
 
-	@ApiProperty({
+	@ApiPropertyOptional({
 		example: 1,
 		description: "Shooter profile id of the user",
-		required: false,
-		nullable: true,
 	})
 	@Type(() => Number)
 	@IsOptional()
@@ -73,11 +71,9 @@ export class UserDto extends User {
 	@Exclude()
 	ownsTeam: Team;
 
-	@ApiProperty({
+	@ApiPropertyOptional({
 		example: 1,
 		description: "Id of the team that the user owns",
-		required: false,
-		nullable: true,
 	})
 	@Type(() => Number)
 	@IsOptional()
@@ -87,11 +83,9 @@ export class UserDto extends User {
 	@Exclude()
 	adminOfTeam: Team;
 
-	@ApiProperty({
+	@ApiPropertyOptional({
 		example: 1,
 		description: "Id of the team that the user is an admin of",
-		required: false,
-		nullable: true,
 	})
 	@Type(() => Number)
 	@IsOptional()
@@ -145,14 +139,12 @@ export class CreateUserDto extends PickType(UserDto, [
 	@IsEmail()
 	email: string;
 
-	@ApiProperty({
+	@ApiPropertyOptional({
 		example: 1,
 		description: "Shooter profile id of the user",
-		required: false,
-		nullable: true,
 	})
-	@Type(() => Number)
 	@IsOptional()
+	@Type(() => Number)
 	@IsInt()
 	shooterProfileId?: number;
 }

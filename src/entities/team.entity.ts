@@ -8,7 +8,6 @@ import {
 	OneToMany,
 	RelationId,
 	UpdateDateColumn,
-	DeleteDateColumn,
 } from "typeorm";
 import { User } from "./user.entity";
 import { Shooter } from "./shooter.entity";

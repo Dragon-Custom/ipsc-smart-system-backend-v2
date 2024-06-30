@@ -16,50 +16,50 @@ import { User } from "./user.entity";
 import { MatchShooter, Score } from "./match";
 
 @Entity()
-export class Shooter {
+export abstract class Shooter {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@OneToOne(() => User, (user) => user.shooterProfile)
-	belongsUser: User;
+	abstract belongsUser: User;
 
 	@RelationId((shooter: Shooter) => shooter.belongsUser)
-	belongsUserId?: number;
+	abstract belongsUserId?: number;
 
 	@Column()
-	firstName: string;
+	abstract firstName: string;
 
 	@Column()
-	lastName: string;
+	abstract lastName: string;
 
 	@Column({
 		generatedType: "STORED",
 		asExpression: `"firstName" || ' ' || "lastName"`,
 	})
-	fullName: string;
+	abstract fullName: string;
 
 	@ManyToOne(() => Team, (team) => team.members)
 	@JoinColumn()
-	team: Team;
+	abstract team: Team;
 
 	@RelationId((shooter: Shooter) => shooter.team)
 	@Column({
 		nullable: true,
 	})
-	teamId?: number;
+	abstract teamId?: number;
 
 	@OneToMany(() => MatchShooter, (matchShooter) => matchShooter.shooter)
-	shooterOfMatches: MatchShooter[];
+	abstract shooterOfMatches: MatchShooter[];
 
 	@OneToMany(() => Score, (score) => score.shooter)
-	scores: Score[];
+	abstract scores: Score[];
 
 	@CreateDateColumn()
-	createdAt: Date;
+	abstract createdAt: Date;
 
 	@UpdateDateColumn()
-	updatedAt: Date;
+	abstract updatedAt: Date;
 
 	@DeleteDateColumn()
-	deletedAt: Date;
+	abstract deletedAt: Date;
 }
