@@ -144,6 +144,17 @@ export class CreateUserDto extends PickType(UserDto, [
 	})
 	@IsEmail()
 	email: string;
+
+	@ApiProperty({
+		example: 1,
+		description: "Shooter profile id of the user",
+		required: false,
+		nullable: true,
+	})
+	@Type(() => Number)
+	@IsOptional()
+	@IsInt()
+	shooterProfileId?: number;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
