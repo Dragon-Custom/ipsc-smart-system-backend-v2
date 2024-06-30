@@ -13,35 +13,35 @@ import { User } from "./user.entity";
 import { Shooter } from "./shooter.entity";
 
 @Entity()
-export class Team {
+export abstract class Team {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@Column()
-	name: string;
+	abstract name: string;
 
 	@Column({ nullable: true })
-	description?: string;
+	abstract description?: string;
 
 	@OneToOne(() => User, (user) => user.ownsTeam)
 	@JoinColumn()
-	owner: User;
+	abstract owner: User;
 
 	@RelationId((team: Team) => team.owner)
 	@Column({
 		nullable: false,
 	})
-	ownerId: number;
+	abstract ownerId: number;
 
 	@OneToMany(() => User, (user) => user.adminOfTeam)
-	admins: User[];
+	abstract admins: User[];
 
 	@OneToMany(() => Shooter, (shooter) => shooter.team)
-	members: Shooter[];
+	abstract members: Shooter[];
 
 	@CreateDateColumn()
-	createdAt: Date;
+	abstract createdAt: Date;
 
 	@UpdateDateColumn()
-	updatedAt: Date;
+	abstract updatedAt: Date;
 }

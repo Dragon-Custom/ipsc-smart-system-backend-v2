@@ -1,43 +1,73 @@
-import { ApiProperty, PartialType, PickType } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsInt, IsOptional, IsString } from "class-validator";
-import { Team } from "src/entities";
+import {
+	ApiProperty,
+	ApiPropertyOptional,
+	PartialType,
+	PickType,
+} from "@nestjs/swagger";
+import { Exclude, Type } from "class-transformer";
+import { IsDate, IsInt, IsOptional, IsString } from "class-validator";
+import { Shooter, Team, User } from "src/entities";
 
-export class TeamDto extends Team {}
+export class TeamDto extends Team {
+	@ApiProperty({
+		description: "Team's id",
+		example: 1,
+	})
+	@Type(() => Number)
+	@IsInt()
+	id: number;
 
-export class CreateTeamDto extends PickType(TeamDto, [
-	"name",
-	"description",
-	"ownerId",
-] as const) {
 	@ApiProperty({
 		description: "Team's name",
 		example: "Team 1",
-		required: true,
-		type: String,
 	})
 	@IsString()
 	name: string;
 
-	@ApiProperty({
+	@ApiPropertyOptional({
 		description: "Team's description",
 		example: "This is the first team",
-		required: false,
-		type: String,
 	})
 	@IsOptional()
 	@IsString()
 	description?: string;
 
+	@Exclude()
+	owner: User;
+
 	@ApiProperty({
 		description: "Team's owner's id",
 		example: 1,
-		required: true,
-		type: Number,
 	})
 	@Type(() => Number)
 	@IsInt()
 	ownerId: number;
+
+	@Exclude()
+	admins: User[];
+
+	@Exclude()
+	members: Shooter[];
+
+	@ApiProperty({
+		description: "Team's creation date",
+		example: new Date(),
+	})
+	@IsDate()
+	createdAt: Date;
+
+	@ApiProperty({
+		description: "Team's last update date",
+		example: new Date(),
+	})
+	@IsDate()
+	updatedAt: Date;
 }
+
+export class CreateTeamDto extends PickType(TeamDto, [
+	"name",
+	"description",
+	"ownerId",
+] as const) {}
 
 export class UpdateTeamDto extends PartialType(CreateTeamDto) {}
