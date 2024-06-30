@@ -46,7 +46,6 @@ export class User {
 	@BeforeInsert()
 	@BeforeUpdate()
 	async hashPassword() {
-		console.log("hashing password ", this.password);
 		if (!this.password) return;
 		// add secret key
 		let password =
