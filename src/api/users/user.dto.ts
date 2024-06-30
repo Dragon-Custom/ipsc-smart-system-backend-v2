@@ -11,7 +11,7 @@ import {
 import config from "src/config";
 import { User } from "src/entities";
 
-export class UserDto extends User {
+export class UserDto extends OmitType(User, ["password"]) {
 	@Exclude()
 	password: string;
 

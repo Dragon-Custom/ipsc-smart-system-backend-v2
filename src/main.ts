@@ -19,12 +19,16 @@ CrudConfigService.load({
 		},
 	},
 	routes: {
-		// updateOneBase: {
-		// 	allowParamsOverride: true,
-		// },
-		// deleteOneBase: {
-		// 	returnDeleted: true,
-		// },
+		updateOneBase: {
+			allowParamsOverride: true,
+		},
+		deleteOneBase: {
+			returnDeleted: true,
+		},
+		// HACK: Due to a bug in the crud package, we need to exclude the recoverOneBase route
+		// WARN: The crud lib won't exclude the password while returning the user object.
+		// To fix this, we now need to use the exclude option in the crud config.
+		exclude: ["recoverOneBase"],
 	},
 });
 
@@ -44,10 +48,12 @@ async function bootstrap() {
 
 	app.useGlobalInterceptors(
 		new ClassSerializerInterceptor(app.get(Reflector), {
-			exposeDefaultValues: true,
-			exposeUnsetFields: true,
-			enableImplicitConversion: true,
+			// exposeDefaultValues: true,
+			// exposeUnsetFields: true,
+			// enableImplicitConversion: true,
 			excludeExtraneousValues: true,
+			enableCircularCheck: true,
+			strategy: "exposeAll",
 		}),
 	);
 

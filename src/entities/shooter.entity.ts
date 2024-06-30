@@ -6,6 +6,10 @@ import {
 	ManyToOne,
 	OneToOne,
 	OneToMany,
+	RelationId,
+	UpdateDateColumn,
+	DeleteDateColumn,
+	JoinColumn,
 } from "typeorm";
 import { Team } from "./team.entity";
 import { User } from "./user.entity";
@@ -18,6 +22,9 @@ export class Shooter {
 
 	@OneToOne(() => User, (user) => user.shooterProfile)
 	belongsUser: User;
+
+	@RelationId((shooter: Shooter) => shooter.belongsUser)
+	belongsUserId?: number;
 
 	@Column()
 	firstName: string;
@@ -32,7 +39,14 @@ export class Shooter {
 	fullName: string;
 
 	@ManyToOne(() => Team, (team) => team.members)
+	@JoinColumn()
 	team: Team;
+
+	@RelationId((shooter: Shooter) => shooter.team)
+	@Column({
+		nullable: true,
+	})
+	teamId?: number;
 
 	@OneToMany(() => MatchShooter, (matchShooter) => matchShooter.shooter)
 	shooterOfMatches: MatchShooter[];
@@ -42,4 +56,10 @@ export class Shooter {
 
 	@CreateDateColumn()
 	createdAt: Date;
+
+	@UpdateDateColumn()
+	updatedAt: Date;
+
+	@DeleteDateColumn()
+	deletedAt: Date;
 }
