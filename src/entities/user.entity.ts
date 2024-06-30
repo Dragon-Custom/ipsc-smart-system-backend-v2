@@ -20,28 +20,28 @@ import { MatchStaff } from "./match";
 import { createHash } from "crypto";
 import config from "src/config";
 @Entity()
-export class User {
+export abstract class User {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@OneToOne(() => Shooter, (shooter) => shooter.belongsUser)
 	@JoinColumn()
-	shooterProfile: Shooter;
+	abstract shooterProfile: Shooter;
 
 	@RelationId((user: User) => user.shooterProfile)
 	@Column({
 		nullable: true,
 	})
-	shooterProfileId?: number;
+	abstract shooterProfileId?: number;
 
 	@Column()
-	nickname: string;
+	abstract nickname: string;
 
 	@Column()
-	email: string;
+	abstract email: string;
 
 	@Column()
-	password: string;
+	abstract password: string;
 
 	@BeforeInsert()
 	@BeforeUpdate()
@@ -66,32 +66,38 @@ export class User {
 	}
 
 	@CreateDateColumn()
-	createdAt: Date;
+	abstract createdAt: Date;
 
 	@UpdateDateColumn()
-	updatedAt: Date;
+	abstract updatedAt: Date;
 
 	@DeleteDateColumn()
-	deletedAt: Date;
+	abstract deletedAt: Date;
 
 	@OneToOne(() => Team, (team) => team.owner)
-	ownsTeam: Team;
+	abstract ownsTeam: Team;
 
 	@RelationId((user: User) => user.ownsTeam)
-	ownerOfTeamId?: number;
+	abstract ownerOfTeamId?: number;
 
 	@ManyToOne(() => Team, (team) => team.admins)
-	adminOfTeam: Team;
+	abstract adminOfTeam: Team;
+
+	@RelationId((user: User) => user.adminOfTeam)
+	@Column({
+		nullable: true,
+	})
+	abstract adminOfTeamId?: number;
 
 	@OneToMany(() => Stage, (stage) => stage.designer)
-	designedStages: Stage[];
+	abstract designedStages: Stage[];
 
 	@OneToMany(() => MatchStaff, (match) => match.user)
-	stuffOfMatches: MatchStaff[];
+	abstract stuffOfMatches: MatchStaff[];
 
 	@Column({ default: false })
-	isActive: boolean;
+	abstract isActive: boolean;
 
 	@Column({ default: false })
-	isBanned: boolean;
+	abstract isBanned: boolean;
 }
