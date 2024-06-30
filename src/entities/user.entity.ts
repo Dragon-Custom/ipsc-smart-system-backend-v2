@@ -7,6 +7,8 @@ import {
 	JoinColumn,
 	ManyToOne,
 	OneToMany,
+	UpdateDateColumn,
+	DeleteDateColumn,
 } from "typeorm";
 import { Team } from "./team.entity";
 import { Shooter } from "./shooter.entity";
@@ -33,6 +35,12 @@ export class User {
 
 	@CreateDateColumn()
 	createdAt: Date;
+
+	@UpdateDateColumn()
+	updatedAt: Date;
+
+	@DeleteDateColumn()
+	deletedAt: Date;
 
 	@OneToOne(() => Team, (team) => team.owner)
 	ownsTeam: Team;
