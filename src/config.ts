@@ -6,9 +6,15 @@ export interface Config {
 		password: string;
 		database: string;
 	};
-	ipsc: {};
 	server: {
 		port: number;
+		imageService: {
+			/**
+			 *   In Bytes
+			 */
+			maxSize: number;
+			path: string;
+		};
 	};
 	security: {
 		encrypt: {

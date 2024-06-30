@@ -19,8 +19,9 @@ import {
 	ScoreProceduralPenalty,
 	DQReason,
 	StageDQShooter,
+	Image,
 } from "./entities";
-import { ShootersModule, UsersModule, TeamsModule } from "./api";
+import { ShootersModule, UsersModule, TeamsModule, ImagesModule } from "./api";
 
 @Module({
 	imports: [
@@ -49,12 +50,14 @@ import { ShootersModule, UsersModule, TeamsModule } from "./api";
 				Score,
 				DQReason,
 				StageDQShooter,
+				Image,
 			],
 			synchronize: process.env.NODE_ENV !== "production",
 		}),
 		UsersModule,
 		ShootersModule,
 		TeamsModule,
+		ImagesModule,
 	],
 })
 export class AppModule {
