@@ -14,6 +14,7 @@ import { Team } from "./team.entity";
 import { Shooter } from "./shooter.entity";
 import { Stage } from "./stage.entity";
 import { MatchStaff } from "./match";
+import { Exclude } from "class-transformer";
 
 @Entity()
 export class User {
@@ -31,6 +32,7 @@ export class User {
 	email: string;
 
 	@Column()
+	@Exclude()
 	encryptedPassword: string;
 
 	@CreateDateColumn()
@@ -39,6 +41,7 @@ export class User {
 	@UpdateDateColumn()
 	updatedAt: Date;
 
+	@Exclude()
 	@DeleteDateColumn()
 	deletedAt: Date;
 
