@@ -12,13 +12,17 @@ import {
 	IsEnum,
 	IsInt,
 	IsNumber,
+	IsObject,
 	IsOptional,
 	IsString,
 	IsUUID,
 	Max,
 	Min,
+	ValidateNested,
 } from "class-validator";
-import { Stage, StageType } from "src/entities";
+import { Image, Stage, StageType, User } from "src/entities";
+import { ImageIdDto } from "../images/image.dto";
+import { UserIdDto } from "../users/user.dto";
 
 export class StagesDto extends Stage {
 	@ApiProperty({
@@ -37,22 +41,36 @@ export class StagesDto extends Stage {
 	name: string;
 
 	@ApiProperty({
+		description: "The thumbnail of the stage",
+		example: { id: "6efb2e6b-e6c2-45c5-97f1-9ebd95a287bc" },
+	})
+	@ValidateNested()
+	@Type(() => ImageIdDto)
+	thumbnail: Image;
+
+	@ApiProperty({
 		description: "The thumbnail id of the stage",
 		example: "6efb2e6b-e6c2-45c5-97f1-9ebd95a287bc",
 	})
 	@IsUUID("4")
 	thumbnailId: string;
 
-	@ApiPropertyOptional({
-		description:
-			"The attachment ids of the stage, use the stages/:id/attachments to add or remove attachments",
-		example: [
-			"6efb2e6b-e6c2-45c5-97f1-9ebd95a287bc",
-			"6efb2e6b-e6c2-45c5-97f1-9ebd95a287bc",
-		],
+	@ApiProperty({
+		description: "The attachments of the stage",
+		example: [{ id: "6efb2e6b-e6c2-45c5-97f1-9ebd95a287bc" }],
 	})
-	@IsOptional()
+	@Type(() => ImageIdDto)
 	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested({ each: true })
+	attachments: Image[];
+
+	@ApiProperty({
+		description: "The attachments ids of the stage",
+		example: ["6efb2e6b-e6c2-45c5-97f1-9ebd95a287bc"],
+	})
+	@IsArray()
+	@IsUUID("4", { each: true })
 	attachmentIds: string[];
 
 	@ApiPropertyOptional({
@@ -70,6 +88,15 @@ export class StagesDto extends Stage {
 	@IsOptional()
 	@IsString()
 	briefing?: string;
+
+	@ApiProperty({
+		description: "The designer of the stage",
+		example: { id: 1 },
+	})
+	@Type(() => UserIdDto)
+	@IsObject()
+	@ValidateNested()
+	designer: User;
 
 	@ApiProperty({
 		description: "The designer's user id of the stage",
@@ -178,10 +205,11 @@ export class StagesDto extends Stage {
 
 export class CreateStageDto extends PickType(StagesDto, [
 	"name",
-	"thumbnailId",
+	"thumbnail",
+	"attachments",
 	"description",
 	"briefing",
-	"designerId",
+	"designer",
 	"papers",
 	"noShoots",
 	"poppers",
@@ -191,3 +219,5 @@ export class CreateStageDto extends PickType(StagesDto, [
 ] as const) {}
 
 export class UpdateStageDto extends PartialType(CreateStageDto) {}
+
+export class StageIdDto extends PickType(StagesDto, ["id"] as const) {}

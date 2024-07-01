@@ -32,14 +32,14 @@ export abstract class Stage {
 
 	@OneToOne(() => Image)
 	@JoinColumn()
-	thumbnail: Image;
+	abstract thumbnail: Image;
 
 	@RelationId((stage: Stage) => stage.thumbnail)
 	@Column()
 	abstract thumbnailId: string;
 
 	@OneToMany(() => Image, (image) => image.stage)
-	attachments: Image[];
+	abstract attachments: Image[];
 
 	@RelationId((stage: Stage) => stage.attachments)
 	abstract attachmentIds?: string[];
@@ -52,7 +52,7 @@ export abstract class Stage {
 
 	@ManyToOne(() => User, (user) => user.designedStages, { nullable: false })
 	@JoinColumn()
-	designer: User;
+	abstract designer: User;
 
 	@RelationId((stage: Stage) => stage.designer)
 	@Column()

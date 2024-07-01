@@ -41,10 +41,11 @@ async function bootstrap() {
 		.setTitle("Cats example")
 		.setDescription("The cats API description")
 		.setVersion("1.0")
-		.addTag("cats")
 		.build();
 	const document = SwaggerModule.createDocument(app, openApiConfig);
-	SwaggerModule.setup("api", app, document);
+	SwaggerModule.setup("api", app, document, {
+		jsonDocumentUrl: "/api.json",
+	});
 
 	app.useGlobalInterceptors(
 		new ClassSerializerInterceptor(app.get(Reflector), {

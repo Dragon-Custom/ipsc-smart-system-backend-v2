@@ -4,36 +4,49 @@ import {
 	PrimaryGeneratedColumn,
 	CreateDateColumn,
 	OneToMany,
+	RelationId,
 } from "typeorm";
 import { MatchStaff } from "./matchStaff.entity";
 import { MatchShooter } from "./matchShooter.entity";
 import { MatchStage } from "./matchStage.entity";
 
 @Entity()
-export class Match {
+export abstract class Match {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@Column()
-	name: string;
+	abstract name: string;
+
+	@Column({ nullable: true })
+	abstract description?: string;
 
 	@OneToMany(() => MatchStaff, (matchStuff) => matchStuff.match)
 	staffs: MatchStaff[];
 
+	@RelationId((match: Match) => match.staffs)
+	abstract staffIds: number[];
+
 	@OneToMany(() => MatchStaff, (matchStuff) => matchStuff.match)
-	shooters: MatchShooter[];
+	matchShooters: MatchShooter[];
+
+	@RelationId((match: Match) => match.matchShooters)
+	abstract matchShooterIds: number[];
 
 	@OneToMany(() => MatchStage, (matchStage) => matchStage.match)
-	stages: MatchStage[];
+	matchStage: MatchStage[];
+
+	@RelationId((match: Match) => match.matchStage)
+	abstract matchStageIds: number[];
 
 	@Column()
-	level: number;
+	abstract level: number;
 
 	@Column({ nullable: true })
-	link?: string;
+	abstract link?: string;
 
 	@Column()
-	matchDate: Date;
+	abstract matchDate: Date;
 
 	/**
 	 * Whether the stage DQ is enabled for this match.
@@ -41,11 +54,11 @@ export class Match {
 	 * If false, shooter are DQ over entire match.
 	 */
 	@Column()
-	isStageDQEnabled: boolean;
+	abstract isStageDQEnabled: boolean;
 
 	@CreateDateColumn()
-	createdAt: Date;
+	abstract createdAt: Date;
 
 	@Column({ default: false })
-	isFinished: boolean;
+	abstract isFinished: boolean;
 }

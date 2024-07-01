@@ -97,3 +97,5 @@ export class CreateShooterDto extends PickType(ShooterDto, [
 ] as const) {}
 
 export class UpdateShooterDto extends PartialType(ShooterDto) {}
+
+export class ShooterIdDto extends PickType(ShooterDto, ["id"] as const) {}

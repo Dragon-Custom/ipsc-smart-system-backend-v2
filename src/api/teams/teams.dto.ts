@@ -85,3 +85,5 @@ export class CreateTeamDto extends PickType(TeamDto, [
 ] as const) {}
 
 export class UpdateTeamDto extends PartialType(CreateTeamDto) {}
+
+export class TeamIdDto extends PickType(TeamDto, ["id"] as const) {}

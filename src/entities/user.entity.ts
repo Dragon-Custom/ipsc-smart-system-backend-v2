@@ -26,7 +26,7 @@ export abstract class User {
 
 	@OneToOne(() => Shooter, (shooter) => shooter.belongsUser)
 	@JoinColumn()
-	shooterProfile: Shooter;
+	abstract shooterProfile?: Shooter;
 
 	@RelationId((user: User) => user.shooterProfile)
 	@Column({
@@ -75,13 +75,13 @@ export abstract class User {
 	abstract readonly deletedAt: Date;
 
 	@OneToOne(() => Team, (team) => team.owner)
-	ownsTeam: Team;
+	abstract ownsTeam?: Team;
 
 	@RelationId((user: User) => user.ownsTeam)
 	abstract ownerOfTeamId?: number;
 
 	@ManyToOne(() => Team, (team) => team.admins)
-	adminOfTeam: Team;
+	abstract adminOfTeam?: Team;
 
 	@RelationId((user: User) => user.adminOfTeam)
 	@Column({
@@ -90,10 +90,16 @@ export abstract class User {
 	abstract adminOfTeamId?: number;
 
 	@OneToMany(() => Stage, (stage) => stage.designer)
-	designedStages: Stage[];
+	abstract designedStages?: Stage[];
+
+	@RelationId((user: User) => user.designedStages)
+	abstract designedStagesIds?: number[];
 
 	@OneToMany(() => MatchStaff, (match) => match.user)
-	stuffOfMatches: MatchStaff[];
+	abstract stuffOfMatches?: MatchStaff[];
+
+	@RelationId((user: User) => user.stuffOfMatches)
+	abstract stuffOfMatchesIds?: number[];
 
 	@Column({ default: false })
 	abstract isActive: boolean;

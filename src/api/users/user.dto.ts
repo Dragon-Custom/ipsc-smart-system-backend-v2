@@ -2,16 +2,22 @@ import { PickType } from "@nestjs/mapped-types";
 import { ApiProperty, ApiPropertyOptional, PartialType } from "@nestjs/swagger";
 import { Exclude, Type } from "class-transformer";
 import {
+	IsArray,
 	IsBoolean,
 	IsDate,
 	IsEmail,
 	IsInt,
+	IsObject,
 	IsOptional,
 	IsString,
 	IsStrongPassword,
+	ValidateNested,
 } from "class-validator";
 import config from "src/config";
 import { MatchStaff, Shooter, Stage, Team, User } from "src/entities";
+import { ShooterIdDto } from "../shooters/shooter.dto";
+import { TeamIdDto } from "../teams/teams.dto";
+import { StageIdDto } from "../stages/stages.dto";
 
 export class UserDto extends User {
 	@Exclude()
@@ -28,8 +34,15 @@ export class UserDto extends User {
 	@IsInt()
 	id: number;
 
-	@Exclude()
-	shooterProfile: Shooter;
+	@ApiPropertyOptional({
+		description: "Shooter profile of the user",
+		type: Shooter,
+	})
+	@IsOptional()
+	@Type(() => ShooterIdDto)
+	@ValidateNested()
+	@IsObject()
+	shooterProfile?: Shooter;
 
 	@ApiPropertyOptional({
 		example: 1,
@@ -68,8 +81,15 @@ export class UserDto extends User {
 	@IsDate()
 	updatedAt: Date;
 
-	@Exclude()
-	ownsTeam: Team;
+	@ApiPropertyOptional({
+		description: "Team that the user owns",
+		type: Team,
+	})
+	@IsOptional()
+	@Type(() => TeamIdDto)
+	@ValidateNested()
+	@IsObject()
+	ownsTeam?: Team;
 
 	@ApiPropertyOptional({
 		example: 1,
@@ -80,8 +100,15 @@ export class UserDto extends User {
 	@IsInt()
 	ownerOfTeamId?: number;
 
-	@Exclude()
-	adminOfTeam: Team;
+	@ApiPropertyOptional({
+		description: "Team that the user is an admin of",
+		type: Team,
+	})
+	@IsOptional()
+	@Type(() => TeamIdDto)
+	@ValidateNested()
+	@IsObject()
+	adminOfTeam?: Team;
 
 	@ApiPropertyOptional({
 		example: 1,
@@ -92,11 +119,39 @@ export class UserDto extends User {
 	@IsInt()
 	adminOfTeamId?: number;
 
-	@Exclude()
-	designedStages: Stage[];
+	@ApiPropertyOptional({
+		description: "Stages that the user designed",
+		type: Stage,
+	})
+	@IsOptional()
+	@IsArray()
+	@Type(() => StageIdDto)
+	@ValidateNested({ each: true })
+	@IsObject({ each: true })
+	designedStages?: Stage[];
+
+	@ApiPropertyOptional({
+		example: [1, 2, 3],
+		description: "Ids of the stages that the user designed",
+	})
+	@IsOptional()
+	@IsArray()
+	@Type(() => Number)
+	@IsInt({ each: true })
+	designedStagesIds?: number[];
 
 	@Exclude()
-	stuffOfMatches: MatchStaff[];
+	stuffOfMatches?: MatchStaff[];
+
+	@ApiPropertyOptional({
+		example: [1, 2, 3],
+		description: "Ids of the matches that the user is a staff of",
+	})
+	@IsOptional()
+	@IsArray()
+	@Type(() => Number)
+	@IsInt({ each: true })
+	stuffOfMatchesIds?: number[];
 
 	@ApiProperty({
 		example: true,
@@ -118,35 +173,34 @@ export class CreateUserDto extends PickType(UserDto, [
 	"nickname",
 	"shooterProfileId",
 ] as const) {
-	@ApiProperty({
-		example: "johndoe123",
-		description: "Password of the user",
-	})
-	@IsStrongPassword(config.security.passwordOptions)
-	password: string;
-
-	@ApiProperty({
-		example: "John Doe",
-		description: "Nickname of the user",
-	})
-	@IsString()
-	nickname: string;
-
-	@ApiProperty({
-		example: "john.doe@example.com",
-		description: "Email of the user",
-	})
-	@IsEmail()
-	email: string;
-
-	@ApiPropertyOptional({
-		example: 1,
-		description: "Shooter profile id of the user",
-	})
-	@IsOptional()
-	@Type(() => Number)
-	@IsInt()
-	shooterProfileId?: number;
+	// @ApiProperty({
+	// 	example: "johndoe123",
+	// 	description: "Password of the user",
+	// })
+	// @IsStrongPassword(config.security.passwordOptions)
+	// password: string;
+	// @ApiProperty({
+	// 	example: "John Doe",
+	// 	description: "Nickname of the user",
+	// })
+	// @IsString()
+	// nickname: string;
+	// @ApiProperty({
+	// 	example: "john.doe@example.com",
+	// 	description: "Email of the user",
+	// })
+	// @IsEmail()
+	// email: string;
+	// @ApiPropertyOptional({
+	// 	example: 1,
+	// 	description: "Shooter profile id of the user",
+	// })
+	// @IsOptional()
+	// @Type(() => Number)
+	// @IsInt()
+	// shooterProfileId?: number;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
+
+export class UserIdDto extends PickType(UserDto, ["id"] as const) {}

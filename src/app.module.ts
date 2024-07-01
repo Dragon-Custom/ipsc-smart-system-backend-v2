@@ -27,6 +27,8 @@ import {
 	TeamsModule,
 	ImagesModule,
 	StagesModule,
+	MatchesModule,
+	MatchShooterCategoriesModule,
 } from "./api";
 
 @Module({
@@ -65,6 +67,8 @@ import {
 		TeamsModule,
 		ImagesModule,
 		StagesModule,
+		MatchShooterCategoriesModule,
+		MatchesModule,
 	],
 })
 export class AppModule {
