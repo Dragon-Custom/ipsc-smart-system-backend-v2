@@ -20,11 +20,11 @@ import {
 	DQReason,
 	StageDQShooter,
 } from "./entities";
-import { UsersModule } from './api/users/users.module';
-import { ShootersModule } from './api/shooters/shooters.module';
-import { StagesModule } from './api/stages/stages.module';
-import { TeamModule } from './api/team/team.module';
-import { MatchesModule } from './api/matches/matches.module';
+import { UsersModule } from "./api/users/users.module";
+import { ShootersModule } from "./api/shooters/shooters.module";
+import { StagesModule } from "./api/stages/stages.module";
+import { TeamModule } from "./api/team/team.module";
+import { MatchesModule } from "./api/matches/matches.module";
 
 @Module({
 	imports: [
