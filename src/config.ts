@@ -6,7 +6,6 @@ export interface Config {
 		password: string;
 		database: string;
 	};
-	ipsc: {};
 	server: {
 		port: number;
 	};
