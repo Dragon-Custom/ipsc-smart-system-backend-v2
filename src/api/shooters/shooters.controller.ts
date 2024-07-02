@@ -1,7 +1,7 @@
-import { Controller } from '@nestjs/common';
-import { ShootersService } from './shooters.service';
+import { Controller } from "@nestjs/common";
+import { ShootersService } from "./shooters.service";
 
-@Controller('shooters')
+@Controller("shooters")
 export class ShootersController {
-  constructor(private readonly shootersService: ShootersService) {}
+	constructor(private readonly shootersService: ShootersService) {}
 }

@@ -6,40 +6,53 @@ import {
 	ManyToOne,
 	OneToOne,
 	OneToMany,
+	RelationId,
 } from "typeorm";
 import { Team } from "./team.entity";
 import { User } from "./user.entity";
 import { MatchShooter, Score } from "./match";
 
 @Entity()
-export class Shooter {
+export abstract class Shooter {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@OneToOne(() => User, (user) => user.shooterProfile)
-	belongsUser: User;
+	abstract belongsUser?: User;
+
+	@RelationId((shooter: Shooter) => shooter.belongsUser)
+	abstract readonly belongsUserId?: number;
 
 	@Column()
-	firstName: string;
+	abstract firstName: string;
 
 	@Column()
-	lastName: string;
+	abstract lastName: string;
 
 	@Column({
 		generatedType: "STORED",
 		asExpression: `"firstName" || ' ' || "lastName"`,
 	})
-	fullName: string;
+	abstract readonly fullName: string;
 
 	@ManyToOne(() => Team, (team) => team.members)
-	team: Team;
+	abstract team?: Team;
+
+	@RelationId((shooter: Shooter) => shooter.team)
+	abstract readonly teamId?: number;
 
 	@OneToMany(() => MatchShooter, (matchShooter) => matchShooter.shooter)
-	shooterOfMatches: MatchShooter[];
+	abstract shooterOfMatches?: MatchShooter[];
 
-	@OneToMany(() => Score, (score) => score.shooter)
-	scores: Score[];
+	@RelationId((shooter: Shooter) => shooter.shooterOfMatches)
+	abstract readonly shooterOfMatchesId?: number[];
+
+	@OneToMany(() => Score, (score) => score.matchShooter)
+	abstract scores?: Score[];
+
+	@RelationId((shooter: Shooter) => shooter.scores)
+	abstract readonly scoresId?: number[];
 
 	@CreateDateColumn()
-	createdAt: Date;
+	abstract createdAt: Date;
 }

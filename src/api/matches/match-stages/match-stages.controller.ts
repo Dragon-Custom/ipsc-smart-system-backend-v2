@@ -1,7 +1,7 @@
-import { Controller } from '@nestjs/common';
-import { MatchStagesService } from './match-stages.service';
+import { Controller } from "@nestjs/common";
+import { MatchStagesService } from "./match-stages.service";
 
-@Controller('match-stages')
+@Controller("match-stages")
 export class MatchStagesController {
-  constructor(private readonly matchStagesService: MatchStagesService) {}
+	constructor(private readonly matchStagesService: MatchStagesService) {}
 }

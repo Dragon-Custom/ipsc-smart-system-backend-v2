@@ -4,26 +4,39 @@ import {
 	ManyToOne,
 	Column,
 	Check,
+	RelationId,
 } from "typeorm";
 import { Score } from "./score.entity";
 import { ProceduralPenalty } from "./proceduralPenalty.entity";
 
 @Entity()
 @Check("count >= 1")
-export class ScoreProceduralPenalty {
+export abstract class ScoreProceduralPenalty {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@Column()
-	count: number;
+	abstract count: number;
 
-	@ManyToOne(() => Score, (score) => score.proceduralPenalties, {
+	@ManyToOne(() => Score, (score) => score.scoreProceduralPenalties, {
 		nullable: false,
 	})
-	score: Score;
+	abstract score: Score;
 
-	@ManyToOne(() => Score, (score) => score.proceduralPenalties, {
+	@RelationId(
+		(scoreProceduralPenalty: ScoreProceduralPenalty) =>
+			scoreProceduralPenalty.score,
+	)
+	abstract readonly scoreId: number;
+
+	@ManyToOne(() => Score, (score) => score.scoreProceduralPenalties, {
 		nullable: false,
 	})
-	proceduralPenalty: ProceduralPenalty;
+	abstract proceduralPenalty: ProceduralPenalty;
+
+	@RelationId(
+		(scoreProceduralPenalty: ScoreProceduralPenalty) =>
+			scoreProceduralPenalty.proceduralPenalty,
+	)
+	abstract readonly proceduralPenaltyId: number;
 }

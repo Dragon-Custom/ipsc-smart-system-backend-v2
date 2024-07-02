@@ -1,8 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+	Entity,
+	Column,
+	PrimaryGeneratedColumn,
+	ManyToOne,
+	RelationId,
+} from "typeorm";
 import { User } from "../user.entity";
 import { Match } from "./match.entity";
 
-export enum StuffRole {
+export enum StaffRole {
 	RO = "RO",
 	RM = "RM",
 	CRO = "CRO",
@@ -12,19 +18,25 @@ export enum StuffRole {
 }
 
 @Entity()
-export class MatchStaff {
+export abstract class MatchStaff {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@Column({
 		type: "enum",
-		enum: StuffRole,
+		enum: StaffRole,
 	})
-	role: StuffRole;
+	abstract role: StaffRole;
 
-	@ManyToOne(() => Match, (match) => match.staffs)
-	match: Match;
+	@ManyToOne(() => Match, (match) => match.matchStaffs)
+	abstract match: Match;
+
+	@RelationId((matchStaff: MatchStaff) => matchStaff.match)
+	abstract readonly matchId: number;
 
 	@ManyToOne(() => User, (user) => user.stuffOfMatches)
-	user: User;
+	abstract user: User;
+
+	@RelationId((matchStaff: MatchStaff) => matchStaff.user)
+	abstract readonly userId: number;
 }

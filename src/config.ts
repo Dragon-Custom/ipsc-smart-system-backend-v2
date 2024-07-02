@@ -9,6 +9,11 @@ export interface Config {
 	server: {
 		port: number;
 	};
+	security: {
+		encrypt: {
+			passwordEncryptionKey: string;
+		};
+	};
 }
 
 import config from "../server.config";

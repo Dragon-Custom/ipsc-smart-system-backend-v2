@@ -5,6 +5,7 @@ import {
 	CreateDateColumn,
 	ManyToOne,
 	OneToMany,
+	RelationId,
 } from "typeorm";
 import { User } from "./user.entity";
 import { MatchStage } from "./match/matchStage.entity";
@@ -17,54 +18,57 @@ export enum StageType {
 }
 
 @Entity()
-export class Stage {
+export abstract class Stage {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@Column()
-	name: string;
+	abstract name: string;
 
 	@Column({ nullable: true })
-	description: string;
+	abstract description?: string;
 
 	@Column({ nullable: true })
-	briefing: string;
+	abstract briefing?: string;
 
 	@ManyToOne(() => User, (user) => user.designedStages)
-	designer: User;
+	abstract designer: User;
+
+	@RelationId((stage: Stage) => stage.designer)
+	abstract readonly designerId: number;
 
 	@Column()
-	papers: number;
+	abstract papers: number;
 
 	@Column()
-	noShoots: number;
+	abstract noShoots: number;
 
 	@Column()
-	poppers: number;
+	abstract poppers: number;
 
 	@Column()
-	condidtion: number;
+	abstract condidtion: number;
 
 	/**
 	 * in seconds
 	 */
 	@Column({ comment: "in seconds", type: "time" })
-	walkthroughTime: number;
+	abstract walkthroughTime: number;
 
 	@Column()
-	isBZoneEnabled: boolean;
+	abstract isBZoneEnabled: boolean;
 
 	@Column({
 		generatedType: "STORED",
 		asExpression: `(papers * 2 + poppers)`,
 	})
-	minRounds: number;
+	abstract readonly minRounds: number;
 
 	@Column({
 		generatedType: "STORED",
 		asExpression: `(papers * 2 * 5 + poppers * 5)`,
 	})
-	maxScores: number;
+	abstract readonly maxScores: number;
 
 	@Column({
 		type: "enum",
@@ -82,11 +86,14 @@ export class Stage {
 			END
 		`,
 	})
-	stageType: StageType;
+	abstract readonly stageType: StageType;
 
 	@OneToMany(() => MatchStage, (matchStage) => matchStage.stage)
-	stageOfMatches: MatchStage[];
+	abstract stageOfMatches?: MatchStage[];
+
+	@RelationId((stage: Stage) => stage.stageOfMatches)
+	abstract readonly stageOfMatchesId?: number[];
 
 	@CreateDateColumn()
-	createdAt: Date;
+	abstract createdAt: Date;
 }

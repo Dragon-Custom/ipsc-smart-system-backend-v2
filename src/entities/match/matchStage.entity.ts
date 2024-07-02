@@ -6,35 +6,41 @@ import {
 	CreateDateColumn,
 	UpdateDateColumn,
 	Column,
+	RelationId,
 } from "typeorm";
 import { Match } from "./match.entity";
 import { Stage } from "../stage.entity";
 import { Score } from "./score.entity";
-import { StageDQShooter } from "./stageDqShooter.entity";
 
 @Entity()
-export class MatchStage {
+export abstract class MatchStage {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
-	@OneToMany(() => Score, (stage) => stage.stage)
-	scores: Score[];
+	@OneToMany(() => Score, (stage) => stage.matchStage)
+	abstract scores?: Score[];
 
-	@ManyToOne(() => Match, (match) => match.staffs)
-	match: Match;
+	@RelationId((matchStage: MatchStage) => matchStage.scores)
+	abstract readonly scoreIds?: number[];
+
+	@ManyToOne(() => Match, (match) => match.matchStaffs)
+	abstract match: Match;
+
+	@RelationId((matchStage: MatchStage) => matchStage.match)
+	abstract readonly matchId: number;
 
 	@ManyToOne(() => Stage, (stage) => stage.stageOfMatches)
-	stage: Stage;
+	abstract stage: Stage;
 
-	@OneToMany(() => StageDQShooter, (matchShooter) => matchShooter.shoooter)
-	stageDQ: StageDQShooter[];
+	@RelationId((matchStage: MatchStage) => matchStage.stage)
+	abstract readonly stageId: number;
 
 	@Column({ default: false })
-	isFinished: boolean;
+	abstract isFinished: boolean;
 
 	@CreateDateColumn()
-	createdAt: Date;
+	abstract createdAt: Date;
 
 	@UpdateDateColumn()
-	updatedAt: Date;
+	abstract updatedAt: Date;
 }

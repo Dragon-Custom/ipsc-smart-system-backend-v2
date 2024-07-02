@@ -6,31 +6,45 @@ import {
 	OneToOne,
 	JoinColumn,
 	OneToMany,
+	RelationId,
+	RelationCount,
 } from "typeorm";
 import { User } from "./user.entity";
 import { Shooter } from "./shooter.entity";
 
 @Entity()
-export class Team {
+export abstract class Team {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@Column()
-	name: string;
+	abstract name: string;
 
 	@Column({ nullable: true })
-	description: string;
+	abstract description?: string;
 
 	@OneToOne(() => User, (user) => user.ownsTeam)
 	@JoinColumn()
-	owner: User;
+	abstract owner: User;
+
+	@RelationId((team: Team) => team.owner)
+	abstract readonly ownerId: number;
 
 	@OneToMany(() => User, (user) => user.adminOfTeam)
-	admins: User[];
+	abstract admins?: User[];
+
+	@RelationId((team: Team) => team.admins)
+	abstract readonly adminIds?: number[];
 
 	@OneToMany(() => Shooter, (shooter) => shooter.team)
-	members: Shooter[];
+	abstract members?: Shooter[];
+
+	@RelationId((team: Team) => team.members)
+	abstract readonly memberIds?: number[];
+
+	@RelationCount((team: Team) => team.members)
+	abstract readonly membersCount: number;
 
 	@CreateDateColumn()
-	createdAt: Date;
+	abstract createdAt: Date;
 }

@@ -6,11 +6,13 @@ import {
 	CreateDateColumn,
 	UpdateDateColumn,
 	OneToMany,
+	DeleteDateColumn,
+	RelationId,
 } from "typeorm";
 import { MatchStage } from "./matchStage.entity";
-import { Shooter } from "../shooter.entity";
 import { ScoreProceduralPenalty } from "./scoreProceduralPenalty.entity";
 import { DQReason } from "./dqReason.entity";
+import { MatchShooter, PowerFactor } from "./matchShooter.entity";
 
 export enum ScoreStateType {
 	DidNotAttempted = "Did Not Attempted",
@@ -20,9 +22,9 @@ export enum ScoreStateType {
 }
 
 @Entity()
-export class Score {
+export abstract class Score {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	/**
 	 * time in seconds
@@ -31,51 +33,57 @@ export class Score {
 		type: "float",
 		comment: "Time in seconds",
 	})
-	time: number;
+	abstract time: number;
 
 	@Column({ default: 0 })
-	alpha: number;
+	abstract alpha: number;
 
 	@Column({ default: 0 })
-	bravo: number;
+	abstract bravo: number;
 
 	@Column({ default: 0 })
-	charlie: number;
+	abstract charlie: number;
 
 	@Column({ default: 0 })
-	delta: number;
+	abstract delta: number;
 
 	@Column({ default: 0 })
-	miss: number;
+	abstract miss: number;
 
 	@Column({ default: 0 })
-	noShoot: number;
+	abstract noShoot: number;
 
 	@Column({ default: 0 })
-	popper: number;
+	abstract popper: number;
 
 	@Column({
 		type: "enum",
 		enum: ScoreStateType,
 		default: ScoreStateType.DidNotAttempted,
 	})
-	state: ScoreStateType;
+	abstract state: ScoreStateType;
 
 	@OneToMany(() => ScoreProceduralPenalty, (penalty) => penalty.score)
-	proceduralPenalties: ScoreProceduralPenalty[];
+	abstract scoreProceduralPenalties?: ScoreProceduralPenalty[];
+
+	@RelationId((score: Score) => score.scoreProceduralPenalties)
+	abstract readonly scoreProceduralPenaltiesId?: number[];
 
 	@Column({ default: 0 })
-	totalProceduralPenalties: number;
+	abstract totalProceduralPenalties: number;
 
 	@Column({
 		type: "int",
 		generatedType: "STORED",
 		asExpression: `
-			(alpha * 5 + bravo * 3 + charlie * 3 + delta * 1 + popper * 5) -
-			(miss * 10 + "noShoot" * 10 + "totalProceduralPenalties" * 10)
+			CASE WHEN "powerFactor" = 'Minor' THEN
+				(alpha * 5 + bravo * 3 + charlie * 3 + delta * 1 + popper * 5) - (miss * 10 + "noShoot" * 10 + "totalProceduralPenalties" * 10) 
+			ELSE
+				(alpha * 5 + bravo * 4 + charlie * 4 + delta * 2 + popper * 5) - (miss * 10 + "noShoot" * 10 + "totalProceduralPenalties" * 10) 
+			END
 		`,
 	})
-	score: number;
+	abstract readonly score: number;
 
 	@Column({
 		type: "float",
@@ -84,24 +92,53 @@ export class Score {
 			CASE WHEN time = 0 THEN
 				0
 			ELSE
-				(alpha * 5 + bravo * 3 + charlie * 3 + delta * 1 + popper * 5) - (miss * 10 + "noShoot" * 10 + "totalProceduralPenalties" * 10) / time
+				CASE WHEN "powerFactor" = 'Minor' THEN
+					(alpha * 5 + bravo * 3 + charlie * 3 + delta * 1 + popper * 5) - (miss * 10 + "noShoot" * 10 + "totalProceduralPenalties" * 10) / time
+				ELSE
+					(alpha * 5 + bravo * 4 + charlie * 4 + delta * 2 + popper * 5) - (miss * 10 + "noShoot" * 10 + "totalProceduralPenalties" * 10) / time
+				END
 			END
 		`,
 	})
-	hitFactor: number;
+	abstract readonly hitFactor: number;
+
+	@Column({
+		enum: PowerFactor,
+	})
+	powerFactor: PowerFactor;
 
 	@ManyToOne(() => MatchStage, (stage) => stage.scores)
-	stage: MatchStage;
+	abstract matchStage: MatchStage;
 
-	@ManyToOne(() => Shooter, (shooter) => shooter.scores)
-	shooter: Shooter;
+	@RelationId((score: Score) => score.matchStage)
+	abstract readonly matchStageId: number;
+
+	@ManyToOne(() => MatchShooter, (shooter) => shooter.scores)
+	abstract matchShooter: MatchShooter;
+
+	@RelationId((score: Score) => score.matchShooter)
+	abstract readonly matchShooterId: number;
 
 	@ManyToOne(() => DQReason, (reason) => reason.dqedScores)
-	dqReason: DQReason;
+	abstract dqReason?: DQReason;
+
+	@RelationId((score: Score) => score.dqReason)
+	abstract readonly dqReasonId?: number;
 
 	@CreateDateColumn()
-	createdAt: Date;
+	abstract readonly createdAt: Date;
 
 	@UpdateDateColumn()
-	updatedAt: Date;
+	abstract readonly updatedAt: Date;
+
+	@DeleteDateColumn()
+	abstract readonly deletedAt: Date;
+
+	/**
+	 * The change of the score
+	 */
+	@Column({
+		default: 1,
+	})
+	abstract iterations: number;
 }

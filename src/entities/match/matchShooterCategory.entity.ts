@@ -1,14 +1,30 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
+import {
+	Entity,
+	Column,
+	PrimaryGeneratedColumn,
+	ManyToMany,
+	RelationId,
+	RelationCount,
+} from "typeorm";
 import { MatchShooter } from "./matchShooter.entity";
 
 @Entity()
-export class MatchShooterCategory {
+export abstract class MatchShooterCategory {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@Column()
-	name: string;
+	abstract name: string;
 
 	@ManyToMany(() => MatchShooter, (matchShooter) => matchShooter.division)
-	matchShooters: MatchShooter[];
+	abstract matchShooters?: MatchShooter[];
+
+	@RelationId((category: MatchShooterCategory) => category.matchShooters)
+	abstract readonly matchShooterIds?: number[];
+
+	@RelationCount(
+		(matchShooterCategory: MatchShooterCategory) =>
+			matchShooterCategory.matchShooters,
+	)
+	abstract readonly matchShooterCount: number;
 }

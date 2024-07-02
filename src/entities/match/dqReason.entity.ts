@@ -1,24 +1,29 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+	Column,
+	Entity,
+	OneToMany,
+	PrimaryGeneratedColumn,
+	RelationId,
+} from "typeorm";
 import { Score } from "./score.entity";
-import { StageDQShooter } from "./stageDqShooter.entity";
 
 @Entity()
-export class DQReason {
+export abstract class DQReason {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@Column()
-	name: string;
+	abstract name: string;
 
 	@Column()
-	content: string;
+	abstract content: string;
 
 	@Column()
-	index: string;
+	abstract index: string;
 
 	@OneToMany(() => Score, (score) => score.dqReason)
-	dqedScores: Score[];
+	abstract dqedScores: Score[];
 
-	@OneToMany(() => StageDQShooter, (score) => score.dqReason)
-	stageDqs: StageDQShooter[];
+	@RelationId((dqReason: DQReason) => dqReason.dqedScores)
+	abstract readonly dqedScoresIds: number[];
 }

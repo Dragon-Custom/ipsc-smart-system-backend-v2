@@ -1,23 +1,35 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import {
+	Entity,
+	PrimaryGeneratedColumn,
+	Column,
+	OneToMany,
+	RelationId,
+} from "typeorm";
 import { ScoreProceduralPenalty } from "./scoreProceduralPenalty.entity";
 
 @Entity()
-export class ProceduralPenalty {
+export abstract class ProceduralPenalty {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@Column()
-	name: string;
+	abstract name: string;
 
 	@Column()
-	content: string;
+	abstract content: string;
 
 	@Column()
-	index: string;
+	abstract index: string;
 
 	@OneToMany(
 		() => ScoreProceduralPenalty,
 		(proceduralPenalty) => proceduralPenalty.proceduralPenalty,
 	)
-	proceduralPenaltyOfScores: ScoreProceduralPenalty[];
+	abstract proceduralPenaltyOfScores?: ScoreProceduralPenalty[];
+
+	@RelationId(
+		(proceduralPenalty: ProceduralPenalty) =>
+			proceduralPenalty.proceduralPenaltyOfScores,
+	)
+	abstract readonly scoreProceduralPenaltyIds?: number[];
 }

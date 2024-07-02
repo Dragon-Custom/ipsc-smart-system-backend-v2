@@ -4,36 +4,76 @@ import {
 	PrimaryGeneratedColumn,
 	CreateDateColumn,
 	OneToMany,
+	RelationId,
+	RelationCount,
 } from "typeorm";
 import { MatchStaff } from "./matchStaff.entity";
 import { MatchShooter } from "./matchShooter.entity";
 import { MatchStage } from "./matchStage.entity";
+import { MatchDivision } from "./matchDivision.entity";
+import { MatchClassification } from "./matchClassification.entity";
 
 @Entity()
-export class Match {
+export abstract class Match {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@Column()
-	name: string;
-
-	@OneToMany(() => MatchStaff, (matchStuff) => matchStuff.match)
-	staffs: MatchStaff[];
-
-	@OneToMany(() => MatchStaff, (matchStuff) => matchStuff.match)
-	shooters: MatchShooter[];
-
-	@OneToMany(() => MatchStage, (matchStage) => matchStage.match)
-	stages: MatchStage[];
-
-	@Column()
-	level: number;
+	abstract name: string;
 
 	@Column({ nullable: true })
-	link?: string;
+	abstract description?: string;
+
+	@OneToMany(() => MatchStaff, (matchStuff) => matchStuff.match)
+	abstract matchStaffs?: MatchStaff[];
+
+	@RelationCount((match: Match) => match.matchStaffs)
+	abstract readonly matchStaffCount: number;
+
+	@RelationId((match: Match) => match.matchStaffs)
+	abstract readonly matchStaffIds?: number[];
+
+	@OneToMany(() => MatchStaff, (matchStuff) => matchStuff.match)
+	abstract matchShooters: MatchShooter[];
+
+	@RelationCount((match: Match) => match.matchShooters)
+	abstract readonly matchShooterCount: number;
+
+	@RelationId((match: Match) => match.matchShooters)
+	abstract readonly matchShooterIds: number[];
+
+	@OneToMany(() => MatchStage, (matchStage) => matchStage.match)
+	abstract matchStages: MatchStage[];
+
+	@RelationCount((match: Match) => match.matchStages)
+	abstract readonly matchStageCount: number;
+
+	@RelationId((match: Match) => match.matchStages)
+	abstract readonly matchStageIds: number[];
+
+	@OneToMany(() => MatchDivision, (matchDivision) => matchDivision.match)
+	abstract matchDivisions: MatchDivision[];
+
+	@RelationId((match: Match) => match.matchDivisions)
+	abstract readonly matchDivisionIds: number[];
+
+	@OneToMany(
+		() => MatchClassification,
+		(classification) => classification.match,
+	)
+	abstract matchClassifications?: MatchClassification[];
+
+	@RelationId((match: Match) => match.matchClassifications)
+	abstract readonly matchClassificationIds?: number[];
 
 	@Column()
-	matchDate: Date;
+	abstract level: number;
+
+	@Column({ nullable: true })
+	abstract link?: string;
+
+	@Column()
+	abstract matchDate: Date;
 
 	/**
 	 * Whether the stage DQ is enabled for this match.
@@ -41,11 +81,11 @@ export class Match {
 	 * If false, shooter are DQ over entire match.
 	 */
 	@Column()
-	isStageDQEnabled: boolean;
+	abstract isStageDQEnabled: boolean;
 
 	@CreateDateColumn()
-	createdAt: Date;
+	abstract createdAt: Date;
 
 	@Column({ default: false })
-	isFinished: boolean;
+	abstract isFinished: boolean;
 }

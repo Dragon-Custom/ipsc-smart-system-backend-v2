@@ -5,53 +5,83 @@ import {
 	ManyToOne,
 	ManyToMany,
 	JoinTable,
+	RelationId,
 	OneToMany,
 } from "typeorm";
 import { Match } from "./match.entity";
 import { Shooter } from "../shooter.entity";
-import { Division } from "./division.entity";
-import { Classification } from "./classification.entity";
+import { MatchDivision } from "./matchDivision.entity";
+import { MatchClassification } from "./matchClassification.entity";
 import { MatchShooterCategory } from "./matchShooterCategory.entity";
-import { StageDQShooter } from "./stageDqShooter.entity";
+import { Score } from "./score.entity";
+
+export enum PowerFactor {
+	Minor = "Minor",
+	Major = "Major",
+}
 
 @Entity()
-export class MatchShooter {
+export abstract class MatchShooter {
 	@PrimaryGeneratedColumn()
-	id: number;
+	abstract id: number;
 
 	@Column()
-	squad: number;
+	abstract squad: number;
 
-	@ManyToOne(() => Division, (division) => division.matchShooters)
-	division: Division;
+	@ManyToOne(() => MatchDivision, (division) => division.matchShooters)
+	abstract division: MatchDivision;
+
+	@RelationId((matchShooter: MatchShooter) => matchShooter.division)
+	abstract readonly divisionId: number;
 
 	@ManyToOne(
-		() => Classification,
+		() => MatchClassification,
 		(classification) => classification.matchShooters,
 	)
-	classification: Classification;
+	abstract classification: MatchClassification;
+
+	@RelationId((matchShooter: MatchShooter) => matchShooter.classification)
+	abstract readonly classificationId: number;
+
+	@Column({
+		enum: PowerFactor,
+	})
+	abstract powerFactor: PowerFactor;
 
 	/**
 	 * this is the global DQ flag not the stage DQ flag
 	 */
 	@Column({
 		comment: "This is the global DQ flag not the stage DQ flag",
+		default: false,
 	})
-	isDQed: boolean;
+	abstract isDQed: boolean;
 
 	@ManyToMany(
 		() => MatchShooterCategory,
 		(category) => category.matchShooters,
 	)
 	@JoinTable()
-	categories: MatchShooterCategory[];
+	abstract categories?: MatchShooterCategory[];
 
-	@OneToMany(() => StageDQShooter, (dqedShooter) => dqedShooter.shoooter)
-	stageDQ: StageDQShooter;
+	@RelationId((matchShooter: MatchShooter) => matchShooter.categories)
+	abstract readonly categoryIds?: number[];
 
-	@ManyToOne(() => Match, (match) => match.staffs)
-	match: Match;
+	@ManyToOne(() => Match, (match) => match.matchStaffs)
+	abstract match: Match;
+
+	@RelationId((matchShooter: MatchShooter) => matchShooter.match)
+	abstract readonly matchId: number;
 
 	@ManyToOne(() => Shooter, (shooter) => shooter.shooterOfMatches)
-	shooter: Shooter;
+	abstract shooter: Shooter;
+
+	@RelationId((matchShooter: MatchShooter) => matchShooter.shooter)
+	abstract readonly shooterId: number;
+
+	@OneToMany(() => Score, (score) => score.matchShooter)
+	abstract scores?: Score[];
+
+	@RelationId((matchShooter: MatchShooter) => matchShooter.scores)
+	abstract readonly scoresId?: number[];
 }
