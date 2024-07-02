@@ -34,7 +34,7 @@ export abstract class MatchStaff {
 	@RelationId((matchStaff: MatchStaff) => matchStaff.match)
 	abstract readonly matchId: number;
 
-	@ManyToOne(() => User, (user) => user.stuffOfMatches)
+	@ManyToOne(() => User, (user) => user.staffOfMatches)
 	abstract user: User;
 
 	@RelationId((matchStaff: MatchStaff) => matchStaff.user)

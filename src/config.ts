@@ -13,8 +13,10 @@ export interface Config {
 		encrypt: {
 			passwordEncryptionKey: string;
 		};
+		passwordOption?: IsStrongPasswordOptions;
 	};
 }
 
+import { IsStrongPasswordOptions } from "class-validator";
 import config from "../server.config";
 export default config as typeof config;

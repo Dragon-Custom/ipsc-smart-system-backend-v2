@@ -1,5 +1,9 @@
-import { PickType } from "@nestjs/mapped-types";
-import { ApiProperty, ApiPropertyOptional, PartialType } from "@nestjs/swagger";
+import {
+	ApiProperty,
+	ApiPropertyOptional,
+	PartialType,
+	PickType,
+} from "@nestjs/swagger";
 import { Exclude, Type } from "class-transformer";
 import {
 	IsArray,
@@ -10,8 +14,14 @@ import {
 	IsOptional,
 	IsString,
 	IsStrongPassword,
+	ValidateNested,
 } from "class-validator";
 import { MatchStaff, Shooter, Stage, Team, User } from "src/entities";
+import { ShooterIdDto } from "../shooters/shooters.dto";
+import { TeamIdDto } from "../team/teams.dto";
+import { StageIdDto } from "../stages/stages.dto";
+import { MatchStaffIdDto } from "../matches/match-staffs/match-staffs.dto";
+import config from "src/config";
 
 export class UserDto extends User {
 	@ApiProperty({
@@ -23,7 +33,6 @@ export class UserDto extends User {
 	@IsInt()
 	id: number;
 
-	//TODO: relation
 	shooterProfile?: Shooter;
 
 	@ApiPropertyOptional({
@@ -65,7 +74,6 @@ export class UserDto extends User {
 	@IsDateString()
 	createdAt: Date;
 
-	//TODO: relation
 	ownsTeam?: Team;
 
 	@ApiPropertyOptional({
@@ -78,7 +86,6 @@ export class UserDto extends User {
 	@IsInt()
 	readonly ownsTeamId?: number;
 
-	//TODO: relation
 	adminOfTeam?: Team;
 
 	@ApiPropertyOptional({
@@ -91,7 +98,6 @@ export class UserDto extends User {
 	@IsInt()
 	readonly adminOfTeamId?: number;
 
-	//TODO: relation
 	designedStages?: Stage[];
 
 	@ApiPropertyOptional({
@@ -103,10 +109,9 @@ export class UserDto extends User {
 	@IsArray()
 	@Type(() => Number)
 	@IsInt({ each: true })
-	readonly designedStagesId?: number[];
+	readonly designedStagesIds?: number[];
 
-	//TODO: relation
-	stuffOfMatches?: MatchStaff[];
+	staffOfMatches?: MatchStaff[];
 
 	@ApiPropertyOptional({
 		description: "Id of the matches the user is a staff of",
@@ -117,7 +122,7 @@ export class UserDto extends User {
 	@IsArray()
 	@Type(() => Number)
 	@IsInt({ each: true })
-	readonly stuffOfMatchesId?: number[];
+	readonly staffOfMatchesIds?: number[];
 
 	@ApiProperty({
 		description: "Is the user active",
@@ -136,7 +141,7 @@ export class UserDto extends User {
 	isBanned: boolean;
 }
 
-export class UserCreateDto extends PickType(UserDto, [
+export class CreateUserDto extends PickType(UserDto, [
 	"nickname",
 	"email",
 ] as const) {
@@ -144,10 +149,56 @@ export class UserCreateDto extends PickType(UserDto, [
 		description: "Password of the user",
 		example: "password123",
 	})
-	@IsStrongPassword()
+	@IsStrongPassword(config.security.passwordOption)
 	password: string;
+
+	@ApiPropertyOptional({
+		description: "User's shooter profile",
+		type: ShooterIdDto,
+	})
+	@ValidateNested()
+	@Type(() => ShooterIdDto)
+	shooterProfile?: Shooter;
+
+	@ApiPropertyOptional({
+		description: "User's team",
+		type: TeamIdDto,
+	})
+	@IsOptional()
+	@ValidateNested()
+	@Type(() => TeamIdDto)
+	ownsTeam?: Team;
+
+	@ApiPropertyOptional({
+		description: "User's admin team",
+		type: TeamIdDto,
+	})
+	@IsOptional()
+	@ValidateNested()
+	@Type(() => TeamIdDto)
+	adminOfTeam?: Team;
+
+	@ApiPropertyOptional({
+		description: "User's designed stages",
+		type: StageIdDto,
+	})
+	@IsOptional()
+	@IsArray()
+	@ValidateNested()
+	@Type(() => StageIdDto)
+	designedStages?: Stage[];
+
+	@ApiPropertyOptional({
+		description: "User's staff of matches",
+		type: MatchStaffIdDto,
+	})
+	@IsOptional()
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => MatchStaffIdDto)
+	staffOfMatches?: MatchStaff[];
 }
 
-export class UserUpdateDto extends PartialType(UserCreateDto) {}
+export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
 export class UserIdDto extends PickType(UserDto, ["id"] as const) {}

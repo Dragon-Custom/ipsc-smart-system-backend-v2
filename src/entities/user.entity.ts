@@ -30,6 +30,7 @@ export abstract class User {
 	abstract shooterProfile?: Shooter;
 
 	@RelationId((user: User) => user.shooterProfile)
+	@Column({ nullable: true })
 	abstract readonly shooterProfileId?: number;
 
 	@Column()
@@ -61,8 +62,9 @@ export abstract class User {
 			.update(password)
 			.digest("base64");
 
-		this.password = secondResult;
-		return this.password;
+		this.encryptedPassword = secondResult;
+		delete this.password;
+		return this.encryptedPassword;
 	}
 
 	@CreateDateColumn()
@@ -80,19 +82,20 @@ export abstract class User {
 	abstract adminOfTeam?: Team;
 
 	@RelationId((user: User) => user.adminOfTeam)
+	@Column({ nullable: true })
 	abstract readonly adminOfTeamId?: number;
 
 	@OneToMany(() => Stage, (stage) => stage.designer)
 	abstract designedStages?: Stage[];
 
 	@RelationId((user: User) => user.designedStages)
-	abstract readonly designedStagesId?: number[];
+	abstract readonly designedStagesIds?: number[];
 
 	@OneToMany(() => MatchStaff, (match) => match.user)
-	abstract stuffOfMatches?: MatchStaff[];
+	abstract staffOfMatches?: MatchStaff[];
 
-	@RelationId((user: User) => user.stuffOfMatches)
-	abstract readonly stuffOfMatchesId?: number[];
+	@RelationId((user: User) => user.staffOfMatches)
+	abstract readonly staffOfMatchesIds?: number[];
 
 	@Column({ default: false })
 	abstract isActive: boolean;
