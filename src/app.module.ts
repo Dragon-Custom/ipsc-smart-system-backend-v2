@@ -22,7 +22,7 @@ import {
 import { UsersModule } from "./api/users/users.module";
 import { ShootersModule } from "./api/shooters/shooters.module";
 import { StagesModule } from "./api/stages/stages.module";
-import { TeamModule } from "./api/team/team.module";
+import { TeamsModule } from "./api/teams/team.module";
 import { MatchesModule } from "./api/matches/matches.module";
 
 @Module({
@@ -57,7 +57,7 @@ import { MatchesModule } from "./api/matches/matches.module";
 		UsersModule,
 		ShootersModule,
 		StagesModule,
-		TeamModule,
+		TeamsModule,
 		MatchesModule,
 	],
 })

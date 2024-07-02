@@ -18,7 +18,7 @@ import {
 } from "class-validator";
 import { MatchStaff, Shooter, Stage, Team, User } from "src/entities";
 import { ShooterIdDto } from "../shooters/shooters.dto";
-import { TeamIdDto } from "../team/teams.dto";
+import { TeamIdDto } from "../teams/teams.dto";
 import { StageIdDto } from "../stages/stages.dto";
 import { MatchStaffIdDto } from "../matches/match-staffs/match-staffs.dto";
 import config from "src/config";
