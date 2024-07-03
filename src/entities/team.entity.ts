@@ -28,6 +28,7 @@ export abstract class Team {
 	abstract owner: User;
 
 	@RelationId((team: Team) => team.owner)
+	@Column()
 	abstract readonly ownerId: number;
 
 	@OneToMany(() => User, (user) => user.adminOfTeam)

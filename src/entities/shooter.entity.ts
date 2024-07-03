@@ -35,7 +35,10 @@ export abstract class Shooter {
 	})
 	abstract readonly fullName: string;
 
-	@ManyToOne(() => Team, (team) => team.members)
+	@ManyToOne(() => Team, (team) => team.members, {
+		onDelete: "SET NULL",
+		onUpdate: "CASCADE",
+	})
 	abstract team?: Team;
 
 	@RelationId((shooter: Shooter) => shooter.team)

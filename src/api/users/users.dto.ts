@@ -11,6 +11,7 @@ import {
 	IsDateString,
 	IsEmail,
 	IsInt,
+	IsObject,
 	IsOptional,
 	IsString,
 	IsStrongPassword,
@@ -104,6 +105,7 @@ export class UserDto extends User {
 		description: "Id of the stages the user designed",
 		example: [1, 2, 3],
 		readOnly: true,
+		type: [Number],
 	})
 	@IsOptional()
 	@IsArray()
@@ -117,6 +119,7 @@ export class UserDto extends User {
 		description: "Id of the matches the user is a staff of",
 		example: [1, 2, 3],
 		readOnly: true,
+		type: [Number],
 	})
 	@IsOptional()
 	@IsArray()
@@ -154,35 +157,40 @@ export class CreateUserDto extends PickType(UserDto, [
 
 	@ApiPropertyOptional({
 		description: "User's shooter profile",
-		type: ShooterIdDto,
+		type: () => ShooterIdDto,
 	})
+	@IsOptional()
+	@IsObject()
 	@ValidateNested()
 	@Type(() => ShooterIdDto)
 	shooterProfile?: Shooter;
 
 	@ApiPropertyOptional({
 		description: "User's team",
-		type: TeamIdDto,
+		type: () => TeamIdDto,
 	})
 	@IsOptional()
+	@IsObject()
 	@ValidateNested()
 	@Type(() => TeamIdDto)
 	ownsTeam?: Team;
 
 	@ApiPropertyOptional({
 		description: "User's admin team",
-		type: TeamIdDto,
+		type: () => TeamIdDto,
 	})
 	@IsOptional()
+	@IsObject()
 	@ValidateNested()
 	@Type(() => TeamIdDto)
 	adminOfTeam?: Team;
 
 	@ApiPropertyOptional({
 		description: "User's designed stages",
-		type: StageIdDto,
+		type: () => [StageIdDto],
 	})
 	@IsOptional()
+	@IsObject()
 	@IsArray()
 	@ValidateNested()
 	@Type(() => StageIdDto)
@@ -190,9 +198,10 @@ export class CreateUserDto extends PickType(UserDto, [
 
 	@ApiPropertyOptional({
 		description: "User's staff of matches",
-		type: MatchStaffIdDto,
+		type: () => [MatchStaffIdDto],
 	})
 	@IsOptional()
+	@IsObject()
 	@IsArray()
 	@ValidateNested({ each: true })
 	@Type(() => MatchStaffIdDto)

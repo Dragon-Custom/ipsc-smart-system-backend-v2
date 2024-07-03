@@ -5,8 +5,18 @@ import {
 	PickType,
 } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDateString, IsInt, IsOptional, IsString } from "class-validator";
+import {
+	IsArray,
+	IsDateString,
+	IsInt,
+	IsObject,
+	IsOptional,
+	IsString,
+	ValidateNested,
+} from "class-validator";
 import { Shooter, Team, User } from "src/entities";
+import { UserIdDto } from "../users/users.dto";
+import { ShooterIdDto } from "../shooters/shooters.dto";
 
 export class TeamDto extends Team {
 	@ApiProperty({
@@ -50,7 +60,6 @@ export class TeamDto extends Team {
 	@IsDateString()
 	createdAt: Date;
 
-	//TODO: relation
 	owner: User;
 
 	@ApiProperty({
@@ -62,26 +71,26 @@ export class TeamDto extends Team {
 	@IsInt()
 	readonly ownerId: number;
 
-	//TODO: relation
 	admins?: User[];
 
 	@ApiPropertyOptional({
 		description: "Id of the admins of the team",
 		example: [1, 2, 3],
 		readOnly: true,
+		type: [Number],
 	})
 	@Type(() => Number)
 	@IsInt({ each: true })
 	@IsOptional()
 	readonly adminIds?: number[];
 
-	//TODO: relation
 	members?: Shooter[];
 
 	@ApiPropertyOptional({
 		description: "Id of the members of the team",
 		example: [1, 2, 3],
 		readOnly: true,
+		type: [Number],
 	})
 	@Type(() => Number)
 	@IsInt({ each: true })
@@ -89,12 +98,42 @@ export class TeamDto extends Team {
 	readonly memberIds?: number[];
 }
 
-export class TeamCreateDto extends PickType(TeamDto, [
+export class CreateTeamDto extends PickType(TeamDto, [
 	"name",
 	"description",
-	"owner",
-] as const) {}
+] as const) {
+	@ApiProperty({
+		description: "Owner of the team",
+		type: () => UserIdDto,
+	})
+	@ValidateNested()
+	@IsObject()
+	@Type(() => UserIdDto)
+	owner: User;
 
-export class TeamUpdateDto extends PartialType(TeamCreateDto) {}
+	@ApiPropertyOptional({
+		description: "Admins of the team",
+		type: () => [UserIdDto],
+	})
+	@IsOptional()
+	@IsObject({ each: true })
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => UserIdDto)
+	admins?: User[];
+
+	@ApiPropertyOptional({
+		description: "Members of the team",
+		type: () => [ShooterIdDto],
+	})
+	@IsOptional()
+	@IsObject({ each: true })
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => ShooterIdDto)
+	members?: () => Shooter[];
+}
+
+export class UpdateTeamDto extends PartialType(CreateTeamDto) {}
 
 export class TeamIdDto extends PickType(TeamDto, ["id"] as const) {}

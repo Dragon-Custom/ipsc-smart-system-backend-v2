@@ -78,7 +78,10 @@ export abstract class User {
 	@RelationId((user: User) => user.ownsTeam)
 	abstract readonly ownsTeamId?: number;
 
-	@ManyToOne(() => Team, (team) => team.admins)
+	@ManyToOne(() => Team, (team) => team.admins, {
+		onDelete: "SET NULL",
+		onUpdate: "CASCADE",
+	})
 	abstract adminOfTeam?: Team;
 
 	@RelationId((user: User) => user.adminOfTeam)
