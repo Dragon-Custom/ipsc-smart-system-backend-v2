@@ -21,7 +21,22 @@
 			host: "",
 			port: 0,
 		},
-		ipsc: {},
+		server: {
+		port: 3000,
+			imageService: {
+				imageMaxBytes: 10 /* MB */ * 1024 * 1024,
+				imageStoragePath: join(process.cwd(), "public/images"),
+			},
+		},
+		security: {
+			encrypt: {
+				passwordEncryptionKey: "<KEY>",
+			},
+			passwordOption: {
+				minLength: 8,
+				minSymbols: 0,
+			},
+		},
 	};
 	export default config;
 	```
