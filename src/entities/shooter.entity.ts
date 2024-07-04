@@ -48,13 +48,13 @@ export abstract class Shooter {
 	abstract shooterOfMatches?: MatchShooter[];
 
 	@RelationId((shooter: Shooter) => shooter.shooterOfMatches)
-	abstract readonly shooterOfMatchesId?: number[];
+	abstract readonly shooterOfMatchesIds?: number[];
 
 	@OneToMany(() => Score, (score) => score.matchShooter)
 	abstract scores?: Score[];
 
 	@RelationId((shooter: Shooter) => shooter.scores)
-	abstract readonly scoresId?: number[];
+	abstract readonly scoresIds?: number[];
 
 	@CreateDateColumn()
 	abstract createdAt: Date;

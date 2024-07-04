@@ -54,7 +54,7 @@ export class StageDto extends Stage {
 	@IsOptional()
 	@IsArray()
 	@IsString({ each: true })
-	readonly attachmentsId?: string[];
+	readonly attachmentsIds?: string[];
 
 	@ApiProperty({
 		description: "Name of the stage",
@@ -175,7 +175,7 @@ export class StageDto extends Stage {
 	@IsArray()
 	@Type(() => Number)
 	@IsInt({ each: true })
-	stageOfMatchesId?: number[];
+	stageOfMatchesIds?: number[];
 
 	designer: User;
 

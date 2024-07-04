@@ -87,7 +87,7 @@ export class ShooterDto extends Shooter {
 	@Type(() => Number)
 	@IsInt({ each: true })
 	@IsOptional()
-	readonly shooterOfMatchesId?: number[];
+	readonly shooterOfMatchesIds?: number[];
 
 	//TODO: relation
 	scores?: Score[];
@@ -100,7 +100,7 @@ export class ShooterDto extends Shooter {
 	@Type(() => Number)
 	@IsInt({ each: true })
 	@IsOptional()
-	readonly scoresId?: number[];
+	readonly scoresIds?: number[];
 }
 
 export class ShooterCreateDto extends PickType(ShooterDto, [

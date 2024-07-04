@@ -37,7 +37,7 @@ export abstract class Stage {
 	abstract attachments?: Image[];
 
 	@RelationId((stage: Stage) => stage.attachments)
-	abstract readonly attachmentsId?: string[];
+	abstract readonly attachmentsIds?: string[];
 
 	@Column()
 	abstract name: string;
@@ -109,7 +109,7 @@ export abstract class Stage {
 	abstract stageOfMatches?: MatchStage[];
 
 	@RelationId((stage: Stage) => stage.stageOfMatches)
-	abstract readonly stageOfMatchesId?: number[];
+	abstract readonly stageOfMatchesIds?: number[];
 
 	@CreateDateColumn()
 	abstract createdAt: Date;
