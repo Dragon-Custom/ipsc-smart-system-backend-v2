@@ -24,6 +24,8 @@ import { ShootersModule } from "./api/shooters/shooters.module";
 import { StagesModule } from "./api/stages/stages.module";
 import { TeamsModule } from "./api/teams/team.module";
 import { MatchesModule } from "./api/matches/matches.module";
+import { ImagesModule } from "./api/images/images.module";
+import { Image } from "./entities/image.entity";
 
 @Module({
 	imports: [
@@ -51,6 +53,7 @@ import { MatchesModule } from "./api/matches/matches.module";
 				ScoreProceduralPenalty,
 				Score,
 				DQReason,
+				Image,
 			],
 			synchronize: process.env.NODE_ENV !== "production",
 		}),
@@ -59,6 +62,7 @@ import { MatchesModule } from "./api/matches/matches.module";
 		StagesModule,
 		TeamsModule,
 		MatchesModule,
+		ImagesModule,
 	],
 })
 export class AppModule {

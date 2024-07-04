@@ -8,6 +8,10 @@ export interface Config {
 	};
 	server: {
 		port: number;
+		imageService: {
+			imageStoragePath: string;
+			imageMaxBytes: number;
+		};
 	};
 	security: {
 		encrypt: {
