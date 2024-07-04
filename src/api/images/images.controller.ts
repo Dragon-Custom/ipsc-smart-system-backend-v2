@@ -17,16 +17,20 @@ import { isMimeType } from "class-validator";
 import config from "src/config";
 import { ImageDto } from "./image.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { ApiOkResponse } from "@nestjs/swagger";
+import { ApiOkResponse, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import { createReadStream } from "fs";
 import { plainToInstance } from "class-transformer";
 
 @Controller("images")
+@ApiTags("images")
 export class ImagesController {
 	constructor(private readonly imagesService: ImagesService) {}
 
 	@Post("")
+	@ApiQuery({
+		description: "update load an image",
+	})
 	@ApiOkResponse({ type: ImageDto })
 	@SerializeOptions({
 		excludeExtraneousValues: false,
