@@ -36,7 +36,7 @@ export abstract class User {
 	@Column()
 	abstract nickname: string;
 
-	@Column()
+	@Column({ unique: true })
 	abstract email: string;
 
 	@Column()
@@ -44,13 +44,10 @@ export abstract class User {
 
 	abstract password: string;
 
-	@BeforeInsert()
-	@BeforeUpdate()
-	private async hashPassword() {
-		if (!this.password) return;
+	static async hashPassword(password: string) {
+		if (!password) return;
 		// add secret key
-		let password =
-			this.password + config.security.encrypt.passwordEncryptionKey;
+		password = password + config.security.encrypt.passwordEncryptionKey;
 		// sha256 hash
 		const firstResult = createHash("sha512")
 			.update(password)
@@ -61,10 +58,14 @@ export abstract class User {
 		const secondResult = createHash("sha512")
 			.update(password)
 			.digest("base64");
+		return secondResult;
+	}
 
-		this.encryptedPassword = secondResult;
+	@BeforeInsert()
+	@BeforeUpdate()
+	private async hashPassword() {
+		this.encryptedPassword = await User.hashPassword(this.password);
 		delete this.password;
-		return this.encryptedPassword;
 	}
 
 	@CreateDateColumn()

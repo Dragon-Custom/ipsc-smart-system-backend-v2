@@ -18,6 +18,10 @@ export interface Config {
 			passwordEncryptionKey: string;
 		};
 		passwordOption?: IsStrongPasswordOptions;
+		jwt: {
+			secret: string;
+			expiresIn: string;
+		};
 	};
 }
 

@@ -26,6 +26,7 @@ import { TeamsModule } from "./api/teams/team.module";
 import { MatchesModule } from "./api/matches/matches.module";
 import { ImagesModule } from "./api/images/images.module";
 import { Image } from "./entities/image.entity";
+import { AuthModule } from "./api/auth/auth.module";
 
 @Module({
 	imports: [
@@ -63,6 +64,7 @@ import { Image } from "./entities/image.entity";
 		TeamsModule,
 		MatchesModule,
 		ImagesModule,
+		AuthModule,
 	],
 })
 export class AppModule {
