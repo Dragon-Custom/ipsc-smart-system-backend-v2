@@ -5,8 +5,18 @@ import {
 	PickType,
 } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDateString, IsInt, IsOptional, IsString } from "class-validator";
-import { MatchShooter, Score, Shooter, Team, User } from "src/entities";
+import {
+	IsArray,
+	IsDateString,
+	IsInt,
+	IsOptional,
+	IsString,
+	ValidateNested,
+} from "class-validator";
+import { MatchShooter, Shooter, Team, User } from "src/entities";
+import { UserIdDto } from "../users/users.dto";
+import { TeamIdDto } from "../teams/teams.dto";
+import { MatchShooterIdDto } from "../matches/match-shooters/match-shooters.dto";
 
 export class ShooterDto extends Shooter {
 	@ApiProperty({
@@ -50,7 +60,6 @@ export class ShooterDto extends Shooter {
 	@IsDateString()
 	createdAt: Date;
 
-	//TODO: relation
 	belongsUser?: User;
 
 	@ApiPropertyOptional({
@@ -63,7 +72,6 @@ export class ShooterDto extends Shooter {
 	@IsOptional()
 	readonly belongsUserId?: number;
 
-	//TODO: relation
 	team?: Team;
 
 	@ApiPropertyOptional({
@@ -76,7 +84,6 @@ export class ShooterDto extends Shooter {
 	@IsOptional()
 	readonly teamId?: number;
 
-	//TODO: relation
 	shooterOfMatches?: MatchShooter[];
 
 	@ApiPropertyOptional({
@@ -88,28 +95,44 @@ export class ShooterDto extends Shooter {
 	@IsInt({ each: true })
 	@IsOptional()
 	readonly shooterOfMatchesIds?: number[];
-
-	//TODO: relation
-	scores?: Score[];
-
-	@ApiPropertyOptional({
-		description: "Id of the scores the shooter has",
-		example: [1, 2, 3],
-		readOnly: true,
-	})
-	@Type(() => Number)
-	@IsInt({ each: true })
-	@IsOptional()
-	readonly scoresIds?: number[];
 }
 
-export class ShooterCreateDto extends PickType(ShooterDto, [
+export class CreateShooterDto extends PickType(ShooterDto, [
 	"firstName",
 	"lastName",
 	"belongsUser",
 	"team",
-] as const) {}
+	"shooterOfMatches",
+] as const) {
+	@ApiPropertyOptional({
+		description: "The user the shooter belongs to",
+		type: () => UserIdDto,
+	})
+	@IsOptional()
+	@ValidateNested()
+	@Type(() => UserIdDto)
+	belongsUser?: User;
 
-export class ShooterUpdateDto extends PartialType(ShooterCreateDto) {}
+	@ApiPropertyOptional({
+		description: "The team the shooter belongs to",
+		type: () => TeamIdDto,
+	})
+	@IsOptional()
+	@ValidateNested()
+	@Type(() => TeamIdDto)
+	team?: Team;
+
+	@ApiPropertyOptional({
+		description: "The matches the shooter is a part of",
+		type: () => [MatchShooterIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => MatchShooterIdDto)
+	shooterOfMatches?: MatchShooter[];
+}
+
+export class UpdateShooterDto extends PartialType(CreateShooterDto) {}
 
 export class ShooterIdDto extends PickType(ShooterDto, ["id"] as const) {}
