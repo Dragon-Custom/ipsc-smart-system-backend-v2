@@ -6,9 +6,12 @@ import {
 	ManyToOne,
 	OneToMany,
 	RelationId,
+	OneToOne,
+	JoinColumn,
 } from "typeorm";
 import { User } from "./user.entity";
 import { MatchStage } from "./match/matchStage.entity";
+import { Image } from "./image.entity";
 
 export enum StageType {
 	Short = "Short",
@@ -21,6 +24,20 @@ export enum StageType {
 export abstract class Stage {
 	@PrimaryGeneratedColumn()
 	abstract id: number;
+
+	@OneToOne(() => Image)
+	@JoinColumn()
+	abstract thumbnail?: Image;
+
+	@RelationId((stage: Stage) => stage.thumbnail)
+	@Column({ nullable: true })
+	abstract readonly thumbnailId?: string;
+
+	@OneToMany(() => Image, (image) => image.stageAttachments)
+	abstract attachments?: Image[];
+
+	@RelationId((stage: Stage) => stage.attachments)
+	abstract readonly attachmentsId?: string[];
 
 	@Column()
 	abstract name: string;
@@ -52,7 +69,7 @@ export abstract class Stage {
 	/**
 	 * in seconds
 	 */
-	@Column({ comment: "in seconds", type: "time" })
+	@Column({ comment: "in seconds", type: "float" })
 	abstract walkthroughTime: number;
 
 	@Column()

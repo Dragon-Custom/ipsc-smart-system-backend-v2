@@ -13,8 +13,16 @@ import {
 	IsInt,
 	IsOptional,
 	IsString,
+	Max,
+	Min,
+	ValidateNested,
 } from "class-validator";
 import { MatchStage, Score, Stage, StageType, User } from "src/entities";
+import { Image } from "src/entities/image.entity";
+import { ImageIdDto } from "../images/image.dto";
+import { UserIdDto } from "../users/users.dto";
+import { ScoreIdDto } from "../matches/scores/scores.dto";
+import { MatchStageIdDto } from "../matches/match-stages/match-stages.dto";
 
 export class StageDto extends Stage {
 	@ApiProperty({
@@ -24,6 +32,29 @@ export class StageDto extends Stage {
 	@Type(() => Number)
 	@IsInt()
 	id: number;
+
+	thumbnail?: Image;
+
+	@ApiPropertyOptional({
+		description: "Id of the thumbnail of the stage",
+		example: 1,
+		readOnly: true,
+	})
+	@IsOptional()
+	@IsString()
+	readonly thumbnailId?: string;
+
+	attachments?: Image[];
+
+	@ApiPropertyOptional({
+		description: "Id of the attachments of the stage",
+		example: [1, 2, 3],
+		readOnly: true,
+	})
+	@IsOptional()
+	@IsArray()
+	@IsString({ each: true })
+	readonly attachmentsId?: string[];
 
 	@ApiProperty({
 		description: "Name of the stage",
@@ -82,6 +113,8 @@ export class StageDto extends Stage {
 	})
 	@Type(() => Number)
 	@IsInt()
+	@Min(1)
+	@Max(3)
 	condidtion: number;
 
 	@ApiProperty({
@@ -89,7 +122,6 @@ export class StageDto extends Stage {
 		example: 100,
 	})
 	@Type(() => Number)
-	@IsInt()
 	walkthroughTime: number;
 
 	@ApiProperty({
@@ -133,7 +165,6 @@ export class StageDto extends Stage {
 	@IsDateString()
 	createdAt: Date;
 
-	//TODO: relation
 	stageOfMatches?: MatchStage[];
 
 	@ApiPropertyOptional({
@@ -146,7 +177,6 @@ export class StageDto extends Stage {
 	@IsInt({ each: true })
 	stageOfMatchesId?: number[];
 
-	//TODO: relation
 	designer: User;
 
 	@ApiProperty({
@@ -157,7 +187,6 @@ export class StageDto extends Stage {
 	@IsInt()
 	designerId: number;
 
-	//TODO: relation
 	scores?: Score[];
 
 	@ApiPropertyOptional({
@@ -171,8 +200,10 @@ export class StageDto extends Stage {
 	scoresId?: number[];
 }
 
-export class StageCreateDto extends PickType(StageDto, [
+export class CreateStageDto extends PickType(StageDto, [
 	"name",
+	"thumbnail",
+	"attachments",
 	"description",
 	"briefing",
 	"designer",
@@ -182,8 +213,57 @@ export class StageCreateDto extends PickType(StageDto, [
 	"condidtion",
 	"walkthroughTime",
 	"isBZoneEnabled",
-] as const) {}
+	"scores",
+	"stageOfMatches",
+] as const) {
+	@ApiPropertyOptional({
+		description: "The thumbnail of the stage",
+		type: () => ImageIdDto,
+	})
+	@IsOptional()
+	@ValidateNested()
+	@Type(() => ImageIdDto)
+	thumbnail?: Image;
 
-export class StageUpdateDto extends PartialType(StageCreateDto) {}
+	@ApiPropertyOptional({
+		description: "The attachments of the stage",
+		type: () => [ImageIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => ImageIdDto)
+	attachments?: Image[];
+
+	@ApiProperty({
+		description: "The designer of the stage",
+		type: () => UserIdDto,
+	})
+	@ValidateNested()
+	@Type(() => UserIdDto)
+	designer: User;
+
+	@ApiPropertyOptional({
+		description: "The scores of the stage",
+		type: () => [ScoreIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => ScoreIdDto)
+	scores?: Score[];
+
+	@ApiPropertyOptional({
+		description: "The matches the stage is a part of",
+		type: () => [MatchStageIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => MatchStageIdDto)
+	stageOfMatches?: MatchStage[];
+}
+
+export class UpdateStageDto extends PartialType(CreateStageDto) {}
 
 export class StageIdDto extends PickType(StageDto, ["id"] as const) {}

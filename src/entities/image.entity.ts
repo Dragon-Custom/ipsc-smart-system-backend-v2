@@ -2,8 +2,10 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	ManyToOne,
 	PrimaryGeneratedColumn,
 } from "typeorm";
+import { Stage } from "./stage.entity";
 
 @Entity()
 export abstract class Image {
@@ -30,4 +32,9 @@ export abstract class Image {
 
 	@CreateDateColumn()
 	abstract readonly createdAt: Date;
+
+	@ManyToOne(() => Stage, (stage) => stage.attachments, {
+		onDelete: "CASCADE",
+	})
+	stageAttachments: Stage;
 }

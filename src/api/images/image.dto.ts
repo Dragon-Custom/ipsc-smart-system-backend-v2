@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, PickType } from "@nestjs/swagger";
 import { Exclude } from "class-transformer";
 import {
 	IsDate,
@@ -55,3 +55,5 @@ export class ImageDto extends Image {
 	@IsDate()
 	createdAt: Date;
 }
+
+export class ImageIdDto extends PickType(ImageDto, ["id"] as const) {}
