@@ -5,8 +5,17 @@ import {
 	PickType,
 } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsArray, IsInt, IsOptional, IsString } from "class-validator";
+import {
+	IsArray,
+	IsInt,
+	IsObject,
+	IsOptional,
+	IsString,
+	ValidateNested,
+} from "class-validator";
 import { Match, MatchDivision, MatchShooter } from "src/entities";
+import { MatchShooterIdDto } from "../match-shooters/match-shooters.dto";
+import { MatchIdDto } from "../matches.dto";
 
 export class MatchDivisionsDto extends MatchDivision {
 	@ApiProperty({
@@ -39,6 +48,15 @@ export class MatchDivisionsDto extends MatchDivision {
 	@IsInt({ each: true })
 	readonly matchShooterIds?: number[];
 
+	@ApiProperty({
+		description: "The number of shooter in this division",
+		example: 3,
+		readOnly: true,
+	})
+	@Type(() => Number)
+	@IsInt()
+	readonly matchShooterCount: number;
+
 	//TODO: relation
 	match: Match;
 
@@ -54,8 +72,29 @@ export class MatchDivisionsDto extends MatchDivision {
 
 export class CreateMatchDivisionDto extends PickType(MatchDivisionsDto, [
 	"name",
+	"matchShooters",
 	"match",
-] as const) {}
+] as const) {
+	@ApiPropertyOptional({
+		description: "The shooter's id which are in this division",
+		type: () => [MatchShooterIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@ValidateNested({ each: true })
+	@IsObject({ each: true })
+	@Type(() => MatchShooterIdDto)
+	matchShooters?: MatchShooter[];
+
+	@ApiProperty({
+		description: "The match id",
+		type: () => MatchIdDto,
+	})
+	@ValidateNested()
+	@IsObject()
+	@Type(() => MatchIdDto)
+	match: Match;
+}
 
 export class UpdateMatchDivisionDto extends PartialType(MatchDivisionsDto) {}
 
