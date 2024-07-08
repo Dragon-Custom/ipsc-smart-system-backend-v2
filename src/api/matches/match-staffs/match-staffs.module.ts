@@ -1,8 +1,11 @@
 import { Module } from "@nestjs/common";
 import { MatchStaffsService } from "./match-staffs.service";
 import { MatchStaffsController } from "./match-staffs.controller";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { MatchStaff } from "src/entities";
 
 @Module({
+	imports: [TypeOrmModule.forFeature([MatchStaff])],
 	controllers: [MatchStaffsController],
 	providers: [MatchStaffsService],
 })

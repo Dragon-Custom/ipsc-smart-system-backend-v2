@@ -4,6 +4,7 @@ import {
 	PrimaryGeneratedColumn,
 	ManyToOne,
 	RelationId,
+	Index,
 } from "typeorm";
 import { User } from "../user.entity";
 import { Match } from "./match.entity";
@@ -18,6 +19,9 @@ export enum StaffRole {
 }
 
 @Entity()
+@Index(["matchId", "userId"], {
+	unique: true,
+})
 export abstract class MatchStaff {
 	@PrimaryGeneratedColumn()
 	abstract id: number;
@@ -28,15 +32,23 @@ export abstract class MatchStaff {
 	})
 	abstract role: StaffRole;
 
-	@ManyToOne(() => Match, (match) => match.matchStaffs)
+	@ManyToOne(() => Match, (match) => match.matchStaffs, {
+		nullable: false,
+		onDelete: "CASCADE",
+	})
 	abstract match: Match;
 
 	@RelationId((matchStaff: MatchStaff) => matchStaff.match)
+	@Column({ nullable: false })
 	abstract readonly matchId: number;
 
-	@ManyToOne(() => User, (user) => user.staffOfMatches)
+	@ManyToOne(() => User, (user) => user.staffOfMatches, {
+		nullable: false,
+		onDelete: "CASCADE",
+	})
 	abstract user: User;
 
 	@RelationId((matchStaff: MatchStaff) => matchStaff.user)
+	@Column({ nullable: false })
 	abstract readonly userId: number;
 }
