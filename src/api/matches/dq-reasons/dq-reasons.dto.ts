@@ -10,6 +10,7 @@ import {
 	IsArray,
 	IsInt,
 	IsObject,
+	IsOptional,
 	IsString,
 	ValidateNested,
 } from "class-validator";
@@ -45,7 +46,6 @@ export class DqReasonDto extends DQReason {
 	@IsString()
 	index: string;
 
-	//TODO: relation
 	dqedScores?: Score[];
 
 	@ApiPropertyOptional({
@@ -78,6 +78,7 @@ export class CreateDqReasonDto extends PickType(DqReasonDto, [
 		description: "the score that dqd with this reason",
 		type: () => [ScoreIdDto],
 	})
+	@IsOptional()
 	@ValidateNested()
 	@IsArray()
 	@IsObject({ each: true })
