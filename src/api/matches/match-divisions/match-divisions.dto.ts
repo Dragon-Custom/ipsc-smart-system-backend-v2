@@ -34,7 +34,6 @@ export class MatchDivisionsDto extends MatchDivision {
 	@IsString()
 	name: string;
 
-	//TODO: relation
 	matchShooters?: MatchShooter[];
 
 	@ApiPropertyOptional({
@@ -57,7 +56,6 @@ export class MatchDivisionsDto extends MatchDivision {
 	@IsInt()
 	readonly matchShooterCount: number;
 
-	//TODO: relation
 	match: Match;
 
 	@ApiProperty({
