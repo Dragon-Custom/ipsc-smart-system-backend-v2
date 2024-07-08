@@ -1,7 +1,29 @@
 import { Controller } from "@nestjs/common";
 import { DqReasonsService } from "./dq-reasons.service";
+import { Crud, CrudController } from "@nestjsx/crud";
+import { DQReason } from "src/entities";
+import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
+import {
+	CreateDqReasonDto,
+	DqReasonDto,
+	UpdateDqReasonDto,
+} from "./dq-reasons.dto";
+import { ApiTags } from "@nestjs/swagger";
 
-@Controller("dq-reasons")
-export class DqReasonsController {
-	constructor(private readonly dqReasonsService: DqReasonsService) {}
+@Controller("matches/dq-reasons")
+@ApiTags("DQ Reasons")
+@Crud(
+	mixinCrudConfig({
+		model: {
+			type: DqReasonDto,
+		},
+		dto: {
+			create: CreateDqReasonDto,
+			update: UpdateDqReasonDto,
+			replace: CreateDqReasonDto,
+		},
+	}),
+)
+export class DqReasonsController implements CrudController<DQReason> {
+	constructor(public readonly service: DqReasonsService) {}
 }

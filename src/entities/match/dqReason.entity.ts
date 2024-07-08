@@ -3,6 +3,7 @@ import {
 	Entity,
 	OneToMany,
 	PrimaryGeneratedColumn,
+	RelationCount,
 	RelationId,
 } from "typeorm";
 import { Score } from "./score.entity";
@@ -22,8 +23,11 @@ export abstract class DQReason {
 	abstract index: string;
 
 	@OneToMany(() => Score, (score) => score.dqReason)
-	abstract dqedScores: Score[];
+	abstract dqedScores?: Score[];
 
 	@RelationId((dqReason: DQReason) => dqReason.dqedScores)
-	abstract readonly dqedScoresIds: number[];
+	abstract readonly dqedScoresIds?: number[];
+
+	@RelationCount((dqReason: DQReason) => dqReason.dqedScores)
+	abstract readonly dqedScoresCount: number;
 }

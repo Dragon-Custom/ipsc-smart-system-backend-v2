@@ -1,7 +1,19 @@
-import { ApiProperty, PartialType, PickType } from "@nestjs/swagger";
+import {
+	ApiProperty,
+	ApiPropertyOptional,
+	PartialType,
+	PickType,
+} from "@nestjs/swagger";
 import { DQReason, Score } from "src/entities";
 import { Type } from "class-transformer";
-import { IsArray, IsInt, IsString } from "class-validator";
+import {
+	IsArray,
+	IsInt,
+	IsObject,
+	IsString,
+	ValidateNested,
+} from "class-validator";
+import { ScoreIdDto } from "../scores/scores.dto";
 
 export class DqReasonDto extends DQReason {
 	@ApiProperty({
@@ -34,9 +46,9 @@ export class DqReasonDto extends DQReason {
 	index: string;
 
 	//TODO: relation
-	dqedScores: Score[];
+	dqedScores?: Score[];
 
-	@ApiProperty({
+	@ApiPropertyOptional({
 		description: "the score that dqd with this reason",
 		example: [1, 2, 3],
 		readOnly: true,
@@ -44,15 +56,35 @@ export class DqReasonDto extends DQReason {
 	@IsArray()
 	@Type(() => Number)
 	@IsInt({ each: true })
-	readonly dqedScoresIds: number[];
+	readonly dqedScoresIds?: number[];
+
+	@ApiProperty({
+		description: "the count of score that dqd with this reason",
+		example: 3,
+		readOnly: true,
+	})
+	@Type(() => Number)
+	@IsInt()
+	readonly dqedScoresCount: number;
 }
 
-export class DqReasonCreateDto extends PickType(DqReasonDto, [
+export class CreateDqReasonDto extends PickType(DqReasonDto, [
 	"name",
 	"content",
 	"index",
-] as const) {}
+	"dqedScores",
+] as const) {
+	@ApiPropertyOptional({
+		description: "the score that dqd with this reason",
+		type: () => [ScoreIdDto],
+	})
+	@ValidateNested()
+	@IsArray()
+	@IsObject({ each: true })
+	@Type(() => ScoreIdDto)
+	dqedScores?: Score[];
+}
 
-export class DqReasonUpdateDto extends PartialType(DqReasonCreateDto) {}
+export class UpdateDqReasonDto extends PartialType(CreateDqReasonDto) {}
 
 export class DqReasonIdDto extends PickType(DqReasonDto, ["id"] as const) {}
