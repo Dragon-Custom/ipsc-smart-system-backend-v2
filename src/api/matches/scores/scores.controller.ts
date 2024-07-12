@@ -4,8 +4,10 @@ import { Crud, CrudController } from "@nestjsx/crud";
 import { Score } from "src/entities";
 import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
 import { CreateScoreDto, ScoreDto, UpdateScoreDto } from "./scores.dto";
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller("matches/scores")
+@ApiTags("Scores")
 @Crud(
 	mixinCrudConfig({
 		model: {

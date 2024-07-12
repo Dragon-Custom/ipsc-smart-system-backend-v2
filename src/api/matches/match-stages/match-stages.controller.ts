@@ -8,8 +8,10 @@ import {
 	MatchStageDto,
 	UpdateMatchStageDto,
 } from "./match-stages.dto";
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller("matches/match-stages")
+@ApiTags("Match Stages")
 @Crud(
 	mixinCrudConfig({
 		model: {

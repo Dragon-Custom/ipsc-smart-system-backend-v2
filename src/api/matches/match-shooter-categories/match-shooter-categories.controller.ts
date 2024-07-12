@@ -8,8 +8,10 @@ import {
 	MatchShooterCategoryDto,
 	UpdateMatchShooterCategoryDto,
 } from "./match-shooter-categories.dto";
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller("matches/match-shooter-categories")
+@ApiTags("Match Shooter Categories")
 @Crud(
 	mixinCrudConfig({
 		model: {
