@@ -4,6 +4,13 @@ import { AuthGuard } from "src/api/auth/auth.guard";
 
 export type Route = keyof RoutesOptions;
 
+export const AuthPreset: Record<"C" | "R" | "U" | "D", Route[]> = {
+	C: ["createOneBase", "createManyBase"],
+	R: ["getManyBase", "getOneBase"],
+	U: ["updateOneBase", "replaceOneBase"],
+	D: ["deleteOneBase", "recoverOneBase"],
+};
+
 export function CreateAuthRouteGroup(
 	routesRequireAuth: Route[],
 ): RoutesOptions {
