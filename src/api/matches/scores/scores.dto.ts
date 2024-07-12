@@ -11,7 +11,9 @@ import {
 	IsEnum,
 	IsInt,
 	IsNumber,
+	IsObject,
 	IsOptional,
+	ValidateNested,
 } from "class-validator";
 import {
 	DQReason,
@@ -22,6 +24,10 @@ import {
 	ScoreProceduralPenalty,
 	ScoreStateType,
 } from "src/entities";
+import { ScoreProceduralPenaltiesIdDto } from "../score-procedural-penalties/score-procedural-penalties.dto";
+import { MatchStageIdDto } from "../match-stages/match-stages.dto";
+import { MatchShooterIdDto } from "../match-shooters/match-shooters.dto";
+import { DqReasonIdDto } from "../dq-reasons/dq-reasons.dto";
 
 export class ScoreDto extends Score {
 	@ApiProperty({
@@ -104,7 +110,6 @@ export class ScoreDto extends Score {
 	@IsEnum(ScoreStateType)
 	state: ScoreStateType;
 
-	//TODO: relation
 	scoreProceduralPenalties?: ScoreProceduralPenalty[];
 
 	@ApiPropertyOptional({
@@ -150,7 +155,6 @@ export class ScoreDto extends Score {
 	@IsEnum(PowerFactor)
 	powerFactor: PowerFactor;
 
-	//TODO: relation
 	matchStage: MatchStage;
 
 	@ApiProperty({
@@ -162,7 +166,6 @@ export class ScoreDto extends Score {
 	@IsInt()
 	readonly matchStageId: number;
 
-	//TODO: relation
 	matchShooter: MatchShooter;
 
 	@ApiProperty({
@@ -174,7 +177,6 @@ export class ScoreDto extends Score {
 	@IsInt()
 	readonly matchShooterId: number;
 
-	//TODO: relation
 	dqReason?: DQReason;
 
 	@ApiPropertyOptional({
@@ -231,7 +233,46 @@ export class CreateScoreDto extends PickType(ScoreDto, [
 	"matchShooter",
 	"dqReason",
 	"iterations",
-] as const) {}
+] as const) {
+	@ApiPropertyOptional({
+		description: "proerror list",
+		type: () => [ScoreProceduralPenaltiesIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested()
+	@Type(() => ScoreProceduralPenaltiesIdDto)
+	scoreProceduralPenalties?: ScoreProceduralPenalty[];
+
+	@ApiProperty({
+		description: "The id of the match stage",
+		type: () => MatchStageIdDto,
+	})
+	@IsObject()
+	@ValidateNested()
+	@Type(() => MatchStageIdDto)
+	matchStage: MatchStage;
+
+	@ApiProperty({
+		description: "The id of the match shooter",
+		type: () => MatchShooterIdDto,
+	})
+	@IsObject()
+	@ValidateNested()
+	@Type(() => MatchShooterIdDto)
+	matchShooter: MatchShooter;
+
+	@ApiPropertyOptional({
+		description: "The id of the dq reason",
+		type: () => DqReasonIdDto,
+	})
+	@IsOptional()
+	@IsObject()
+	@ValidateNested()
+	@Type(() => DqReasonIdDto)
+	dqReason?: DQReason;
+}
 
 export class UpdateScoreDto extends PartialType(CreateScoreDto) {}
 
