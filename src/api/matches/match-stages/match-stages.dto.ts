@@ -10,9 +10,14 @@ import {
 	IsBoolean,
 	IsDateString,
 	IsInt,
+	IsObject,
 	IsOptional,
+	ValidateNested,
 } from "class-validator";
 import { Match, MatchStage, Score, Stage } from "src/entities";
+import { ScoreIdDto } from "../scores/scores.dto";
+import { MatchIdDto } from "../matches.dto";
+import { StageIdDto } from "src/api/stages/stages.dto";
 
 export class MatchStageDto extends MatchStage {
 	@ApiProperty({
@@ -86,9 +91,39 @@ export class MatchStageDto extends MatchStage {
 }
 
 export class CreateMatchStageDto extends PickType(MatchStageDto, [
+	"scores",
 	"match",
 	"stage",
-] as const) {}
+] as const) {
+	@ApiPropertyOptional({
+		description: "The scores in the match stage",
+		type: () => [ScoreIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested()
+	@Type(() => ScoreIdDto)
+	scores?: Score[];
+
+	@ApiProperty({
+		description: "The id of the match",
+		example: () => MatchIdDto,
+	})
+	@IsObject()
+	@ValidateNested()
+	@Type(() => MatchIdDto)
+	match: Match;
+
+	@ApiProperty({
+		description: "The stage of this match stage",
+		type: () => StageIdDto,
+	})
+	@IsObject()
+	@ValidateNested()
+	@Type(() => StageIdDto)
+	stage: Stage;
+}
 
 export class UpdateMatchStageDto extends PartialType(MatchStageDto) {}
 

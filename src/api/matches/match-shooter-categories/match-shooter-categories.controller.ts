@@ -9,7 +9,7 @@ import {
 	UpdateMatchShooterCategoryDto,
 } from "./match-shooter-categories.dto";
 
-@Controller("match-shooter-categories")
+@Controller("matches/match-shooter-categories")
 @Crud(
 	mixinCrudConfig({
 		model: {
