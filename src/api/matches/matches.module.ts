@@ -13,11 +13,13 @@ import { ScoresModule } from "./scores/scores.module";
 import { ScoreProceduralPenaltiesModule } from "./score-procedural-penalties/score-procedural-penalties.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Match } from "src/entities";
+import { UsersModule } from "../users/users.module";
 
 @Module({
 	controllers: [MatchesController],
 	providers: [MatchesService],
 	imports: [
+		UsersModule,
 		TypeOrmModule.forFeature([Match]),
 		MatchShootersModule,
 		MatchClassificationsModule,

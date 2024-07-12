@@ -7,6 +7,7 @@ import {
 	RelationId,
 	RelationCount,
 	ManyToOne,
+	DeleteDateColumn,
 } from "typeorm";
 import { MatchStaff } from "./matchStaff.entity";
 import { MatchShooter } from "./matchShooter.entity";
@@ -96,4 +97,7 @@ export abstract class Match {
 
 	@Column({ default: false })
 	abstract isFinished: boolean;
+
+	@DeleteDateColumn()
+	deletedAt?: Date;
 }
