@@ -2,7 +2,7 @@ import { Controller } from "@nestjs/common";
 import { ScoresService } from "./scores.service";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { Score } from "src/entities";
-import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
+import { mixinCrudConfig } from "src/utils";
 import { CreateScoreDto, ScoreDto, UpdateScoreDto } from "./scores.dto";
 import { ApiTags } from "@nestjs/swagger";
 

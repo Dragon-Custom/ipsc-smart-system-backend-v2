@@ -2,9 +2,10 @@ import { Controller } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { User } from "src/entities";
-import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
+import { mixinCrudConfig } from "src/utils";
 import { CreateUserDto, UpdateUserDto, UserDto } from "./users.dto";
 import { ApiTags } from "@nestjs/swagger";
+import { CreateAuthRouteGroup } from "src/utils";
 
 @Controller("users")
 @ApiTags("users")
@@ -18,6 +19,12 @@ import { ApiTags } from "@nestjs/swagger";
 			replace: CreateUserDto,
 			update: UpdateUserDto,
 		},
+		routes: CreateAuthRouteGroup([
+			"deleteOneBase",
+			"recoverOneBase",
+			"replaceOneBase",
+			"updateOneBase",
+		]),
 	}),
 )
 export class UsersController implements CrudController<User> {

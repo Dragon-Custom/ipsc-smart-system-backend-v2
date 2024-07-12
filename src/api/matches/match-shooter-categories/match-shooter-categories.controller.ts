@@ -2,7 +2,7 @@ import { Controller } from "@nestjs/common";
 import { MatchShooterCategoriesService } from "./match-shooter-categories.service";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { MatchShooterCategory } from "src/entities";
-import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
+import { mixinCrudConfig } from "src/utils";
 import {
 	CreateMatchShooterCategoryDto,
 	MatchShooterCategoryDto,

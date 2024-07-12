@@ -2,7 +2,7 @@ import { Controller } from "@nestjs/common";
 import { ProceduralPenaltiesService } from "./procedural-penalties.service";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { ProceduralPenalty } from "src/entities";
-import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
+import { mixinCrudConfig } from "src/utils";
 import {
 	CreateProceduralPenaltyDto,
 	ProceduralPenaltyDto,

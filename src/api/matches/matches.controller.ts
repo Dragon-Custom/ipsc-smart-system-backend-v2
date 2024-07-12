@@ -3,7 +3,7 @@ import { MatchesService } from "./matches.service";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { Match } from "src/entities";
 import { ApiTags } from "@nestjs/swagger";
-import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
+import { mixinCrudConfig } from "src/utils";
 import { CreateMatchDto, MatchDto, UpdateMatchDto } from "./matches.dto";
 
 @Controller("matches")

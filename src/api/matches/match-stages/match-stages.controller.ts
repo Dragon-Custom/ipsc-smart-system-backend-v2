@@ -2,7 +2,7 @@ import { Controller } from "@nestjs/common";
 import { MatchStagesService } from "./match-stages.service";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { MatchStage } from "src/entities";
-import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
+import { mixinCrudConfig } from "src/utils";
 import {
 	CreateMatchStageDto,
 	MatchStageDto,

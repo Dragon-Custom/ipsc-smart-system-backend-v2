@@ -10,6 +10,7 @@ import {
 	BeforeInsert,
 	BeforeUpdate,
 	RelationId,
+	DeleteDateColumn,
 } from "typeorm";
 import { Team } from "./team.entity";
 import { Shooter } from "./shooter.entity";
@@ -112,4 +113,7 @@ export abstract class User {
 
 	@Column({ default: false })
 	abstract isBanned: boolean;
+
+	@DeleteDateColumn()
+	deletedAt?: Date;
 }

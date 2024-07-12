@@ -3,7 +3,7 @@ import { MatchStaffsService } from "./match-staffs.service";
 import { ApiTags } from "@nestjs/swagger";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { MatchStaff } from "src/entities";
-import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
+import { mixinCrudConfig } from "src/utils";
 import {
 	CreateMatchStaffsDto,
 	MatchStaffsDto,

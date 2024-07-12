@@ -2,7 +2,7 @@ import { Controller } from "@nestjs/common";
 import { StagesService } from "./stages.service";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { Stage } from "src/entities";
-import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
+import { mixinCrudConfig } from "src/utils";
 import { CreateStageDto, StageDto, UpdateStageDto } from "./stages.dto";
 import { ApiTags } from "@nestjs/swagger";
 

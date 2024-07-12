@@ -3,7 +3,7 @@ import { TeamsService } from "./team.service";
 import { ApiTags } from "@nestjs/swagger";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { Team } from "src/entities";
-import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
+import { mixinCrudConfig } from "src/utils";
 import { CreateTeamDto, TeamDto, UpdateTeamDto } from "./teams.dto";
 
 @Controller("teams")

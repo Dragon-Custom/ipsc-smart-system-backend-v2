@@ -3,7 +3,7 @@ import { ScoreProceduralPenaltiesService } from "./score-procedural-penalties.se
 import { Crud, CrudController } from "@nestjsx/crud";
 import { ScoreProceduralPenalty } from "src/entities";
 import { ApiTags } from "@nestjs/swagger";
-import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
+import { mixinCrudConfig } from "src/utils";
 import {
 	CreateScoreProceduralPenaltyDto,
 	UpdateScoreProceduralPenaltyDto,

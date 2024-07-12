@@ -2,7 +2,7 @@ import { Controller } from "@nestjs/common";
 import { MatchDivisionsService } from "./match-divisions.service";
 import { ApiTags } from "@nestjs/swagger";
 import { Crud, CrudController } from "@nestjsx/crud";
-import { mixinCrudConfig } from "src/types/mixinGlobalCRUDConfig";
+import { mixinCrudConfig } from "src/utils";
 import {
 	CreateMatchDivisionDto,
 	MatchDivisionsDto,
