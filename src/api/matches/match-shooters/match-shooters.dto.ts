@@ -133,7 +133,7 @@ export class MatchShooterDto extends MatchShooter {
 	readonly scoresId?: number[];
 }
 
-const CreateMatchShooterPickBase = [
+export class CreateMatchShooterDto extends PickType(MatchShooterDto, [
 	"shooter",
 	"squad",
 	"match",
@@ -141,12 +141,8 @@ const CreateMatchShooterPickBase = [
 	"classification",
 	"powerFactor",
 	"division",
-] as const;
-
-export class CreateMatchShooterDto extends PickType(
-	MatchShooterDto,
-	CreateMatchShooterPickBase,
-) {
+	"isDQed",
+] as const) {
 	@ApiProperty({
 		description: "division of the match shooter",
 		type: () => MatchDivisionIdDto,
@@ -168,7 +164,6 @@ export class CreateMatchShooterDto extends PickType(
 	@ApiPropertyOptional({
 		description: "categories of the match shooter",
 		type: () => [MatchShooterCategoryIdDto],
-		isArray: true,
 	})
 	@IsOptional()
 	@IsArray()
@@ -198,7 +193,6 @@ export class CreateMatchShooterDto extends PickType(
 	@ApiPropertyOptional({
 		description: "scores of the match shooter",
 		type: () => [ScoreIdDto],
-		isArray: true,
 	})
 	@IsOptional()
 	@IsArray()
@@ -208,12 +202,7 @@ export class CreateMatchShooterDto extends PickType(
 	scores?: Score[];
 }
 
-export class UpdateMatchShooterDto extends PartialType(
-	PickType(MatchShooterDto, [
-		...CreateMatchShooterPickBase,
-		"isDQed",
-	] as const),
-) {}
+export class UpdateMatchShooterDto extends PartialType(CreateMatchShooterDto) {}
 
 export class MatchShooterIdDto extends PickType(MatchShooterDto, [
 	"id",
