@@ -8,6 +8,7 @@ import {
 	RelationId,
 	OneToOne,
 	JoinColumn,
+	DeleteDateColumn,
 } from "typeorm";
 import { User } from "./user.entity";
 import { MatchStage } from "./match/matchStage.entity";
@@ -113,4 +114,7 @@ export abstract class Stage {
 
 	@CreateDateColumn()
 	abstract createdAt: Date;
+
+	@DeleteDateColumn()
+	deletedAt?: Date;
 }
