@@ -5,7 +5,15 @@ import {
 	PickType,
 } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsEnum, IsInt, IsOptional } from "class-validator";
+import {
+	IsArray,
+	IsBoolean,
+	IsEnum,
+	IsInt,
+	IsObject,
+	IsOptional,
+	ValidateNested,
+} from "class-validator";
 import {
 	MatchClassification,
 	MatchDivision,
@@ -16,6 +24,12 @@ import {
 	PowerFactor,
 	Score,
 } from "src/entities";
+import { MatchDivisionIdDto } from "../match-divisions/match-divisions.dto";
+import { MatchClassificationIdDto } from "../match-classifications/match-classifications.dto";
+import { MatchShooterCategoryIdDto } from "../match-shooter-categories/match-shooter-categories.dto";
+import { MatchIdDto } from "../matches.dto";
+import { ShooterIdDto } from "src/api/shooters/shooters.dto";
+import { ScoreIdDto } from "../scores/scores.dto";
 export class MatchShooterDto extends MatchShooter {
 	@ApiProperty({
 		description: "Id of the match shooter",
@@ -33,7 +47,6 @@ export class MatchShooterDto extends MatchShooter {
 	@IsInt()
 	squad: number;
 
-	//TODO: relation
 	division: MatchDivision;
 
 	@ApiProperty({
@@ -45,7 +58,6 @@ export class MatchShooterDto extends MatchShooter {
 	@IsInt()
 	readonly divisionId: number;
 
-	//TODO: relation
 	classification: MatchClassification;
 
 	@ApiProperty({
@@ -72,7 +84,6 @@ export class MatchShooterDto extends MatchShooter {
 	@IsBoolean()
 	isDQed: boolean;
 
-	//TODO: relation
 	categories?: MatchShooterCategory[];
 
 	@ApiPropertyOptional({
@@ -86,7 +97,6 @@ export class MatchShooterDto extends MatchShooter {
 	@IsInt({ each: true })
 	readonly categoryIds?: number[];
 
-	//TODO: relation
 	match: Match;
 
 	@ApiProperty({
@@ -98,7 +108,6 @@ export class MatchShooterDto extends MatchShooter {
 	@IsInt()
 	readonly matchId: number;
 
-	//TODO: relation
 	shooter: Shooter;
 
 	@ApiProperty({
@@ -110,7 +119,6 @@ export class MatchShooterDto extends MatchShooter {
 	@IsInt()
 	readonly shooterId: number;
 
-	//TODO: relation
 	scores?: Score[];
 
 	@ApiPropertyOptional({
@@ -135,12 +143,72 @@ const CreateMatchShooterPickBase = [
 	"division",
 ] as const;
 
-export class MatchShooterCreateDto extends PickType(
+export class CreateMatchShooterDto extends PickType(
 	MatchShooterDto,
 	CreateMatchShooterPickBase,
-) {}
+) {
+	@ApiProperty({
+		description: "division of the match shooter",
+		type: () => MatchDivisionIdDto,
+	})
+	@IsObject()
+	@ValidateNested()
+	@Type(() => MatchDivisionIdDto)
+	division: MatchDivision;
 
-export class MatchShooterUpdateDto extends PartialType(
+	@ApiProperty({
+		description: "classification of the match shooter",
+		type: () => MatchClassificationIdDto,
+	})
+	@IsObject()
+	@ValidateNested()
+	@Type(() => MatchClassificationIdDto)
+	classification: MatchClassification;
+
+	@ApiPropertyOptional({
+		description: "categories of the match shooter",
+		type: () => [MatchShooterCategoryIdDto],
+		isArray: true,
+	})
+	@IsOptional()
+	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested({ each: true })
+	@Type(() => MatchShooterCategoryIdDto)
+	categories?: MatchShooterCategory[];
+
+	@ApiProperty({
+		description: "match of the match shooter",
+		type: () => MatchIdDto,
+	})
+	@IsObject()
+	@ValidateNested()
+	@Type(() => MatchIdDto)
+	match: Match;
+
+	@ApiProperty({
+		description: "shooter of the match shooter",
+		type: () => ShooterIdDto,
+	})
+	@IsObject()
+	@ValidateNested()
+	@Type(() => ShooterIdDto)
+	shooter: Shooter;
+
+	@ApiPropertyOptional({
+		description: "scores of the match shooter",
+		type: () => [ScoreIdDto],
+		isArray: true,
+	})
+	@IsOptional()
+	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested({ each: true })
+	@Type(() => ScoreIdDto)
+	scores?: Score[];
+}
+
+export class UpdateMatchShooterDto extends PartialType(
 	PickType(MatchShooterDto, [
 		...CreateMatchShooterPickBase,
 		"isDQed",

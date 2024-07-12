@@ -76,3 +76,8 @@ export class CreateMatchShooterCategoryDto extends PickType(
 export class UpdateMatchShooterCategoryDto extends PartialType(
 	CreateMatchShooterCategoryDto,
 ) {}
+
+export class MatchShooterCategoryIdDto extends PickType(
+	MatchShooterCategoryDto,
+	["id"] as const,
+) {}
