@@ -23,6 +23,7 @@ import {
 	MatchStaff,
 	MatchStage,
 	Score,
+	User,
 } from "src/entities";
 import { MatchStaffIdDto } from "./match-staffs/match-staffs.dto";
 import { MatchShooterIdDto } from "./match-shooters/match-shooters.dto";
@@ -30,6 +31,7 @@ import { MatchStageIdDto } from "./match-stages/match-stages.dto";
 import { MatchDivisionIdDto } from "./match-divisions/match-divisions.dto";
 import { MatchClassificationIdDto } from "./match-classifications/match-classifications.dto";
 import { ScoreIdDto } from "./scores/scores.dto";
+import { UserIdDto } from "../users/users.dto";
 
 export class MatchDto extends Match {
 	@ApiProperty({
@@ -211,6 +213,17 @@ export class MatchDto extends Match {
 	@Type(() => Number)
 	@IsInt({ each: true })
 	readonly scoresId?: number[];
+
+	organizer: User;
+
+	@ApiProperty({
+		description: "Id of the organize user of the match",
+		example: 1,
+		readOnly: true,
+	})
+	@Type(() => Number)
+	@IsInt()
+	readonly organizerId: number;
 }
 
 export class CreateMatchDto extends PickType(MatchDto, [
@@ -226,6 +239,7 @@ export class CreateMatchDto extends PickType(MatchDto, [
 	"matchClassifications",
 	"matchStages",
 	"matchStaffs",
+	"organizer",
 ] as const) {
 	@ApiPropertyOptional({
 		description: "match staffs",
@@ -292,6 +306,15 @@ export class CreateMatchDto extends PickType(MatchDto, [
 	@ValidateNested({ each: true })
 	@Type(() => ScoreIdDto)
 	scores?: Score[];
+
+	@ApiProperty({
+		description: "organizer of the match",
+		type: () => UserIdDto,
+	})
+	@IsObject()
+	@ValidateNested()
+	@Type(() => UserIdDto)
+	organizer: User;
 }
 
 export class UpdateMatchDto extends PartialType(CreateMatchDto) {}

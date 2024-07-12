@@ -14,7 +14,7 @@ import {
 import { Team } from "./team.entity";
 import { Shooter } from "./shooter.entity";
 import { Stage } from "./stage.entity";
-import { MatchStaff } from "./match";
+import { Match, MatchStaff } from "./match";
 import config from "src/config";
 import { createHash } from "crypto";
 
@@ -100,6 +100,12 @@ export abstract class User {
 
 	@RelationId((user: User) => user.staffOfMatches)
 	abstract readonly staffOfMatchesIds?: number[];
+
+	@OneToMany(() => Match, (match) => match.organizer)
+	abstract organizedMatches?: Match[];
+
+	@RelationId((user: User) => user.organizedMatches)
+	abstract readonly organizedMatchesIds?: number[];
 
 	@Column({ default: false })
 	abstract isActive: boolean;

@@ -17,12 +17,13 @@ import {
 	IsStrongPassword,
 	ValidateNested,
 } from "class-validator";
-import { MatchStaff, Shooter, Stage, Team, User } from "src/entities";
+import { Match, MatchStaff, Shooter, Stage, Team, User } from "src/entities";
 import { ShooterIdDto } from "../shooters/shooters.dto";
 import { TeamIdDto } from "../teams/teams.dto";
 import { StageIdDto } from "../stages/stages.dto";
 import { MatchStaffIdDto } from "../matches/match-staffs/match-staffs.dto";
 import config from "src/config";
+import { MatchIdDto } from "../matches/matches.dto";
 
 export class UserDto extends User {
 	@ApiProperty({
@@ -142,6 +143,19 @@ export class UserDto extends User {
 	@Type(() => Boolean)
 	@IsBoolean()
 	isBanned: boolean;
+
+	organizedMatches?: Match[];
+
+	@ApiPropertyOptional({
+		description: "Id of the matches the user organized",
+		example: [1, 2, 3],
+		readOnly: true,
+	})
+	@IsOptional()
+	@IsArray()
+	@Type(() => Number)
+	@IsInt({ each: true })
+	readonly organizedMatchesIds?: number[];
 }
 
 export class CreateUserDto extends PickType(UserDto, [
@@ -206,6 +220,17 @@ export class CreateUserDto extends PickType(UserDto, [
 	@ValidateNested({ each: true })
 	@Type(() => MatchStaffIdDto)
 	staffOfMatches?: MatchStaff[];
+
+	@ApiPropertyOptional({
+		description: "User's organized matches",
+		type: () => [MatchIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested({ each: true })
+	@Type(() => MatchIdDto)
+	organizedMatches?: Match[];
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}

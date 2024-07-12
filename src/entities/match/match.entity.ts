@@ -6,12 +6,14 @@ import {
 	OneToMany,
 	RelationId,
 	RelationCount,
+	ManyToOne,
 } from "typeorm";
 import { MatchStaff } from "./matchStaff.entity";
 import { MatchShooter } from "./matchShooter.entity";
 import { MatchStage } from "./matchStage.entity";
 import { MatchDivision } from "./matchDivision.entity";
 import { MatchClassification } from "./matchClassification.entity";
+import { User } from "../user.entity";
 
 @Entity()
 export abstract class Match {
@@ -65,6 +67,12 @@ export abstract class Match {
 
 	@RelationId((match: Match) => match.matchClassifications)
 	abstract readonly matchClassificationIds?: number[];
+
+	@ManyToOne(() => User, (user) => user.organizedMatches)
+	abstract readonly organizer: User;
+
+	@RelationId((match: Match) => match.organizer)
+	abstract readonly organizerId: number;
 
 	@Column()
 	abstract level: number;
