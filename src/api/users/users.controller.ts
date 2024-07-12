@@ -6,6 +6,7 @@ import { mixinCrudConfig, AuthPreset } from "src/utils";
 import { CreateUserDto, UpdateUserDto, UserDto } from "./users.dto";
 import { ApiTags } from "@nestjs/swagger";
 import { CreateAuthRouteGroup } from "src/utils";
+import { IsUserItselfGuard } from "../authorize/authorize.guard";
 
 @Controller("users")
 @ApiTags("users")
@@ -19,7 +20,10 @@ import { CreateAuthRouteGroup } from "src/utils";
 			replace: CreateUserDto,
 			update: UpdateUserDto,
 		},
-		routes: CreateAuthRouteGroup([...AuthPreset.U, ...AuthPreset.D]),
+		routes: CreateAuthRouteGroup(
+			[...AuthPreset.U, ...AuthPreset.D],
+			[IsUserItselfGuard],
+		),
 	}),
 )
 export class UsersController implements CrudController<User> {

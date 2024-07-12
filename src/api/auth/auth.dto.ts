@@ -36,7 +36,9 @@ export class RequestWithUser extends Request {
 		sub: number;
 		username: string;
 		email: string;
+		isSystemAdmin?: true;
 		iat: number;
 		exp: number;
 	};
+	params: any;
 }

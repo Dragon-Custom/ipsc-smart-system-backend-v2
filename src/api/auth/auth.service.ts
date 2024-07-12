@@ -25,7 +25,9 @@ export class AuthService {
 			sub: user.id,
 			username: user.nickname,
 			email: user.email,
+			isSystemAdmin: undefined,
 		};
+		if (user.isSystemAdmin === true) payload.isSystemAdmin = true;
 		return {
 			access_token: await this.jwtService.signAsync(payload),
 		};

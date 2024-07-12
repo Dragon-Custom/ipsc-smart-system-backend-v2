@@ -116,4 +116,7 @@ export abstract class User {
 
 	@DeleteDateColumn()
 	deletedAt?: Date;
+
+	@Column({ default: false })
+	isSystemAdmin: boolean;
 }
