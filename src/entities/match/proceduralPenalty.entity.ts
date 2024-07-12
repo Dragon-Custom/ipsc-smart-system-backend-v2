@@ -4,6 +4,7 @@ import {
 	Column,
 	OneToMany,
 	RelationId,
+	RelationCount,
 } from "typeorm";
 import { ScoreProceduralPenalty } from "./scoreProceduralPenalty.entity";
 
@@ -32,4 +33,10 @@ export abstract class ProceduralPenalty {
 			proceduralPenalty.proceduralPenaltyOfScores,
 	)
 	abstract readonly scoreProceduralPenaltyIds?: number[];
+
+	@RelationCount(
+		(proceduralPenalty: ProceduralPenalty) =>
+			proceduralPenalty.proceduralPenaltyOfScores,
+	)
+	abstract readonly scoreProceduralPenaltyCount: number;
 }

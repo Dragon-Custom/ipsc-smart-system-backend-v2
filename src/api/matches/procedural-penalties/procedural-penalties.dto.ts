@@ -5,8 +5,16 @@ import {
 	PickType,
 } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsArray, IsInt, IsOptional, IsString } from "class-validator";
+import {
+	IsArray,
+	IsInt,
+	IsObject,
+	IsOptional,
+	IsString,
+	ValidateNested,
+} from "class-validator";
 import { ProceduralPenalty, ScoreProceduralPenalty } from "src/entities";
+import { ScoreProceduralPenaltiesIdDto } from "../score-procedural-penalties/score-procedural-penalties.dto";
 
 export class ProceduralPenaltyDto extends ProceduralPenalty {
 	@ApiProperty({
@@ -38,7 +46,6 @@ export class ProceduralPenaltyDto extends ProceduralPenalty {
 	@IsString()
 	index: string;
 
-	//TODO: relations
 	proceduralPenaltyOfScores?: ScoreProceduralPenalty[];
 
 	@ApiPropertyOptional({
@@ -51,13 +58,33 @@ export class ProceduralPenaltyDto extends ProceduralPenalty {
 	@Type(() => Number)
 	@IsInt({ each: true })
 	readonly scoreProceduralPenaltyIds?: number[];
+
+	@ApiProperty({
+		description: "The count of the score-procedural-penalties",
+		example: 3,
+		readOnly: true,
+	})
+	@IsInt()
+	readonly scoreProceduralPenaltyCount: number;
 }
 
 export class CreateProceduralPenaltyDto extends PickType(ProceduralPenaltyDto, [
 	"name",
 	"content",
 	"index",
-]) {}
+	"proceduralPenaltyOfScores",
+]) {
+	@ApiPropertyOptional({
+		description: "The ids of the score-procedural-penalties",
+		type: [ScoreProceduralPenaltiesIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested()
+	@Type(() => ScoreProceduralPenaltiesIdDto)
+	proceduralPenaltyOfScores?: ScoreProceduralPenalty[];
+}
 
 export class UpdateProceduralPenaltyDto extends PartialType(
 	ProceduralPenaltyDto,
