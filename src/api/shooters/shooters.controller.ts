@@ -18,6 +18,7 @@ import { CreateShooterDto, ShooterDto, UpdateShooterDto } from "./shooters.dto";
 			replace: CreateShooterDto,
 			update: UpdateShooterDto,
 		},
+		//TODO: auth
 	}),
 )
 export class ShootersController implements CrudController<Shooter> {
