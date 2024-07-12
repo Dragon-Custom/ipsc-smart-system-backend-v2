@@ -10,8 +10,10 @@ import {
 	IsBoolean,
 	IsDateString,
 	IsInt,
+	IsObject,
 	IsOptional,
 	IsString,
+	ValidateNested,
 } from "class-validator";
 import {
 	Match,
@@ -22,6 +24,12 @@ import {
 	MatchStage,
 	Score,
 } from "src/entities";
+import { MatchStaffIdDto } from "./match-staffs/match-staffs.dto";
+import { MatchShooterIdDto } from "./match-shooters/match-shooters.dto";
+import { MatchStageIdDto } from "./match-stages/match-stages.dto";
+import { MatchDivisionIdDto } from "./match-divisions/match-divisions.dto";
+import { MatchClassificationIdDto } from "./match-classifications/match-classifications.dto";
+import { ScoreIdDto } from "./scores/scores.dto";
 
 export class MatchDto extends Match {
 	@ApiProperty({
@@ -137,7 +145,7 @@ export class MatchDto extends Match {
 	readonly matchStaffIds?: number[];
 
 	//TODO: relation
-	matchShooters: MatchShooter[];
+	matchShooters?: MatchShooter[];
 
 	@ApiPropertyOptional({
 		description: "Id of the match shooters",
@@ -151,7 +159,7 @@ export class MatchDto extends Match {
 	readonly matchShooterIds: number[];
 
 	//TODO: relation
-	matchStages: MatchStage[];
+	matchStages?: MatchStage[];
 
 	@ApiPropertyOptional({
 		description: "Id of the match stages",
@@ -165,7 +173,7 @@ export class MatchDto extends Match {
 	readonly matchStageIds: number[];
 
 	//TODO: relation
-	matchDivisions: MatchDivision[];
+	matchDivisions?: MatchDivision[];
 
 	@ApiProperty({
 		description: "Divisions' id of the match",
@@ -205,17 +213,87 @@ export class MatchDto extends Match {
 	readonly scoresId?: number[];
 }
 
-export class MatchCreateDto extends PickType(MatchDto, [
+export class CreateMatchDto extends PickType(MatchDto, [
 	"name",
 	"description",
 	"isStageDQEnabled",
 	"level",
 	"link",
+	"scores",
 	"matchDate",
+	"matchShooters",
+	"matchDivisions",
+	"matchClassifications",
 	"matchStages",
 	"matchStaffs",
-] as const) {}
+] as const) {
+	@ApiPropertyOptional({
+		description: "match staffs",
+		type: () => [MatchStaffIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested({ each: true })
+	@Type(() => MatchStaffIdDto)
+	matchStaffs?: MatchStaff[];
 
-export class MatchUpdateDto extends PartialType(MatchCreateDto) {}
+	@ApiPropertyOptional({
+		description: "match shooters",
+		type: () => [MatchShooterIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested({ each: true })
+	@Type(() => MatchShooterIdDto)
+	matchShooters?: MatchShooter[];
+
+	@ApiPropertyOptional({
+		description: "match stages",
+		type: () => [MatchStageIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested({ each: true })
+	@Type(() => MatchStageIdDto)
+	matchStages?: MatchStage[];
+
+	@ApiPropertyOptional({
+		description: "match divisions",
+		type: () => [MatchDivisionIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested({ each: true })
+	@Type(() => MatchDivisionIdDto)
+	matchDivisions?: MatchDivision[];
+
+	@ApiPropertyOptional({
+		description: "match classifications",
+		type: () => [MatchClassificationIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested({ each: true })
+	@Type(() => MatchClassificationIdDto)
+	matchClassifications?: MatchClassification[];
+
+	@ApiPropertyOptional({
+		description: "scores",
+		type: () => [ScoreIdDto],
+	})
+	@IsOptional()
+	@IsArray()
+	@IsObject({ each: true })
+	@ValidateNested({ each: true })
+	@Type(() => ScoreIdDto)
+	scores?: Score[];
+}
+
+export class UpdateMatchDto extends PartialType(CreateMatchDto) {}
 
 export class MatchIdDto extends PickType(MatchDto, ["id"] as const) {}

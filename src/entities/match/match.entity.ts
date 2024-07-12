@@ -34,28 +34,28 @@ export abstract class Match {
 	abstract readonly matchStaffIds?: number[];
 
 	@OneToMany(() => MatchStaff, (matchStuff) => matchStuff.match)
-	abstract matchShooters: MatchShooter[];
+	abstract matchShooters?: MatchShooter[];
 
 	@RelationCount((match: Match) => match.matchShooters)
 	abstract readonly matchShooterCount: number;
 
 	@RelationId((match: Match) => match.matchShooters)
-	abstract readonly matchShooterIds: number[];
+	abstract readonly matchShooterIds?: number[];
 
 	@OneToMany(() => MatchStage, (matchStage) => matchStage.match)
-	abstract matchStages: MatchStage[];
+	abstract matchStages?: MatchStage[];
 
 	@RelationCount((match: Match) => match.matchStages)
 	abstract readonly matchStageCount: number;
 
 	@RelationId((match: Match) => match.matchStages)
-	abstract readonly matchStageIds: number[];
+	abstract readonly matchStageIds?: number[];
 
 	@OneToMany(() => MatchDivision, (matchDivision) => matchDivision.match)
-	abstract matchDivisions: MatchDivision[];
+	abstract matchDivisions?: MatchDivision[];
 
 	@RelationId((match: Match) => match.matchDivisions)
-	abstract readonly matchDivisionIds: number[];
+	abstract readonly matchDivisionIds?: number[];
 
 	@OneToMany(
 		() => MatchClassification,

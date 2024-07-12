@@ -11,11 +11,14 @@ import { MatchStagesModule } from "./match-stages/match-stages.module";
 import { ProceduralPenaltiesModule } from "./procedural-penalties/procedural-penalties.module";
 import { ScoresModule } from "./scores/scores.module";
 import { ScoreProceduralPenaltiesModule } from "./score-procedural-penalties/score-procedural-penalties.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Match } from "src/entities";
 
 @Module({
 	controllers: [MatchesController],
 	providers: [MatchesService],
 	imports: [
+		TypeOrmModule.forFeature([Match]),
 		MatchShootersModule,
 		MatchClassificationsModule,
 		MatchDivisionsModule,
