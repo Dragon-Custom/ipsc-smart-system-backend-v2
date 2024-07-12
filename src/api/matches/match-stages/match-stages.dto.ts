@@ -28,7 +28,6 @@ export class MatchStageDto extends MatchStage {
 	@IsInt()
 	id: number;
 
-	//TODO: relations
 	scores?: Score[];
 
 	@ApiPropertyOptional({
@@ -42,7 +41,6 @@ export class MatchStageDto extends MatchStage {
 	@IsInt({ each: true })
 	readonly scoreIds?: number[];
 
-	//TODO: relations
 	match: Match;
 
 	@ApiProperty({
@@ -54,7 +52,6 @@ export class MatchStageDto extends MatchStage {
 	@IsInt()
 	readonly matchId: number;
 
-	//TODO: relations
 	stage: Stage;
 
 	@ApiProperty({
