@@ -19,12 +19,7 @@ import { CreateAuthRouteGroup } from "src/utils";
 			replace: CreateUserDto,
 			update: UpdateUserDto,
 		},
-		routes: CreateAuthRouteGroup([
-			...AuthPreset.C,
-			...AuthPreset.R,
-			...AuthPreset.U,
-			...AuthPreset.D,
-		]),
+		routes: CreateAuthRouteGroup([...AuthPreset.U, ...AuthPreset.D]),
 	}),
 )
 export class UsersController implements CrudController<User> {
