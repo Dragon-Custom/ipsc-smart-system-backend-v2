@@ -1,5 +1,5 @@
 import { CanActivate, UseGuards } from "@nestjs/common";
-import { RoutesOptions } from "@nestjsx/crud";
+import { BaseRouteOptions, RoutesOptions } from "@nestjsx/crud";
 import { AuthGuard } from "src/api/auth/auth.guard";
 
 export type Route = keyof RoutesOptions;
@@ -11,24 +11,28 @@ export const AuthPreset: Record<"C" | "R" | "U" | "D", Route[]> = {
 	D: ["deleteOneBase", "recoverOneBase"],
 };
 
+export type AdditionalRoutes = {
+	route: Route[];
+	options: Partial<BaseRouteOptions>;
+}[];
+
 export function CreateAuthRouteGroup(
-	routesRequireAuth: Route[],
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	additionalGurds?: (CanActivate | Function)[],
-	additionalRoutes?: RoutesOptions,
+	additionalRoutes?: AdditionalRoutes,
 ): RoutesOptions {
 	const routes: RoutesOptions = {};
-	routesRequireAuth.forEach((route) => {
-		//@ts-expect-error require the little js tricks to enable this feature
-		routes[route] = {
-			decorators: [UseGuards(AuthGuard, ...additionalGurds)],
-		};
-	});
-
 	//merge additional routes
 	if (additionalRoutes) {
-		Object.assign(routes, additionalRoutes);
+		additionalRoutes.forEach((route) => {
+			route.route.forEach((r) => {
+				//@ts-expect-error dwa
+				routes[r] = {
+					...routes[r],
+					...route.options,
+				};
+			});
+		});
 	}
+	console.log(routes);
 
 	return routes;
 }
