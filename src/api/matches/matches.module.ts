@@ -11,6 +11,7 @@ import { ScoreProceduralPenaltiesModule } from "./score-procedural-penalties/sco
 import { MatchesModule as WhyThereAreTowSameModule_IDK } from "./matches/matches.module";
 import { APP_GUARD, RouterModule, Routes } from "@nestjs/core";
 import { ConvertToMatchIdGuard } from "./convertToMatchId.guard";
+import { MatchShootersModule } from "./match-shooters/match-shooters.module";
 
 const routes: Routes = [
 	{
@@ -39,6 +40,10 @@ const routes: Routes = [
 			{
 				path: "/match-shooter-categories",
 				children: [MatchShooterCategoriesModule],
+			},
+			{
+				path: "/match-shooters",
+				children: [MatchShootersModule],
 			},
 			{
 				path: "/match-staffs",
@@ -78,6 +83,7 @@ const routes: Routes = [
 		MatchStagesModule,
 		ProceduralPenaltiesModule,
 		ScoresModule,
+		MatchShootersModule,
 		ScoreProceduralPenaltiesModule,
 	],
 })
