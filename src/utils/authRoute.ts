@@ -14,7 +14,7 @@ export type AdditionalRoutes = {
 	options: Partial<BaseRouteOptions>;
 }[];
 
-export function CreateAuthRouteGroup(
+export function CreateRouteGroup(
 	additionalRoutes: AdditionalRoutes,
 ): RoutesOptions {
 	const routes: RoutesOptions = {};
