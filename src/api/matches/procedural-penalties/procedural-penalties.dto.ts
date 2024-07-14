@@ -76,7 +76,7 @@ export class CreateProceduralPenaltyDto extends PickType(ProceduralPenaltyDto, [
 ]) {
 	@ApiPropertyOptional({
 		description: "The ids of the score-procedural-penalties",
-		type: () => [ScoreProceduralPenaltiesIdDto],
+		type: [ScoreProceduralPenaltiesIdDto],
 	})
 	@IsOptional()
 	@IsArray()
@@ -87,7 +87,7 @@ export class CreateProceduralPenaltyDto extends PickType(ProceduralPenaltyDto, [
 }
 
 export class UpdateProceduralPenaltyDto extends PartialType(
-	CreateProceduralPenaltyDto,
+	ProceduralPenaltyDto,
 ) {}
 
 export class ProceduralPenaltyIdDto extends PickType(ProceduralPenaltyDto, [
