@@ -1,10 +1,16 @@
-import { Controller } from "@nestjs/common";
+import { Controller, UseGuards } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { User } from "src/entities";
-import { mixinCrudConfig } from "src/utils";
+import {
+	CreateRouteGroup,
+	mixinCrudConfig,
+	RouteOperationPreset,
+} from "src/utils";
 import { CreateUserDto, UpdateUserDto, UserDto } from "./users.dto";
 import { ApiTags } from "@nestjs/swagger";
+import { AuthGuard } from "../auth/auth.guard";
+import { IsUserItselfGuard } from "./users.guard";
 
 @Controller("users")
 @ApiTags("users")
@@ -18,6 +24,14 @@ import { ApiTags } from "@nestjs/swagger";
 			replace: CreateUserDto,
 			update: UpdateUserDto,
 		},
+		routes: CreateRouteGroup([
+			{
+				route: [...RouteOperationPreset.U, ...RouteOperationPreset.D],
+				options: {
+					decorators: [UseGuards(AuthGuard, IsUserItselfGuard)],
+				},
+			},
+		]),
 	}),
 )
 export class UsersController implements CrudController<User> {

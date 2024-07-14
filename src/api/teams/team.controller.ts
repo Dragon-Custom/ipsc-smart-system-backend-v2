@@ -1,10 +1,16 @@
-import { Controller } from "@nestjs/common";
+import { Controller, UseGuards } from "@nestjs/common";
 import { TeamsService } from "./team.service";
 import { ApiTags } from "@nestjs/swagger";
 import { Crud, CrudController } from "@nestjsx/crud";
 import { Team } from "src/entities";
-import { mixinCrudConfig } from "src/utils";
+import {
+	CreateRouteGroup,
+	mixinCrudConfig,
+	RouteOperationPreset,
+} from "src/utils";
 import { CreateTeamDto, TeamDto, UpdateTeamDto } from "./teams.dto";
+import { AuthGuard } from "../auth/auth.guard";
+import { IsUserItselfGuard } from "../users/users.guard";
 
 @Controller("teams")
 @ApiTags("teams")

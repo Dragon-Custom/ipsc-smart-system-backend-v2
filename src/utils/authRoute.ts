@@ -2,7 +2,7 @@ import { BaseRouteOptions, RoutesOptions } from "@nestjsx/crud";
 
 export type Route = keyof RoutesOptions;
 
-export const AuthPreset: Record<"C" | "R" | "U" | "D", Route[]> = {
+export const RouteOperationPreset: Record<"C" | "R" | "U" | "D", Route[]> = {
 	C: ["createOneBase", "createManyBase"],
 	R: ["getManyBase", "getOneBase"],
 	U: ["updateOneBase", "replaceOneBase"],

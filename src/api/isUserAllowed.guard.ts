@@ -6,21 +6,19 @@ import { Request } from "express";
 /**
  * to ensure the target operation is performed by a specific user with the jwt sub id
  */
-export abstract class SpecificIdGuard implements CanActivate {
+export abstract class IsUserAllowedGuard implements CanActivate {
 	constructor() {}
 
 	async canActivate(context: ExecutionContext): Promise<boolean> {
 		const request = context
 			.switchToHttp()
 			.getRequest<RequestWithUser<Request>>();
-
-		const allowedIds = await this.getAllowedIds(request);
+		const operationTargetId = parseInt(request.params.id);
+		const allowedIds = await this.getAllowedUserIds(operationTargetId);
 		const subId = request.user.sub;
 
 		return allowedIds.includes(subId);
 	}
 
-	abstract getAllowedIds(
-		request: RequestWithUser<Request>,
-	): Promise<number[]>;
+	abstract getAllowedUserIds(targetId?: number): Promise<number[]> | number[];
 }
