@@ -16,6 +16,7 @@ import { MatchDivision } from "./matchDivision.entity";
 import { MatchClassification } from "./matchClassification.entity";
 import { User } from "../user.entity";
 import { Score } from "./score.entity";
+import { ScoreProceduralPenalty } from "./scoreProceduralPenalty.entity";
 
 @Entity()
 export abstract class Match {
@@ -84,6 +85,18 @@ export abstract class Match {
 
 	@RelationId((match: Match) => match.scores)
 	abstract readonly scoreIds?: number[];
+
+	@OneToMany(
+		() => ScoreProceduralPenalty,
+		(scoreProceduralPenalty) => scoreProceduralPenalty.match,
+	)
+	scoreProceduralPenalties: ScoreProceduralPenalty[];
+
+	@RelationCount((match: Match) => match.scoreProceduralPenalties)
+	readonly scoreProceduralPenaltyCount: number;
+
+	@RelationId((match: Match) => match.scoreProceduralPenalties)
+	readonly scoreProceduralPenaltyIds?: number[];
 
 	@Column()
 	abstract level: number;

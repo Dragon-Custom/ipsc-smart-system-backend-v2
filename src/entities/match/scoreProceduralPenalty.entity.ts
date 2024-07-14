@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { Score } from "./score.entity";
 import { ProceduralPenalty } from "./proceduralPenalty.entity";
+import { Match } from "./match.entity";
 
 @Entity()
 @Check("count >= 1")
@@ -39,4 +40,13 @@ export abstract class ScoreProceduralPenalty {
 			scoreProceduralPenalty.proceduralPenalty,
 	)
 	abstract readonly proceduralPenaltyId: number;
+
+	@ManyToOne(() => Match, (match) => match.scoreProceduralPenalties)
+	match: Match;
+
+	@RelationId(
+		(scoreProceduralPenalty: ScoreProceduralPenalty) =>
+			scoreProceduralPenalty.match,
+	)
+	readonly matchId: number;
 }
