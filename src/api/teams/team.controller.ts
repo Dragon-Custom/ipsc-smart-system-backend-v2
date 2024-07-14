@@ -10,11 +10,7 @@ import {
 } from "src/utils";
 import { CreateTeamDto, TeamDto, UpdateTeamDto } from "./teams.dto";
 import { AuthGuard } from "../auth/auth.guard";
-import {
-	IsTeamAdminGuard,
-	IsTeamOwnerGuard,
-	IsTeamOwnerOrAdminGuard,
-} from "./team.guard";
+import { IsTeamOwnerGuard, IsTeamOwnerOrAdminGuard } from "./team.guard";
 
 @Controller("teams")
 @ApiTags("teams")
