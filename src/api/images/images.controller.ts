@@ -10,6 +10,7 @@ import {
 	SerializeOptions,
 	StreamableFile,
 	UploadedFile,
+	UseGuards,
 	UseInterceptors,
 } from "@nestjs/common";
 import { ImagesService } from "./images.service";
@@ -21,6 +22,7 @@ import { ApiOkResponse, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import { createReadStream } from "fs";
 import { plainToInstance } from "class-transformer";
+import { AuthGuard } from "../auth/auth.guard";
 
 @Controller("images")
 @ApiTags("images")
@@ -36,6 +38,7 @@ export class ImagesController {
 		excludeExtraneousValues: false,
 	})
 	@UseInterceptors(FileInterceptor("file"))
+	@UseGuards(AuthGuard)
 	async uploadFile(
 		@UploadedFile() file: Express.Multer.File,
 	): Promise<ImageDto> {
@@ -82,6 +85,7 @@ export class ImagesController {
 	@SerializeOptions({
 		excludeExtraneousValues: false,
 	})
+	@UseGuards(AuthGuard)
 	async deleteImage(@Param("id") id: string): Promise<ImageDto> {
 		const result = await this.imagesService.deleteImage(id);
 		return plainToInstance(ImageDto, result);
