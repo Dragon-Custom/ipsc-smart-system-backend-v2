@@ -13,7 +13,7 @@ import {
 	UpdateScoreProceduralPenaltyDto,
 } from "./score-procedural-penalties.dto";
 import { OriginalTargetEntity } from "../convertToMatchId.guard";
-import { IsMatchStaffGuard } from "../match-staffs/match-staffs.guard";
+import { IsMatchStaffOrOrganizerGuard } from "../match-staffs/match-staffs.guard";
 import { AuthGuard } from "src/api/auth/auth.guard";
 
 @Controller()
@@ -38,7 +38,7 @@ import { AuthGuard } from "src/api/auth/auth.guard";
 				options: {
 					decorators: [OriginalTargetEntity(ScoreProceduralPenalty)],
 				},
-				guard: [AuthGuard, IsMatchStaffGuard],
+				guard: [AuthGuard, IsMatchStaffOrOrganizerGuard],
 			},
 		]),
 	}),

@@ -11,7 +11,7 @@ import { CreateScoreDto, ScoreDto, UpdateScoreDto } from "./scores.dto";
 import { ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "src/api/auth/auth.guard";
 import { OriginalTargetEntity } from "../convertToMatchId.guard";
-import { IsMatchStaffGuard } from "../match-staffs/match-staffs.guard";
+import { IsMatchStaffOrOrganizerGuard } from "../match-staffs/match-staffs.guard";
 
 @Controller()
 @ApiTags("Scores")
@@ -35,7 +35,7 @@ import { IsMatchStaffGuard } from "../match-staffs/match-staffs.guard";
 				options: {
 					decorators: [OriginalTargetEntity(Score)],
 				},
-				guard: [AuthGuard, IsMatchStaffGuard],
+				guard: [AuthGuard, IsMatchStaffOrOrganizerGuard],
 			},
 		]),
 	}),

@@ -2,10 +2,12 @@ import { Module } from "@nestjs/common";
 import { ScoreProceduralPenaltiesService } from "./score-procedural-penalties.service";
 import { ScoreProceduralPenaltiesController } from "./score-procedural-penalties.controller";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { MatchStaff, ScoreProceduralPenalty } from "src/entities";
+import { Match, MatchStaff, ScoreProceduralPenalty } from "src/entities";
 
 @Module({
-	imports: [TypeOrmModule.forFeature([ScoreProceduralPenalty, MatchStaff])],
+	imports: [
+		TypeOrmModule.forFeature([ScoreProceduralPenalty, MatchStaff, Match]),
+	],
 	controllers: [ScoreProceduralPenaltiesController],
 	providers: [ScoreProceduralPenaltiesService],
 })

@@ -3,7 +3,7 @@ import { IsUserAllowedGuard } from "src/api/isUserAllowed.guard";
 import { REAL_MATCHID_TOKEN } from "../matches/matches.guard";
 import { Request } from "express";
 import { InjectRepository } from "@nestjs/typeorm";
-import { MatchStaff } from "src/entities";
+import { Match, MatchStaff } from "src/entities";
 import { Repository } from "typeorm";
 
 export class IsMatchStaffGuard extends IsUserAllowedGuard {
@@ -26,5 +26,23 @@ export class IsMatchStaffGuard extends IsUserAllowedGuard {
 			where: { matchId: targetId },
 		});
 		return staff.map((s) => s.userId);
+	}
+}
+
+export class IsMatchStaffOrOrganizerGuard extends IsMatchStaffGuard {
+	constructor(
+		@InjectRepository(MatchStaff)
+		matchStaffRepo: Repository<MatchStaff>,
+		@InjectRepository(Match)
+		private readonly matchRepo: Repository<Match>,
+	) {
+		super(matchStaffRepo);
+	}
+	async getAllowedUserIds(targetId?: number): Promise<number[]> {
+		const staff = await super.getAllowedUserIds(targetId);
+		const organizer = await this.matchRepo.findOne({
+			where: { id: targetId },
+		});
+		return [...staff, organizer.organizerId];
 	}
 }
