@@ -5,8 +5,10 @@ import {
 	ManyToMany,
 	RelationId,
 	RelationCount,
+	ManyToOne,
 } from "typeorm";
 import { MatchShooter } from "./matchShooter.entity";
+import { Match } from "./match.entity";
 
 @Entity()
 export abstract class MatchShooterCategory {
@@ -27,4 +29,10 @@ export abstract class MatchShooterCategory {
 			matchShooterCategory.matchShooters,
 	)
 	abstract readonly matchShooterCount: number;
+
+	@ManyToOne(() => Match, (match) => match.matchShooterCategories)
+	match: Match;
+
+	@RelationId((category: MatchShooterCategory) => category.match)
+	matchId: number;
 }
