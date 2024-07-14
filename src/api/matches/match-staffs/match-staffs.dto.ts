@@ -2,7 +2,7 @@ import { ApiProperty, PartialType, PickType } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsEnum, IsInt, IsObject, ValidateNested } from "class-validator";
 import { Match, MatchStaff, StaffRole, User } from "src/entities";
-import { MatchIdDto } from "../matches.dto";
+import { MatchIdDto } from "../matches/matches.dto";
 import { UserIdDto } from "src/api/users/users.dto";
 
 export class MatchStaffsDto extends MatchStaff {

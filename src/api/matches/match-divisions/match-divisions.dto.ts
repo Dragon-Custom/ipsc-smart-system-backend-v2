@@ -15,7 +15,7 @@ import {
 } from "class-validator";
 import { Match, MatchDivision, MatchShooter } from "src/entities";
 import { MatchShooterIdDto } from "../match-shooters/match-shooters.dto";
-import { MatchIdDto } from "../matches.dto";
+import { MatchIdDto } from "../matches/matches.dto";
 
 export class MatchDivisionsDto extends MatchDivision {
 	@ApiProperty({

@@ -25,13 +25,13 @@ import {
 	Score,
 	User,
 } from "src/entities";
-import { MatchStaffIdDto } from "./match-staffs/match-staffs.dto";
-import { MatchShooterIdDto } from "./match-shooters/match-shooters.dto";
-import { MatchStageIdDto } from "./match-stages/match-stages.dto";
-import { MatchDivisionIdDto } from "./match-divisions/match-divisions.dto";
-import { MatchClassificationIdDto } from "./match-classifications/match-classifications.dto";
-import { ScoreIdDto } from "./scores/scores.dto";
-import { UserIdDto } from "../users/users.dto";
+import { MatchStaffIdDto } from "../match-staffs/match-staffs.dto";
+import { MatchShooterIdDto } from "../match-shooters/match-shooters.dto";
+import { MatchStageIdDto } from "../match-stages/match-stages.dto";
+import { MatchDivisionIdDto } from "../match-divisions/match-divisions.dto";
+import { MatchClassificationIdDto } from "../match-classifications/match-classifications.dto";
+import { ScoreIdDto } from "../scores/scores.dto";
+import { UserIdDto } from "../../users/users.dto";
 
 export class MatchDto extends Match {
 	@ApiProperty({

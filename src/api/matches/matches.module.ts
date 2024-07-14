@@ -1,6 +1,4 @@
 import { Module } from "@nestjs/common";
-import { MatchesService } from "./matches.service";
-import { MatchesController } from "./matches.controller";
 import { MatchShootersModule } from "./match-shooters/match-shooters.module";
 import { MatchClassificationsModule } from "./match-classifications/match-classifications.module";
 import { MatchDivisionsModule } from "./match-divisions/match-divisions.module";
@@ -11,17 +9,12 @@ import { MatchStagesModule } from "./match-stages/match-stages.module";
 import { ProceduralPenaltiesModule } from "./procedural-penalties/procedural-penalties.module";
 import { ScoresModule } from "./scores/scores.module";
 import { ScoreProceduralPenaltiesModule } from "./score-procedural-penalties/score-procedural-penalties.module";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { Match } from "src/entities";
-import { UsersModule } from "../users/users.module";
+import { MatchesModule as WhyThereAreTowSameModule_IDK } from "./matches/matches.module";
 
 @Module({
-	controllers: [MatchesController],
-	providers: [MatchesService],
 	imports: [
-		UsersModule,
-		TypeOrmModule.forFeature([Match]),
-		MatchShootersModule,
+		MatchesModule,
+		WhyThereAreTowSameModule_IDK,
 		MatchClassificationsModule,
 		MatchDivisionsModule,
 		DqReasonsModule,

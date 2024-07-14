@@ -23,7 +23,7 @@ import { TeamIdDto } from "../teams/teams.dto";
 import { StageIdDto } from "../stages/stages.dto";
 import { MatchStaffIdDto } from "../matches/match-staffs/match-staffs.dto";
 import config from "src/config";
-import { MatchIdDto } from "../matches/matches.dto";
+import { MatchIdDto } from "../matches/matches/matches.dto";
 
 export class UserDto extends User {
 	@ApiProperty({

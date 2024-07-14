@@ -16,7 +16,7 @@ import {
 } from "class-validator";
 import { Match, MatchStage, Score, Stage } from "src/entities";
 import { ScoreIdDto } from "../scores/scores.dto";
-import { MatchIdDto } from "../matches.dto";
+import { MatchIdDto } from "../matches/matches.dto";
 import { StageIdDto } from "src/api/stages/stages.dto";
 
 export class MatchStageDto extends MatchStage {
