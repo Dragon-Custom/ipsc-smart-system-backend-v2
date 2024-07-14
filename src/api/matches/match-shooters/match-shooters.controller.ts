@@ -9,7 +9,7 @@ import {
 } from "./match-shooters.dto";
 import { MatchShooter } from "src/entities";
 
-@Controller("matches/match-shooters")
+@Controller()
 @ApiTags("Match Shooters")
 @Crud({
 	model: {

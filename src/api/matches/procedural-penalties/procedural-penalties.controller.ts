@@ -10,7 +10,7 @@ import {
 } from "./procedural-penalties.dto";
 import { ApiTags } from "@nestjs/swagger";
 
-@Controller("matches/procedural-penalties")
+@Controller()
 @ApiTags("Procedural Penalties")
 @Crud(
 	mixinCrudConfig({

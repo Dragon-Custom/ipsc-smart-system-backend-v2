@@ -132,7 +132,6 @@ export class MatchDto extends Match {
 	@IsInt()
 	readonly matchStageCount: number;
 
-	//TODO: relation
 	matchStaffs?: MatchStaff[];
 
 	@ApiPropertyOptional({
@@ -146,7 +145,6 @@ export class MatchDto extends Match {
 	@IsInt({ each: true })
 	readonly matchStaffIds?: number[];
 
-	//TODO: relation
 	matchShooters?: MatchShooter[];
 
 	@ApiPropertyOptional({
@@ -160,7 +158,6 @@ export class MatchDto extends Match {
 	@IsInt({ each: true })
 	readonly matchShooterIds: number[];
 
-	//TODO: relation
 	matchStages?: MatchStage[];
 
 	@ApiPropertyOptional({
@@ -174,7 +171,6 @@ export class MatchDto extends Match {
 	@IsInt({ each: true })
 	readonly matchStageIds: number[];
 
-	//TODO: relation
 	matchDivisions?: MatchDivision[];
 
 	@ApiProperty({
@@ -186,7 +182,6 @@ export class MatchDto extends Match {
 	@IsInt({ each: true })
 	readonly matchDivisionIds: number[];
 
-	//TODO: relation
 	matchClassifications?: MatchClassification[];
 
 	@ApiPropertyOptional({
@@ -200,7 +195,6 @@ export class MatchDto extends Match {
 	@IsInt({ each: true })
 	readonly matchClassificationIds?: number[];
 
-	//TODO: relation
 	scores?: Score[];
 
 	@ApiPropertyOptional({
@@ -224,6 +218,25 @@ export class MatchDto extends Match {
 	@Type(() => Number)
 	@IsInt()
 	readonly organizerId: number;
+
+	@ApiProperty({
+		description: "Score count of the match",
+		example: 10,
+		readOnly: true,
+	})
+	@Type(() => Number)
+	@IsInt()
+	readonly scoreCount: number;
+
+	@ApiPropertyOptional({
+		description: "Score ids of the match",
+		example: [1, 2, 3],
+		readOnly: true,
+	})
+	@IsArray()
+	@Type(() => Number)
+	@IsInt({ each: true })
+	scoreIds?: number[];
 }
 
 export class CreateMatchDto extends PickType(MatchDto, [

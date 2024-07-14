@@ -10,7 +10,7 @@ import {
 } from "./dq-reasons.dto";
 import { ApiTags } from "@nestjs/swagger";
 
-@Controller("matches/dq-reasons")
+@Controller()
 @ApiTags("DQ Reasons")
 @Crud(
 	mixinCrudConfig({

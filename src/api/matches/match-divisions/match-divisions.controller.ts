@@ -10,7 +10,7 @@ import {
 } from "./match-divisions.dto";
 import { MatchDivision } from "src/entities";
 
-@Controller("matches/match-divisions")
+@Controller()
 @ApiTags("Match Divisions")
 @Crud(
 	mixinCrudConfig({

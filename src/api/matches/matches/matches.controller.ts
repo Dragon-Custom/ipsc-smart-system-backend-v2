@@ -12,7 +12,7 @@ import { CreateMatchDto, MatchDto, UpdateMatchDto } from "./matches.dto";
 import { AuthGuard } from "src/api/auth/auth.guard";
 import { IsMatchOrganizerGuard } from "./matches.guard";
 
-@Controller("matches")
+@Controller()
 @ApiTags("Matches")
 @Crud(
 	mixinCrudConfig({

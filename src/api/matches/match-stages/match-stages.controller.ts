@@ -10,7 +10,7 @@ import {
 } from "./match-stages.dto";
 import { ApiTags } from "@nestjs/swagger";
 
-@Controller("matches/match-stages")
+@Controller()
 @ApiTags("Match Stages")
 @Crud(
 	mixinCrudConfig({

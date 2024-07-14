@@ -13,6 +13,7 @@ import { MatchStage } from "./matchStage.entity";
 import { ScoreProceduralPenalty } from "./scoreProceduralPenalty.entity";
 import { DQReason } from "./dqReason.entity";
 import { MatchShooter, PowerFactor } from "./matchShooter.entity";
+import { Match } from "./match.entity";
 
 export enum ScoreStateType {
 	DidNotAttempted = "Did Not Attempted",
@@ -118,6 +119,12 @@ export abstract class Score {
 
 	@RelationId((score: Score) => score.matchShooter)
 	abstract readonly matchShooterId: number;
+
+	@ManyToOne(() => Match, (match) => match.scores)
+	abstract match: Match;
+
+	@RelationId((score: Score) => score.match)
+	abstract readonly matchId: number;
 
 	@ManyToOne(() => DQReason, (reason) => reason.dqedScores)
 	abstract dqReason?: DQReason;

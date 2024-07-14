@@ -10,7 +10,7 @@ import {
 	UpdateMatchStaffsDto,
 } from "./match-staffs.dto";
 
-@Controller("matches/match-staffs")
+@Controller()
 @ApiTags("Match Staffs")
 @Crud(
 	mixinCrudConfig({

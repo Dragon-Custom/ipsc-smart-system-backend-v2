@@ -10,7 +10,7 @@ import {
 } from "./match-classifications.dto";
 import { MatchClassification } from "src/entities";
 
-@Controller("matches/match-classifications")
+@Controller()
 @ApiTags("Match Classifications")
 @Crud(
 	mixinCrudConfig({

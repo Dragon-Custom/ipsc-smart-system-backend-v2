@@ -15,11 +15,17 @@ export abstract class IsUserAllowedGuard implements CanActivate {
 			.getRequest<RequestWithUser<Request>>();
 
 		const operationTargetId = parseInt(request.params.id);
-		const allowedIds = await this.getAllowedUserIds(operationTargetId);
+		const realTargetId = this.customTargetId(operationTargetId, request);
+		const allowedIds = await this.getAllowedUserIds(realTargetId);
 		const subId = request.user.sub;
 
 		return allowedIds.includes(subId);
 	}
 
 	abstract getAllowedUserIds(targetId?: number): Promise<number[]> | number[];
+
+	abstract customTargetId(
+		originalTargetId: number,
+		request: RequestWithUser<Request>,
+	): number;
 }

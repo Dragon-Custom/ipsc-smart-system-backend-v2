@@ -17,6 +17,7 @@ import {
 } from "class-validator";
 import {
 	DQReason,
+	Match,
 	MatchShooter,
 	MatchStage,
 	PowerFactor,
@@ -28,6 +29,7 @@ import { ScoreProceduralPenaltiesIdDto } from "../score-procedural-penalties/sco
 import { MatchStageIdDto } from "../match-stages/match-stages.dto";
 import { MatchShooterIdDto } from "../match-shooters/match-shooters.dto";
 import { DqReasonIdDto } from "../dq-reasons/dq-reasons.dto";
+import { MatchIdDto } from "../matches/matches.dto";
 
 export class ScoreDto extends Score {
 	@ApiProperty({
@@ -215,6 +217,17 @@ export class ScoreDto extends Score {
 	@Type(() => Number)
 	@IsInt()
 	iterations: number;
+
+	@ApiProperty({
+		description: "The id of the match",
+		example: 1,
+		readOnly: true,
+	})
+	@Type(() => Number)
+	@IsInt()
+	readonly matchId: number;
+
+	match: Match;
 }
 
 export class CreateScoreDto extends PickType(ScoreDto, [
@@ -233,6 +246,7 @@ export class CreateScoreDto extends PickType(ScoreDto, [
 	"matchShooter",
 	"dqReason",
 	"iterations",
+	"match",
 ] as const) {
 	@ApiPropertyOptional({
 		description: "proerror list",
@@ -272,6 +286,24 @@ export class CreateScoreDto extends PickType(ScoreDto, [
 	@ValidateNested()
 	@Type(() => DqReasonIdDto)
 	dqReason?: DQReason;
+
+	@ApiPropertyOptional({
+		description: "What's the version is this score",
+		example: 2,
+	})
+	@IsOptional()
+	@Type(() => Number)
+	@IsInt()
+	iterations: number;
+
+	@ApiProperty({
+		description: "The id of the match",
+		type: () => MatchIdDto,
+	})
+	@IsObject()
+	@ValidateNested()
+	@Type(() => MatchIdDto)
+	match: Match;
 }
 
 export class UpdateScoreDto extends PartialType(CreateScoreDto) {}

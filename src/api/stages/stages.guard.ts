@@ -4,6 +4,8 @@ import { Stage } from "src/entities";
 import { Repository } from "typeorm";
 
 export class IsStageDesignerItself extends IsUserAllowedGuard {
+	customTargetId = (x) => x;
+
 	constructor(
 		@InjectRepository(Stage) private readonly stageRepo: Repository<Stage>,
 	) {

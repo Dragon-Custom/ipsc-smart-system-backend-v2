@@ -3,7 +3,11 @@ import { IsUserAllowedGuard } from "src/api/isUserAllowed.guard";
 import { Match } from "src/entities";
 import { Repository } from "typeorm";
 
+export const REAL_MATCHID_TOKEN = "real_matchid_token";
+
 export class IsMatchOrganizerGuard extends IsUserAllowedGuard {
+	customTargetId = (x) => x;
+
 	constructor(
 		@InjectRepository(Match) private readonly matchRepo: Repository<Match>,
 	) {

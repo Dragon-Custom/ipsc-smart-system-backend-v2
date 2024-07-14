@@ -4,6 +4,8 @@ import { Team } from "src/entities";
 import { Repository } from "typeorm";
 
 export class IsTeamAdminGuard extends IsUserAllowedGuard {
+	customTargetId = (x) => x;
+
 	constructor(
 		@InjectRepository(Team)
 		private readonly teamRepository: Repository<Team>,
@@ -23,6 +25,8 @@ export class IsTeamAdminGuard extends IsUserAllowedGuard {
 }
 
 export class IsTeamOwnerGuard extends IsUserAllowedGuard {
+	customTargetId = (x) => x;
+
 	constructor(
 		@InjectRepository(Team)
 		private readonly teamRepository: Repository<Team>,
@@ -42,6 +46,8 @@ export class IsTeamOwnerGuard extends IsUserAllowedGuard {
 }
 
 export class IsTeamOwnerOrAdminGuard extends IsUserAllowedGuard {
+	customTargetId = (x) => x;
+
 	constructor(
 		@InjectRepository(Team)
 		private readonly teamRepository: Repository<Team>,

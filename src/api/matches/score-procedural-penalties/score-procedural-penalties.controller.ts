@@ -9,7 +9,7 @@ import {
 	UpdateScoreProceduralPenaltyDto,
 } from "./score-procedural-penalties.dto";
 
-@Controller("matches/score-procedural-penalties")
+@Controller()
 @ApiTags("Score Procedural Penalties")
 @Crud(
 	mixinCrudConfig({

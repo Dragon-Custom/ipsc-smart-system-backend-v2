@@ -15,6 +15,7 @@ import { MatchStage } from "./matchStage.entity";
 import { MatchDivision } from "./matchDivision.entity";
 import { MatchClassification } from "./matchClassification.entity";
 import { User } from "../user.entity";
+import { Score } from "./score.entity";
 
 @Entity()
 export abstract class Match {
@@ -74,6 +75,15 @@ export abstract class Match {
 
 	@RelationId((match: Match) => match.organizer)
 	abstract readonly organizerId: number;
+
+	@OneToMany(() => Score, (score) => score.match)
+	abstract scores?: Score[];
+
+	@RelationCount((match: Match) => match.scores)
+	abstract readonly scoreCount: number;
+
+	@RelationId((match: Match) => match.scores)
+	abstract readonly scoreIds?: number[];
 
 	@Column()
 	abstract level: number;
