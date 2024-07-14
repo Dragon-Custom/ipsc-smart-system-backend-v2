@@ -3,7 +3,7 @@ import { IsUserAllowedGuard } from "src/api/isUserAllowed.guard";
 import { Match } from "src/entities";
 import { Repository } from "typeorm";
 
-export const REAL_MATCHID_TOKEN = "real_matchid_token";
+export const REAL_MATCHID_TOKEN = `real_matchid_token_${Math.random()}`;
 
 export class IsMatchOrganizerGuard extends IsUserAllowedGuard {
 	customTargetId = (x) => x;
