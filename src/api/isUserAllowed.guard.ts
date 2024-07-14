@@ -7,12 +7,13 @@ import { Request } from "express";
  * to ensure the target operation is performed by a specific user with the jwt sub id
  */
 export abstract class IsUserAllowedGuard implements CanActivate {
-	constructor() {}
+	protected constructor() {}
 
 	async canActivate(context: ExecutionContext): Promise<boolean> {
 		const request = context
 			.switchToHttp()
 			.getRequest<RequestWithUser<Request>>();
+
 		const operationTargetId = parseInt(request.params.id);
 		const allowedIds = await this.getAllowedUserIds(operationTargetId);
 		const subId = request.user.sub;

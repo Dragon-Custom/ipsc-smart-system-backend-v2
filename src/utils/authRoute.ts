@@ -11,9 +11,9 @@ export const RouteOperationPreset: Record<"C" | "R" | "U" | "D", Route[]> = {
 };
 
 export type AdditionalRoutes = {
-	route: Route[];
-	options: Partial<BaseRouteOptions>;
-	guard?: CanActivate[];
+	route?: Route[];
+	options?: Partial<BaseRouteOptions>;
+	guard?: (CanActivate | CallableFunction)[];
 }[];
 
 export function CreateRouteGroup(
@@ -23,9 +23,14 @@ export function CreateRouteGroup(
 	//merge additional routes
 	additionalRoutes.forEach((route) => {
 		route.route.forEach((r) => {
+			if (!route?.options)
+				route.options = {
+					decorators: [],
+					interceptors: [],
+				};
 			route.options.decorators = [
 				...route.options.decorators,
-				UseGuards(...route.guard),
+				UseGuards(...(route?.guard ?? [])),
 			];
 			//@ts-expect-error dwa
 			routes[r] = route.options;
