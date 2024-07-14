@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsString } from "class-validator";
-import { Request } from "express";
 
 export class LoginDto {
 	@ApiProperty({
@@ -28,7 +27,7 @@ export class LoginResponseDto {
 	access_token: string;
 }
 
-export class RequestWithUser extends Request {
+export type RequestWithUser<T> = T & {
 	user: {
 		/**
 		 * user id
@@ -40,5 +39,4 @@ export class RequestWithUser extends Request {
 		iat: number;
 		exp: number;
 	};
-	params: any;
-}
+};
